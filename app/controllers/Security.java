@@ -3,8 +3,7 @@ package controllers;
 import models.User;
 import models.UserDatabase;
 
-public class Security { // TODO extends Secure.Security
-
+public class Security extends Secure.Security {
 	static boolean authenticate(String username, String password) {
 		UserDatabase userDB = UserDatabase.getInstance();
 
