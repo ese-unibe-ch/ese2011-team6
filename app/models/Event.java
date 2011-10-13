@@ -2,7 +2,7 @@ package models;
 
 import java.util.Date;
 
-public class Event {
+public class Event implements Comparable<Event>{
 	
 	private Date start;
 	private Date end;
@@ -40,6 +40,14 @@ public class Event {
 	}
 	public String getName() {
 		return name;
+	}
+
+	/**
+	 * Compares the two events by starting time.
+	 */
+	@Override
+	public int compareTo(Event e) {
+		return this.start.compareTo(e.start);
 	}
 	
 
