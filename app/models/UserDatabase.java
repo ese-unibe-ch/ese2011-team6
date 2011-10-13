@@ -18,11 +18,14 @@ public class UserDatabase {
 		return database;
 	}
 
-	public void createUser(String userName, String password) {
-		// TODO Check if a user with userName already exist and throw an
-		// exception
-		User user = new User(userName, password);
-		userList.add(user);
+	public void createUser(String username, String password) {
+
+		if (this.getUserByName(username) != null) {
+			// TODO: throw an exception: user already exist
+		} else {
+			User user = new User(username, password);
+			userList.add(user);
+		}
 	}
 
 	public void deleteUser(String username, String password) {
