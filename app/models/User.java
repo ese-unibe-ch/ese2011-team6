@@ -34,4 +34,9 @@ public class User
 		return this.userName;
 	}
 
+	public Object getPassword() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

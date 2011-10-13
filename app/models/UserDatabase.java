@@ -28,4 +28,10 @@ public class UserDatabase {
 	public void deleteUser(String userName, String password) {
 		// TODO
 	}
+
+	public User getUserByName(String username) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
