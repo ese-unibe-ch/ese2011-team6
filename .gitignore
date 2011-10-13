@@ -74,5 +74,10 @@ Desktop.ini
 *.tar
 *.zip
 
-# Merge #
+# Merge backups #
 .orig
+
+# Play eclipsify absolute paths #
+.classpath
+eclipse/*.launch
+tmp/
