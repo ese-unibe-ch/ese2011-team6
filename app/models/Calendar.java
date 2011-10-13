@@ -12,6 +12,12 @@ public class Calendar {
 		events = new ArrayList<Event>();
 		this.name = name;
 	}
+	
+	
+	public List<Event> getEventsOfDay(String date){
+		//TODO
+		return null;
+	}
 
 	public void addEvent(Event e) {
 		events.add(e);
@@ -19,10 +25,6 @@ public class Calendar {
 
 	public String getName() {
 		return name;
-	}
-
-	public List<Event> getEvents() {
-		return events;
 	}
 
 }
