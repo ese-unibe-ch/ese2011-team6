@@ -80,4 +80,8 @@ Desktop.ini
 # Play eclipsify absolute paths #
 .classpath
 eclipse/*.launch
-tmp/
+/tmp
+/modules
+/lib
+/test-result
+/logs

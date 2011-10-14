@@ -1,0 +1,22 @@
+#{extends 'Secure/layout.html' /}
+<div id="login">
+	<h1>Register new user</h1>
+	#{form @createNewUser()}
+		#{if flash.error}
+			<p class="error">
+				&{flash.error}
+			</p>
+		#{/if}
+		<p id="username-field">
+			<label for="username">New &{'secure.username'}</label>
+			<input type="text" name="username" id="username" value="${flash.username}" />
+		</p>
+		<p id="password-field">
+			<label for="password">New &{'secure.password'}</label>
+			<input type="password" name="password" id="password" value="" />
+		</p>
+		<p id="signin-field">
+			<input type="submit" id="signin" value="Register" />
+		</p>
+	#{/form}
+</div>
