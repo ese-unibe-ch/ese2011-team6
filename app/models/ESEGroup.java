@@ -62,7 +62,7 @@ public class ESEGroup extends Model {
 	}
 
 	public boolean isUserInGroup(@Required long userID) {
-		// ESEUser user=
-		// return this.userList //TODO
+		ESEUser user = ESEUser.findById(userID);
+		return this.userList.contains(user);
 	}
 }
