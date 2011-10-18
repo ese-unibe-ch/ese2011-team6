@@ -34,6 +34,20 @@ public class ESEEvent extends Model
 		return name;
 	}
 
+	public Date getStartDate()
+	{
+		return this.startDate;
+	}
+
+	public Date getEndDate()
+	{
+		return this.endDate;
+	}
+
+	public boolean isPublic()
+	{
+		return this.isPublic;
+	}
 	/**
 	 * Expected format: "dd-MM-YYYY hh:mm"
 	 * 

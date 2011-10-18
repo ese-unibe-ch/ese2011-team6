@@ -1,6 +1,7 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import javax.persistence.Entity;
 import play.data.validation.Required;
 import play.db.jpa.Model;
@@ -48,5 +49,42 @@ public class ESECalendar extends Model
 				break;
 			}
 		}
+	}
+
+	public ArrayList<ESEEvent> getAllEventList()
+	{
+		return eventList;
+	}
+
+	public ArrayList<ESEEvent> getPublicEventList()
+	{
+		ArrayList<ESEEvent> publicEventList = new ArrayList<ESEEvent>();
+		for (ESEEvent e : eventList)
+		{
+			if (e.isPublic())
+			{
+				publicEventList.add(e);
+			}
+		}
+
+		return publicEventList;
+	}
+
+	public Iterator<ESEEvent> getAllEventIterator()
+	{
+		ArrayList<ESEEvent> publicEventIterator = new ArrayList<ESEEvent>();
+		for (ESEEvent e : eventList)
+		{
+			if (e.isPublic())
+			{
+				publicEventIterator.add(e);
+			}
+		}
+		return publicEventIterator.iterator();
+	}
+
+	public Iterator<ESEEvent> getPublicEventIterator()
+	{
+		return eventList.iterator();
 	}
 }
