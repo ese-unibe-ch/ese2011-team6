@@ -77,5 +77,11 @@ public class ESEEvent extends Model
 		SimpleDateFormat sdfToString = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 		return sdfToString.format(date);
 	}
+	
+	/* Only for testing purposes */
+	public Date testStringToDateConverting(String stringDate){
+		return this.convertStringToDate(stringDate);
+	}
+	
 
 }
