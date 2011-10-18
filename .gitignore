@@ -3,6 +3,7 @@
 /eclipse
 .settings
 .classpath
+/bin
 
 # play!
 /lib
