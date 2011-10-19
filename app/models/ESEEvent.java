@@ -58,7 +58,7 @@ public class ESEEvent extends Model
 	 */
 	private Date convertStringToDate(String stringDate)
 	{
-		SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy hh:mm");
+		SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 		Date dateToReturn = null;
 		try {
 			dateToReturn =  df.parse(stringDate);
