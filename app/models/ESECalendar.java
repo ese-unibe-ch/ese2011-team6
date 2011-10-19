@@ -24,9 +24,47 @@ public class ESECalendar extends Model
 			@Required String startDate, @Required String endDate,
 			@Required String isPublic)
 	{
-		ESEEvent newEvent = new ESEEvent(eventName, startDate, endDate,
-				isPublic);
+		ESEEvent newEvent = new ESEEvent(eventName, startDate, endDate,	isPublic);
+		for (ESEEvent existingEvent : eventList)
+		{
+			if (checkEventOverlaps(existingEvent, newEvent))
+			{
+				// TODO: Complain as new event overlaps with other event
+			}
+		}
 		eventList.add(newEvent);
+	}
+
+	private boolean checkEventOverlaps(ESEEvent existingEvent, ESEEvent newEvent)
+	{
+		return (startDateLiesInBetweenExistingEvent(existingEvent, newEvent)
+				|| endDateLiesInBetweenExistingEvent(existingEvent, newEvent)
+				|| eventIsSubsetOfExistingEvent(existingEvent, newEvent)
+				|| eventContainsExistingEvent(existingEvent, newEvent));
+	}
+
+	private boolean startDateLiesInBetweenExistingEvent(ESEEvent existingEvent, ESEEvent newEvent)
+	{
+		return existingEvent.getStartDate().getTime() <= newEvent.getStartDate().getTime()
+												&& newEvent.getStartDate().getTime() <= existingEvent.getEndDate().getTime();
+	}
+
+	private boolean endDateLiesInBetweenExistingEvent(ESEEvent existingEvent, ESEEvent newEvent)
+	{
+		return existingEvent.getStartDate().getTime() <= newEvent.getEndDate().getTime()
+												&& newEvent.getEndDate().getTime() <= existingEvent.getEndDate().getTime();
+	}
+
+	private boolean eventIsSubsetOfExistingEvent(ESEEvent existingEvent, ESEEvent newEvent)
+	{
+		return existingEvent.getStartDate().getTime() <= newEvent.getStartDate().getTime()
+												&& newEvent.getEndDate().getTime() <= existingEvent.getEndDate().getTime();
+	}
+
+	private boolean eventContainsExistingEvent(ESEEvent existingEvent, ESEEvent newEvent)
+	{
+		return newEvent.getStartDate().getTime() <= existingEvent.getStartDate().getTime()
+										   && existingEvent.getEndDate().getTime() <= newEvent.getEndDate().getTime();
 	}
 
 	public String getName()
@@ -51,12 +89,12 @@ public class ESECalendar extends Model
 		}
 	}
 
-	public ArrayList<ESEEvent> getAllEventList()
+	public ArrayList<ESEEvent> getAllEventsAsList()
 	{
 		return eventList;
 	}
 
-	public ArrayList<ESEEvent> getPublicEventList()
+	public ArrayList<ESEEvent> getPublicEventsAsList()
 	{
 		ArrayList<ESEEvent> publicEventList = new ArrayList<ESEEvent>();
 		for (ESEEvent e : eventList)
@@ -70,7 +108,7 @@ public class ESECalendar extends Model
 		return publicEventList;
 	}
 
-	public Iterator<ESEEvent> getAllEventIterator()
+	public Iterator<ESEEvent> getAllEventsAsIterator()
 	{
 		ArrayList<ESEEvent> publicEventIterator = new ArrayList<ESEEvent>();
 		for (ESEEvent e : eventList)
@@ -83,7 +121,7 @@ public class ESECalendar extends Model
 		return publicEventIterator.iterator();
 	}
 
-	public Iterator<ESEEvent> getPublicEventIterator()
+	public Iterator<ESEEvent> getPublicEventsAsIterator()
 	{
 		return eventList.iterator();
 	}
