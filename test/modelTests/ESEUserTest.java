@@ -7,9 +7,11 @@ import play.test.UnitTest;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.junit.Test;
+
 import models.ESEUser;
 
-import org.junit.*;
+//import org.junit.*;
 import play.test.*;
 
 /**
@@ -26,7 +28,14 @@ public class ESEUserTest extends UnitTest {
 	
 	@Test
 	public void tryAnything(){
-		assertEquals(1,ESEUser.count());
+		assertEquals(1,ESEUser.count()); //database doesn't seam to work to way I understood it
+	}
+	
+	
+	@Test
+	public void constructorWith2ParasTest(){
+		ESEUser user = new ESEUser("nick", "sehrgeheim");
+		//TODO
 	}
 	
 	@Test
@@ -36,12 +45,6 @@ public class ESEUserTest extends UnitTest {
 //		assertTrue(user.familyName.equals("Müller"));
 //		assertTrue(user.firstName.equals("Hans"));
 //		assertTrue(user.password.equals("sehrgeheim"));
-	}
-	
-	@Test
-	public void constructorWith2ParasTest(){
-//		ESEUser user = new ESEUser("nick", "sehrgeheim");
-		//TODO
 	}
 	
 	@Test

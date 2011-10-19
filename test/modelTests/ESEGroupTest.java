@@ -5,13 +5,16 @@ import static org.junit.Assert.assertEquals;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import models.ESEEvent;
 import models.ESEGroup;
+import models.ESEUser;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import play.data.validation.Required;
 import play.test.UnitTest;
 
 /**
@@ -32,6 +35,35 @@ public class ESEGroupTest extends UnitTest{
 		assertEquals(testGroup.groupName,"TestGroupName1");
 	}
 	
-	// More tests: TODO
-
+	@Test
+	public void shouldEditGroupNameCorrectly(){
+		testGroup.editGroupName("TestGroupName1NewName");
+		assertEquals(testGroup.groupName,"TestGroupName1NewName");
+		
+		//TODO: What happens if empty string? Will this be handled in the model or in the view?
+	}
+	/*
+	@Test
+	public void shouldAddUsers(){
+		//TODO
+	}
+	
+	@Given("shouldAddUsers")
+	public void shouldReturnListOfAllUsers(){
+		
+		//TODO
+	}
+	
+	@Given("shouldAddUsers")
+	public void shouldRemoveCorrectUser(){
+		
+		//TODO
+	}
+	
+	@Given("shouldAddUsers")
+	public void shouldReturnWheterUserIsInList(){
+		
+		//TODO
+	}*/
+	
 }
