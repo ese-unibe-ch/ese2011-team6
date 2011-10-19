@@ -1,9 +1,9 @@
 # eclipse
+/.classpath
 /.project
-/eclipse
-.settings
-.classpath
+/.settings
 /bin
+/eclipse
 
 # play!
 /lib
