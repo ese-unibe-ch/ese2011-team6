@@ -56,4 +56,16 @@ public class ESEGroupTest extends UnitTest{
 		//TODO
 	}
 	
+	@Given("shouldAddUsers")
+	public void shouldRemoveCorrectUser(){
+		
+		//TODO
+	}
+	
+	@Given("shouldAddUsers")
+	public void shouldReturnWheterUserIsInList(){
+		
+		//TODO
+	}
+	
 }
