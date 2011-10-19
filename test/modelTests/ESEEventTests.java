@@ -13,14 +13,9 @@ import org.junit.Test;
 
 import play.test.UnitTest;
 
-/**
- * @author judith
- * 
- */
+
 public class ESEEventTests extends UnitTest{
-	
-	//Calendar calendar = Calendar.getInstance();
-	
+		
 	private ESEEvent testEvent1;
 	private ESEEvent testEvent2;
 
@@ -62,7 +57,6 @@ public class ESEEventTests extends UnitTest{
 		Calendar dateToTest = new GregorianCalendar(2011, Calendar.NOVEMBER, 28, 14, 00);
 		assertTrue(testEvent1.testStringToDateConverting("28:11:2011 14:00").getTime()<dateToTest.getTimeInMillis()+1000);
 		assertTrue(testEvent1.testStringToDateConverting("28:11:2011 14:00").getTime()>dateToTest.getTimeInMillis()-1000);
-		//TODO: Test what happens, when invalid Strings are entered
 	}
 	
 
