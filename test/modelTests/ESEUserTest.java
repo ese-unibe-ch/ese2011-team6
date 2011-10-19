@@ -7,9 +7,11 @@ import play.test.UnitTest;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.junit.Test;
+
 import models.ESEUser;
 
-import org.junit.*;
+//import org.junit.*;
 import play.test.*;
 
 /**
@@ -32,7 +34,7 @@ public class ESEUserTest extends UnitTest {
 	
 	@Test
 	public void constructorWith2ParasTest(){
-//		ESEUser user = new ESEUser("nick", "sehrgeheim");
+		ESEUser user = new ESEUser("nick", "sehrgeheim");
 		//TODO
 	}
 	

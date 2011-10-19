@@ -14,8 +14,6 @@ import models.ESEUser;
 import org.junit.Before;
 import org.junit.Test;
 
-import ch.unibe.jexample.Given;
-
 import play.data.validation.Required;
 import play.test.UnitTest;
 
@@ -44,7 +42,7 @@ public class ESEGroupTest extends UnitTest{
 		
 		//TODO: What happens if empty string? Will this be handled in the model or in the view?
 	}
-	
+	/*
 	@Test
 	public void shouldAddUsers(){
 		//TODO
@@ -66,6 +64,6 @@ public class ESEGroupTest extends UnitTest{
 	public void shouldReturnWheterUserIsInList(){
 		
 		//TODO
-	}
+	}*/
 	
 }
