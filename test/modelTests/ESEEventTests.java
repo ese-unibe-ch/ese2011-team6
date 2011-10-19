@@ -2,6 +2,7 @@ package modelTests;
 
 import static org.junit.Assert.assertEquals;
 
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -53,7 +54,7 @@ public class ESEEventTests extends UnitTest{
 	}
 	
 	@Test
-	public void shouldParseStringToDate(){
+	public void shouldParseStringToDate() throws ParseException{
 		Calendar dateToTest = new GregorianCalendar(2011, Calendar.NOVEMBER, 28, 14, 00);
 		assertTrue(testEvent1.testStringToDateConverting("28:11:2011 14:00").getTime()<dateToTest.getTimeInMillis()+1000);
 		assertTrue(testEvent1.testStringToDateConverting("28:11:2011 14:00").getTime()>dateToTest.getTimeInMillis()-1000);
