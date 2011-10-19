@@ -19,8 +19,8 @@ public class ESEEvent extends Model
 	public ESEEvent(String name, String strStart, String strEnd, String strIsPublic)
 	{
 		this.name = name;
-		this.startDate = convertStringToDate(strStart);
-		this.endDate = convertStringToDate(strEnd);
+		this.startDate = ConversionHelper.convertStringToDate(strStart);
+		this.endDate = ConversionHelper.convertStringToDate(strEnd);
 		this.isPublic = Boolean.parseBoolean(strIsPublic);
 	}
 
@@ -48,40 +48,12 @@ public class ESEEvent extends Model
 	{
 		return this.isPublic;
 	}
+	
 	/**
-	 * Expected format: "dd-MM-YYYY hh:mm"
-	 * 
-	 * @param stringDate
-	 * @return
+	 * @deprecated Use static ConversionHelper.convertStringToDate(String) instead
 	 */
-	// TODO does not handle any bad input!
-	private Date convertStringToDate(String stringDate)
-	{
-
-		Calendar cal = Calendar.getInstance();
-
-		int day = Integer.parseInt(stringDate.substring(0, 2));
-		int month = Integer.parseInt(stringDate.substring(3, 5)) - 1; // java.Calendar ranges from 0 to 11
-		int year = Integer.parseInt(stringDate.substring(6, 10));
-		int hourOfDay = Integer.parseInt(stringDate.substring(11, 13));
-		int minute = Integer.parseInt(stringDate.substring(14, 16));
-
-		cal.set(year, month, day, hourOfDay, minute, 0);
-		Date date = cal.getTime();
-
-		return date;
-	}
-
-	private String convertDateToString(Date date)
-	{
-		SimpleDateFormat sdfToString = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-		return sdfToString.format(date);
-	}
-	
-	/* Only for testing purposes */
+	@Deprecated
 	public Date testStringToDateConverting(String stringDate){
-		return this.convertStringToDate(stringDate);
+		return ConversionHelper.convertStringToDate(stringDate);
 	}
-	
-
 }
