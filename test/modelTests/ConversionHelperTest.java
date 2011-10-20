@@ -14,7 +14,9 @@ import models.ESEEvent;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ConversionHelperTest {
+import play.test.UnitTest;
+
+public class ConversionHelperTest extends UnitTest{
 
 	String stringDate;
 	Date dateToTest;
@@ -39,6 +41,12 @@ public class ConversionHelperTest {
 	@Test
 	public void shouldParseDateToString(){
 		assertEquals(ConversionHelper.convertDateToString(dateToTest),"13.02.2011 14:00");
+	}
+	
+	@Test
+	public void WhatToDoWithBadImput(){
+		//TODO: What happens in the case of bad imput? Or is all controlled by the view?
+		// Two cases of bad imput: 1) 13.04.1fss 14:00 oder auch: 35.10.2011 13:00
 	}
 	
 }
