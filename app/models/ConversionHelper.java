@@ -11,7 +11,7 @@ import java.util.Date;
 public class ConversionHelper
 {
 	/**
-	 * Expected format: "dd-MM-YYYY hh:mm"
+	 * Expected format: "dd.MM.yyyy HH:mm"
 	 * 
 	 * @param stringDate
 	 * @return
@@ -19,8 +19,7 @@ public class ConversionHelper
 	// TODO does not handle any bad input!
 	public static Date convertStringToDate(String stringDate)
 	{
-
-		SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy hh:mm");
+		SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 		Date dateToReturn = null;
 		try {
 		dateToReturn =  df.parse(stringDate);
