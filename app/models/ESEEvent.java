@@ -1,6 +1,5 @@
 package models;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -17,7 +16,7 @@ public class ESEEvent extends Model
 	public Date endDate;
 	public boolean isPublic;
 
-	public ESEEvent(String name, String strStart, String strEnd, String strIsPublic)
+	public ESEEvent(@Required String name, @Required String strStart, @Required String strEnd, @Required String strIsPublic)
 	{
 		this.name = name;
 		this.startDate = ConversionHelper.convertStringToDate(strStart);
@@ -25,7 +24,7 @@ public class ESEEvent extends Model
 		this.isPublic = Boolean.parseBoolean(strIsPublic);
 	}
 
-	public void renameEventName(@Required String newName)
+	public void renameEvent(@Required String newName)
 	{
 		this.name = newName;
 	}
@@ -49,7 +48,9 @@ public class ESEEvent extends Model
 	{
 		return this.isPublic;
 	}
-	
+
+	//TODO: Setters = editEvents? How does this look like?
+
 	/**
 	 * @deprecated Use static ConversionHelper.convertStringToDate(String) instead
 	 */
