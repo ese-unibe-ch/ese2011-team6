@@ -1,5 +1,6 @@
 package models;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -19,18 +20,14 @@ public class ConversionHelper
 	public static Date convertStringToDate(String stringDate)
 	{
 
-		Calendar cal = Calendar.getInstance();
-
-		int day = Integer.parseInt(stringDate.substring(0, 2));
-		int month = Integer.parseInt(stringDate.substring(3, 5)) - 1; // java.Calendar ranges from 0 to 11
-		int year = Integer.parseInt(stringDate.substring(6, 10));
-		int hourOfDay = Integer.parseInt(stringDate.substring(11, 13));
-		int minute = Integer.parseInt(stringDate.substring(14, 16));
-
-		cal.set(year, month, day, hourOfDay, minute, 0);
-		Date date = cal.getTime();
-
-		return date;
+		SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy hh:mm");
+		Date dateToReturn = null;
+		try {
+		dateToReturn =  df.parse(stringDate);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return dateToReturn;
 	}
 
 	public static String convertDateToString(Date date)

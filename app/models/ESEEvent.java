@@ -50,11 +50,4 @@ public class ESEEvent extends Model
 		return this.isPublic;
 	}
 	
-	/**
-	 * @deprecated Use static ConversionHelper.convertStringToDate(String) instead
-	 */
-	@Deprecated
-	public Date testStringToDateConverting(String stringDate){
-		return ConversionHelper.convertStringToDate(stringDate);
-	}
 }
