@@ -1,41 +1,28 @@
 package models;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 /**
- * Helper class for conversions between String and Dates
+ * Helper class for conversions between String and Date
  */
 public class ConversionHelper
 {
-	/**
-	 * Expected format: "dd-MM-YYYY hh:mm"
-	 * 
-	 * @param stringDate
-	 * @return
-	 */
-	// TODO does not handle any bad input!
-	public static Date convertStringToDate(String stringDate)
+	private static final String inputFormat = "dd.MM.yyyy HH:mm";
+
+	public static Date convertStringToDate(String userDateString)
 	{
-
-		Calendar cal = Calendar.getInstance();
-
-		int day = Integer.parseInt(stringDate.substring(0, 2));
-		int month = Integer.parseInt(stringDate.substring(3, 5)) - 1; // java.Calendar ranges from 0 to 11
-		int year = Integer.parseInt(stringDate.substring(6, 10));
-		int hourOfDay = Integer.parseInt(stringDate.substring(11, 13));
-		int minute = Integer.parseInt(stringDate.substring(14, 16));
-
-		cal.set(year, month, day, hourOfDay, minute, 0);
-		Date date = cal.getTime();
-
-		return date;
+		DateTimeFormatter dateTimeConvert = DateTimeFormat.forPattern(inputFormat);
+		DateTime dateTimeParser = dateTimeConvert.parseDateTime(userDateString);
+		return dateTimeParser.toDate();
 	}
 
 	public static String convertDateToString(Date date)
 	{
-		SimpleDateFormat sdfToString = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-		return sdfToString.format(date);
+		SimpleDateFormat simpleDateConverter = new SimpleDateFormat(inputFormat);
+		return simpleDateConverter.format(date);
 	}
 }
