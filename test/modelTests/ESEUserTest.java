@@ -6,7 +6,6 @@ import play.test.UnitTest;
 
 import java.util.Calendar;
 import java.util.Date;
-
 import org.junit.Test;
 
 import models.ESEUser;
@@ -20,14 +19,15 @@ import play.test.*;
  */
 public class ESEUserTest extends UnitTest {
 
-	@Before
-	public void setUp() {
+	
+	@Test //@Before doesn't work! ... (but @Test does...)
+	public void setup() {
 	    Fixtures.deleteDatabase();
 	    Fixtures.loadModels("data.yml");
 	}
-	
+
 	@Test
-	public void tryAnything(){
+	public void shouldeUseDatabase(){
 		assertEquals(1,ESEUser.count()); //database doesn't seam to work to way I understood it
 	}
 	
