@@ -28,7 +28,6 @@ public class ESEGroup extends Model {
 
 	private void initialize() {
 		this.userList = new ArrayList<ESEUser>();
-		this.save();
 	}
 
 	public void editGroupName(@Required String groupName) {

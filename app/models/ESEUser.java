@@ -23,8 +23,8 @@ public class ESEUser extends Model {
 	public ArrayList<ESECalendar> calendarList;
 	public ArrayList<ESEGroup> groupList;
 
-	public String firstName;
-	public String familyName;
+	public String firstName = "";
+	public String familyName = "";
 
 	public ESEUser(String username, String password, String firstName,
 			String familyName) {
@@ -107,8 +107,6 @@ public class ESEUser extends Model {
 
 		ESEGroup groupFriends = new ESEGroup("Friends");
 		this.groupList.add(groupFriends);
-
-		this.save();
 	}
 
 	private void validateNewCalendar(String calendarName) {
