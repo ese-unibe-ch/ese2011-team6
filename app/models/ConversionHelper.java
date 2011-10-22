@@ -2,36 +2,28 @@ package models;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 /**
- * Helper class for conversions between String and Dates
+ * Helper class for conversions between String and Date
  */
 public class ConversionHelper
 {
-	/**
-	 * Expected format: "dd.MM.yyyy HH:mm"
-	 * 
-	 * @param stringDate
-	 * @return
-	 */
-	// TODO does not handle any bad input!
-	public static Date convertStringToDate(String stringDate)
+	private static final String inputFormat = "dd.MM.yyyy HH:mm";
+
+	public static Date convertStringToDate(String userDateString)
 	{
-		SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-		Date dateToReturn = null;
-		try {
-		dateToReturn =  df.parse(stringDate);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		return dateToReturn;
+		DateTimeFormatter dateTimeConvert = DateTimeFormat.forPattern(inputFormat);
+		DateTime dateTimeParser = dateTimeConvert.parseDateTime(userDateString);
+		return dateTimeParser.toDate();
 	}
 
 	public static String convertDateToString(Date date)
 	{
-		SimpleDateFormat sdfToString = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-		return sdfToString.format(date);
+		SimpleDateFormat simpleDateConverter = new SimpleDateFormat(inputFormat);
+		return simpleDateConverter.format(date);
 	}
 }

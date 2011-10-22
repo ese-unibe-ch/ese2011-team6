@@ -28,7 +28,6 @@ public class ESEGroup extends Model {
 
 	private void initialize() {
 		this.userList = new ArrayList<ESEUser>();
-		this.save();
 	}
 
 	public void editGroupName(@Required String groupName) {
@@ -49,6 +48,27 @@ public class ESEGroup extends Model {
 		}
 	}
 
+	public void addUser(@Required String userName) {
+		ESEUser user = ESEUser.find("byUsername", userName).first();
+
+		boolean valid = !this.userList.contains(user);
+
+		if (valid) {
+			this.userList.add(user);
+		} else {
+			// TODO Throw an exception or do something similar, because user is
+			// already in this group
+		}
+	}
+
+	public void removeUser(@Required String userName) {
+		ESEUser user = ESEUser.find("byUsername", userName).first();
+
+		this.userList.remove(user); // TODO (Maybe) Throw an exception or do
+									// something similar, if the user does not
+									// exist in the list
+	}
+
 	public void removeUser(@Required long userID) {
 		ESEUser user = ESEUser.findById(userID);
 
@@ -63,6 +83,11 @@ public class ESEGroup extends Model {
 
 	public boolean isUserInGroup(@Required long userID) {
 		ESEUser user = ESEUser.findById(userID);
+		return this.userList.contains(user);
+	}
+
+	public boolean isUserInGroup(@Required String userName) {
+		ESEUser user = ESEUser.find("byUsername", userName).first();
 		return this.userList.contains(user);
 	}
 }

@@ -13,7 +13,7 @@ public class ESECalendar extends Model
 	public String name;
 	public ArrayList<ESEEvent> eventList;
 
-	public ESECalendar(String name)
+	public ESECalendar(@Required String name)
 	{
 		this.name = name;
 		eventList = new ArrayList<ESEEvent>();
@@ -46,25 +46,25 @@ public class ESECalendar extends Model
 	private boolean startDateLiesInBetweenExistingEvent(ESEEvent existingEvent, ESEEvent newEvent)
 	{
 		return existingEvent.getStartDate().getTime() <= newEvent.getStartDate().getTime()
-												&& newEvent.getStartDate().getTime() <= existingEvent.getEndDate().getTime();
+				&& newEvent.getStartDate().getTime() <= existingEvent.getEndDate().getTime();
 	}
 
 	private boolean endDateLiesInBetweenExistingEvent(ESEEvent existingEvent, ESEEvent newEvent)
 	{
 		return existingEvent.getStartDate().getTime() <= newEvent.getEndDate().getTime()
-												&& newEvent.getEndDate().getTime() <= existingEvent.getEndDate().getTime();
+				&& newEvent.getEndDate().getTime() <= existingEvent.getEndDate().getTime();
 	}
 
 	private boolean eventIsSubsetOfExistingEvent(ESEEvent existingEvent, ESEEvent newEvent)
 	{
 		return existingEvent.getStartDate().getTime() <= newEvent.getStartDate().getTime()
-												&& newEvent.getEndDate().getTime() <= existingEvent.getEndDate().getTime();
+				&& newEvent.getEndDate().getTime() <= existingEvent.getEndDate().getTime();
 	}
 
 	private boolean eventContainsExistingEvent(ESEEvent existingEvent, ESEEvent newEvent)
 	{
 		return newEvent.getStartDate().getTime() <= existingEvent.getStartDate().getTime()
-										   && existingEvent.getEndDate().getTime() <= newEvent.getEndDate().getTime();
+				&& existingEvent.getEndDate().getTime() <= newEvent.getEndDate().getTime();
 	}
 
 	public String getName()
@@ -89,9 +89,34 @@ public class ESECalendar extends Model
 		}
 	}
 
+	public ArrayList<ESEEvent> getListOfEventsRunningAtDay(@Required String calendarDay)
+	{
+		ArrayList<ESEEvent> eventsFormDate = new ArrayList<ESEEvent>();
+		// Create pseudo event that
+		// starts at "calendarDay" 00:00:00 and
+		// ends at "calendarDay" 23:59:59
+		ESEEvent pseudoEvent = new ESEEvent("CompareHelperEvent",
+				calendarDay.substring(0, 10) + " 00:00:00",
+				calendarDay.substring(0, 10) + " 23:59:59", "1");
+		for (ESEEvent e : eventList)
+		{
+			if (checkEventOverlaps(e, pseudoEvent))
+			{
+				eventsFormDate.add(e);
+			}
+		}
+
+		return eventsFormDate;
+	}
+
+	public Iterator<ESEEvent> getIteratorOfEventsRunningAtDay(@Required String calendarDay)
+	{
+		return this.getListOfEventsRunningAtDay(calendarDay).iterator();
+	}
+
 	public ArrayList<ESEEvent> getAllEventsAsList()
 	{
-		return eventList;
+		return new ArrayList<ESEEvent>(eventList);
 	}
 
 	public ArrayList<ESEEvent> getPublicEventsAsList()
@@ -110,19 +135,11 @@ public class ESECalendar extends Model
 
 	public Iterator<ESEEvent> getAllEventsAsIterator()
 	{
-		ArrayList<ESEEvent> publicEventIterator = new ArrayList<ESEEvent>();
-		for (ESEEvent e : eventList)
-		{
-			if (e.isPublic())
-			{
-				publicEventIterator.add(e);
-			}
-		}
-		return publicEventIterator.iterator();
+		return this.getPublicEventsAsList().iterator();
 	}
 
 	public Iterator<ESEEvent> getPublicEventsAsIterator()
 	{
-		return eventList.iterator();
+		return this.getAllEventsAsList().iterator();
 	}
 }
