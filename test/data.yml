@@ -2,7 +2,7 @@
 # and then load them using Fixtures.load("data.yml")
 
  ESEUser(bob):
-    username: bob
-    password: secret
-    firstname: Bob
-    familyname: Bobber
+    username:    bob
+    password:    secret
+    firstName:   Bob
+    familyName:  Bobber

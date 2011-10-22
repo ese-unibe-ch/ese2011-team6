@@ -108,7 +108,7 @@ public class ESEUser extends Model {
 		ESEGroup groupFriends = new ESEGroup("Friends");
 		this.groupList.add(groupFriends);
 
-		this.save();
+//		this.save();
 	}
 
 	private void validateNewCalendar(String calendarName) {
