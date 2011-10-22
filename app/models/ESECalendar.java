@@ -24,7 +24,7 @@ public class ESECalendar extends Model
 			@Required String startDate, @Required String endDate,
 			@Required String isPublic)
 	{
-		ESEEvent newEvent = new ESEEvent(eventName, startDate, endDate,	isPublic);
+		ESEEvent newEvent = new ESEEvent(eventName, startDate, endDate, isPublic);
 		for (ESEEvent existingEvent : eventList)
 		{
 			if (checkEventOverlaps(existingEvent, newEvent))

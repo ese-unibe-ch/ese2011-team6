@@ -23,8 +23,8 @@ public class ESEEventTest extends UnitTest{
 	@Before
 	public void setUp() {
 		
-		this.testEvent1 = new ESEEvent("testEvent1","25-10-2011 08:15","25-10-2011 10:00","false");
-		this.testEvent2 = new ESEEvent("testEvent2","26-10-2011 08:15","26-10-2011 10:00","true");
+		this.testEvent1 = new ESEEvent("testEvent1","25.10.2011 08:15","25.10.2011 10:00","false");
+		this.testEvent2 = new ESEEvent("testEvent2","26.10.2011 08:15","26.10.2011 10:00","true");
 	}
 	
 	@Test
@@ -47,12 +47,5 @@ public class ESEEventTest extends UnitTest{
 		assertFalse(testEvent1.isPublic() == true);
 		
 		assertEquals(testEvent2.isPublic(),true);
-	}
-	
-	@Test
-	public void shouldParseStringToDate() throws ParseException{
-		Calendar dateToTest = new GregorianCalendar(2011, Calendar.NOVEMBER, 28, 14, 00);
-		assertTrue(testEvent1.testStringToDateConverting("28-11-2011 14:00").getTime()<dateToTest.getTimeInMillis()+1000);
-		assertTrue(testEvent1.testStringToDateConverting("28-11-2011 14:00").getTime()>dateToTest.getTimeInMillis()-1000);
 	}
 }

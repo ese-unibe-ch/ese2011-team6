@@ -20,8 +20,8 @@ public class ESEEvent extends Model
 	public ESEEvent(String name, String strStart, String strEnd, String strIsPublic)
 	{
 		this.name = name;
-		this.startDate = convertStringToDate(strStart);
-		this.endDate = convertStringToDate(strEnd);
+		this.startDate = ConversionHelper.convertStringToDate(strStart);
+		this.endDate = ConversionHelper.convertStringToDate(strEnd);
 		this.isPublic = Boolean.parseBoolean(strIsPublic);
 	}
 
@@ -49,35 +49,5 @@ public class ESEEvent extends Model
 	{
 		return this.isPublic;
 	}
-	/**
-	 * Expected format: "dd-MM-YYYY hh:mm"
-	 * 
-	 * @param stringDate
-	 * @return
-	 * @throws ParseException 
-	 */
-	private Date convertStringToDate(String stringDate)
-	{
-		SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-		Date dateToReturn = null;
-		try {
-			dateToReturn =  df.parse(stringDate);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		return dateToReturn;
-	}
-
-	private String convertDateToString(Date date)
-	{
-		SimpleDateFormat sdfToString = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-		return sdfToString.format(date);
-	}
 	
-	/* Only for testing purposes */
-	public Date testStringToDateConverting(String stringDate) throws ParseException{
-		return this.convertStringToDate(stringDate);
-	}
-	
-
 }
