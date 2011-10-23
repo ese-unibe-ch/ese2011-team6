@@ -1,6 +1,7 @@
 # you describe your data using the YAML notation here
 # and then load them using Fixtures.load("data.yml")
 
+# Users
 ESEUser(bob):
     username:    bob
     password:    secret
@@ -12,3 +13,25 @@ ESEUser(bill):
     password:    pw1
     firstName:   Bill
     familyName:  Billy
+    
+ESEUser(jack):
+    username:    jack
+    password:    pw2
+    firstName:   Jack
+    familyName:  Sparrow
+
+#Calendars    
+ESECalendar(bobCal1):
+    name:    BobsCalendarOne
+    
+ESECalendar(bobCal2):
+    name:    BobsCalendarTwo
+    
+ESECalendar(bobCal3):
+    name:    BobsCalendarThree
+    
+ESECalendar(billCal1):
+    name:    BillsCalendarOne
+    
+    
+

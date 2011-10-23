@@ -31,7 +31,7 @@ public class ESEUserTest extends UnitTest {
 	@Test
 	public void shouldeUseDatabase(){
 		//check if he's there
-		assertEquals(1,ESEUser.count());
+		assertEquals(3,ESEUser.count());
 		
 		//retrieve user from database
 		ESEUser bob = ESEUser.find("byUsername", "bob").first();
