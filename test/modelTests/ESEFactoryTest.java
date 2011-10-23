@@ -38,6 +38,14 @@ public class ESEFactoryTest extends UnitTest{
 	}
 	
 	@Test
+	public void shouldAddCalendarToDataBase() {
+		Fixtures.deleteDatabase();
+		assertEquals(ESECalendar.count(),0);
+		ESEFactory.createCalendar("Testcalendar1");
+		assertEquals(ESECalendar.count(),1);
+	}
+	
+	@Test
 	public void shouldAddEventToDataBase() {
 		Fixtures.deleteDatabase();
 		assertEquals(ESEEvent.count(),0);
