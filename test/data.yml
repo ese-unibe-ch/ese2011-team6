@@ -23,15 +23,19 @@ ESEUser(jack):
 #Calendars    
 ESECalendar(bobCal1):
     name:    BobsCalendarOne
+    user:    bob
     
 ESECalendar(bobCal2):
     name:    BobsCalendarTwo
+    user:    bob
     
 ESECalendar(bobCal3):
     name:    BobsCalendarThree
+    user:    bob
     
 ESECalendar(billCal1):
     name:    BillsCalendarOne
+    user:    bill
     
     
 

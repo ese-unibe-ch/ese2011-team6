@@ -36,17 +36,17 @@ public class ESEUserTest extends UnitTest {
 		//retrieve user from database
 		ESEUser bob = ESEUser.find("byUsername", "bob").first();
 		assertNotNull(bob);
+		ESEUser bill = ESEUser.find("byUsername", "bill").first();
+		assertNotNull(bill);
+		ESEUser jack = ESEUser.find("byFamilyName", "Sparrow").first();
+		assertNotNull(jack);
 		
 		//check parameters
 		assertEquals("bob", bob.username);
 		assertEquals("secret", bob.password);
 		assertEquals("Bob", bob.firstName);
 		assertEquals("Bobber", bob.familyName);
-		
-		//check rest of initialization
-		//TODO is that a problem? Does this problem only occure when date from .yml file is taken?
-		// else the constructor would be used and the lists should be created, right?
-		assertNotNull(bob.calendarList);
+				
 	}
 	
 	
@@ -62,7 +62,8 @@ public class ESEUserTest extends UnitTest {
 	@Test
 	public void shouldCreatCalendar(){
 		//Test with new user
-		ESEUser hansi = ESEFactory.createUser("hansi", "sehrgeheim", "Hans", "Müller");
+//		ESEUser hansi = ESEFactory.createUser("hansi", "sehrgeheim", "Hans", "Müller");
+		ESEUser hansi = ESEUser.find("byUsername", "bob").first();
 		
 		//add by using method
 		hansi.createCalendar("Hausaufgaben");
