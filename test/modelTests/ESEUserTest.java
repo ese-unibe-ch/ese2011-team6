@@ -20,7 +20,7 @@ import play.test.UnitTest;
  */
 public class ESEUserTest extends UnitTest {
 
-	
+	//TODO use Factory!!
 	@Test //"@Before" doesn't work! ... (but @Test does...)
 	public void setup() {
 		//set up database		
@@ -58,48 +58,18 @@ public class ESEUserTest extends UnitTest {
 		assertNotNull(hansi.calendarList);
 		assertNotNull(hansi.groupList);
 	}
-	
-	@Test
-	public void constructorWith2ParasTest(){
-		//create a new user
-		ESEUser nick = new ESEUser("nick", "sehrgeheim");
-		
-		//check username and password
-		assertEquals("nick", nick.username);
-		assertEquals("sehrgeheim", nick.password);
-		
-		//check initialization
-		assertNotNull(nick.calendarList);
-		assertNotNull(nick.groupList);
-	}
-	
-	@Test
-	public void constructorWith3ParasTest(){
-		//create a new user
-		ESEUser user = new ESEUser("hansi", "sehrgeheim", "Hans", "Müller");
-		
-		//check parameters
-		assertTrue(user.username.equals("hansi"));
-		assertTrue(user.familyName.equals("Müller"));
-		assertTrue(user.firstName.equals("Hans"));
-		assertTrue(user.password.equals("sehrgeheim"));		
-	}
 		
 	@Test
 	public void shouldCreatCalendar(){
 		//Test with new user
-		ESEUser hansi = new ESEUser("hansi", "sehrgeheim");
-			
+		ESEUser hansi = ESEFactory.createUser("hansi", "sehrgeheim", "Hans", "Müller");
+		
 		//add by using method
 		hansi.createCalendar("Hausaufgaben");
 		assertNotNull(hansi.calendarList.get(0));		
 		assertEquals("Hausaufgaben", hansi.calendarList.get(0).name);
 		assertEquals(1, hansi.calendarList.size());
-		
-		//add by using constructor
-		hansi.calendarList.add(new ESECalendar("Einkaufsliste"));
-		assertEquals(2, hansi.calendarList.size());
-		
+			
 		//add by using factory
 		hansi.calendarList.add(ESEFactory.createCalendar("Wichtige Sachen"));
 		assertEquals(3, hansi.calendarList.size());
@@ -115,7 +85,7 @@ public class ESEUserTest extends UnitTest {
 	@Test
 	public void shouldRemoveCalendar(){
 		//set up
-		ESEUser hansi = new ESEUser("hansi", "sehrgeheim");
+		ESEUser hansi = ESEFactory.createUser("hansi", "sehrgeheim", "Hans", "Müller");
 		hansi.createCalendar("Hausaufgaben");
 		hansi.createCalendar("Shopping Liste");
 		assertEquals(2,hansi.calendarList.size());
@@ -146,7 +116,7 @@ public class ESEUserTest extends UnitTest {
 	
 	@Test
 	public void shouldCreateGroup(){
-		ESEUser hansi = new ESEUser("hansi", "sehrgeheim");
+		ESEUser hansi = ESEFactory.createUser("hansi", "sehrgeheim", "Hans", "Müller");
 		
 		assertEquals(1,hansi.groupList.size()); //jeder user hat eine 
 		//default gruppe "friends"
@@ -167,7 +137,7 @@ public class ESEUserTest extends UnitTest {
 	@Test
 	public void shouldRemoveGroupe(){
 		//set up
-		ESEUser hansi = new ESEUser("hansi", "sehrgeheim");
+		ESEUser hansi = ESEFactory.createUser("hansi", "sehrgeheim", "Hans", "Müller");
 		hansi.groupList.add(ESEFactory.createGroup("studies"));	
 		hansi.groupList.add(ESEFactory.createGroup("best buddies"));	
 		
@@ -179,7 +149,7 @@ public class ESEUserTest extends UnitTest {
 	
 	@Test
 	public void shouldTestEdits(){
-		ESEUser hansi = new ESEUser("hansi", "sehrgeheim");
+		ESEUser hansi = ESEFactory.createUser("hansi", "sehrgeheim", "Hans", "Müller");
 		
 		hansi.editPassword("nochvielgeheimer");
 		assertEquals("nochvielgeheimer", hansi.password);
