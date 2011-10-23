@@ -24,8 +24,11 @@ public class ESEFactoryTest extends UnitTest{
 		
 	@Before
 	public void setUp() {
-		
+		//TODO
 	}
 	
-	//TODO: Everything
+	@Test
+	public void testAnything() {
+		//TODO
+	}
 }

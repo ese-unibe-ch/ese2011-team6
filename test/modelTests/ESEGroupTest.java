@@ -19,10 +19,6 @@ import play.data.validation.Required;
 import play.test.Fixtures;
 import play.test.UnitTest;
 
-/**
- * @author judith
- * 
- */
 public class ESEGroupTest extends UnitTest{
 	
 	private ESEGroup testGroup;
@@ -94,7 +90,6 @@ public class ESEGroupTest extends UnitTest{
 		assertTrue(testGroup.getAllUser().size()==2);
 		assertTrue(testGroup.getAllUser().get(0).username.equals("bob"));
 		assertTrue(testGroup.getAllUser().get(1).username.equals("bill"));
-		
 	}
 	
 	@Test
