@@ -1,8 +1,10 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
-import javax.persistence.Entity;
+import java.util.List;
+import javax.persistence.*;
 import play.data.validation.Required;
 import play.db.jpa.Model;
 
@@ -10,29 +12,32 @@ import play.db.jpa.Model;
 public class ESECalendar extends Model
 {
 
-	public String name;
-	public ArrayList<ESEEvent> eventList;
+	public String calendarName;
+	@OneToMany(mappedBy = "eventName", cascade = CascadeType.ALL)
+	public List<ESEEvent> eventList;
+	@ManyToOne
+	public ESEUser owner;
 
-	public ESECalendar(@Required String name)
+	public ESECalendar(String calendarName, ESEUser owner)
 	{
-		this.name = name;
-		eventList = new ArrayList<ESEEvent>();
-		this.save();
+		this.calendarName = calendarName;
+		this.eventList = new ArrayList<ESEEvent>();
+		this.owner = owner;
 	}
 
 	public void addEvent(@Required String eventName,
-			@Required String startDate, @Required String endDate,
-			@Required String isPublic)
+			@Required String startDate, @Required String endDate, @Required String isPublic)
 	{
-		ESEEvent newEvent = new ESEEvent(eventName, startDate, endDate, isPublic);
-		for (ESEEvent existingEvent : eventList)
+		//TODO: Has eventName to be unique?
+		ESEEvent newEvent = ESEFactory.createEvent(eventName, startDate, endDate, this, isPublic);
+		for (ESEEvent existingEvent : this.eventList)
 		{
 			if (checkEventOverlaps(existingEvent, newEvent))
 			{
 				// TODO: Complain as new event overlaps with other event
 			}
 		}
-		eventList.add(newEvent);
+		this.eventList.add(newEvent);
 	}
 
 	private boolean checkEventOverlaps(ESEEvent existingEvent, ESEEvent newEvent)
@@ -67,23 +72,23 @@ public class ESECalendar extends Model
 				&& existingEvent.getEndDate().getTime() <= newEvent.getEndDate().getTime();
 	}
 
-	public String getName()
+	public String getCalendarName()
 	{
-		return name;
+		return this.calendarName;
 	}
 
 	public void renameCalendar(@Required String newName)
 	{
-		this.name = newName;
+		this.calendarName = newName;
 	}
 
 	public void removeEvent(@Required String eventName)
 	{
-		for (ESEEvent e : eventList)
+		for (ESEEvent e : this.eventList)
 		{
 			if (e.getEventName().equals(eventName))
 			{
-				eventList.remove(e);
+				this.eventList.remove(e);
 				break;
 			}
 		}
@@ -93,12 +98,12 @@ public class ESECalendar extends Model
 	{
 		ArrayList<ESEEvent> eventsFormDate = new ArrayList<ESEEvent>();
 		// Create pseudo event that
-		// starts at "calendarDay" 00:00:00 and
-		// ends at "calendarDay" 23:59:59
+		// starts at "calendarDay" 00:00 and
+		// ends at "calendarDay" 23:59
 		ESEEvent pseudoEvent = new ESEEvent("CompareHelperEvent",
-				calendarDay.substring(0, 10) + " 00:00:00",
-				calendarDay.substring(0, 10) + " 23:59:59", "1");
-		for (ESEEvent e : eventList)
+				calendarDay.substring(0, 10) + " 00:00",
+				calendarDay.substring(0, 10) + " 23:59", this, "1");
+		for (ESEEvent e : this.eventList)
 		{
 			if (checkEventOverlaps(e, pseudoEvent))
 			{
@@ -122,7 +127,7 @@ public class ESECalendar extends Model
 	public ArrayList<ESEEvent> getPublicEventsAsList()
 	{
 		ArrayList<ESEEvent> publicEventList = new ArrayList<ESEEvent>();
-		for (ESEEvent e : eventList)
+		for (ESEEvent e : this.eventList)
 		{
 			if (e.isPublic())
 			{
