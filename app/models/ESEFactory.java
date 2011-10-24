@@ -8,8 +8,8 @@ package models;
  * 
  */
 public abstract class ESEFactory {
-	public static ESECalendar createCalendar(String calendarName) {
-		ESECalendar calendar = new ESECalendar(calendarName);
+	public static ESECalendar createCalendar(String calendarName, ESEUser owner) {
+		ESECalendar calendar = new ESECalendar(calendarName, owner);
 		calendar.save();
 
 		return calendar;
@@ -23,8 +23,8 @@ public abstract class ESEFactory {
 		return event;
 	}
 
-	public static ESEGroup createGroup(String groupName) {
-		ESEGroup group = new ESEGroup(groupName);
+	public static ESEGroup createGroup(String groupName, ESEUser owner) {
+		ESEGroup group = new ESEGroup(groupName, owner);
 		group.save();
 
 		return group;

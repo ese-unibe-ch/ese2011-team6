@@ -6,7 +6,9 @@ package models;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 
 import play.data.validation.Required;
 import play.db.jpa.Model;
@@ -21,8 +23,11 @@ public class ESEUser extends Model {
 	public String username;
 	@Required
 	public String password;
-	public ArrayList<ESECalendar> calendarList;
-	public ArrayList<ESEGroup> groupList;
+
+	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+	public List<ESECalendar> calendarList;
+	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+	public List<ESEGroup> groupList;
 
 	public String firstName = "";
 	public String familyName = "";
@@ -68,9 +73,10 @@ public class ESEUser extends Model {
 	// -------------------- //
 
 	public void createCalendar(@Required String calendarName) {
+		System.out.println("CREATE CALENDAR: " + calendarName);
 		this.validateNewCalendar(calendarName);
 
-		ESECalendar calendar = new ESECalendar(calendarName);
+		ESECalendar calendar = ESEFactory.createCalendar(calendarName, this);
 
 		this.calendarList.add(calendar);
 	}
@@ -85,8 +91,11 @@ public class ESEUser extends Model {
 	public void createGroup(@Required String groupName) {
 		this.validateNewGroup(groupName);
 
-		ESEGroup group = new ESEGroup(groupName);
+		ESEGroup group = ESEFactory.createGroup(groupName, this);
+		this.groupList.add(group);
 	}
+
+	// TODO GET CALENDAR
 
 	// --------------- //
 	// EDIT METHODS //
@@ -124,7 +133,7 @@ public class ESEUser extends Model {
 		this.calendarList = new ArrayList<ESECalendar>();
 		this.groupList = new ArrayList<ESEGroup>();
 
-		ESEGroup groupFriends = new ESEGroup("Friends");
+		ESEGroup groupFriends = new ESEGroup("Friends", this);
 		this.groupList.add(groupFriends);
 	}
 

@@ -6,6 +6,7 @@ package models;
 import java.util.ArrayList;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 import play.data.validation.Required;
 import play.db.jpa.Model;
@@ -16,13 +17,15 @@ import play.db.jpa.Model;
  */
 @Entity
 public class ESEGroup extends Model {
-
+	@ManyToOne
+	public ESEUser owner;
 	@Required
 	public String groupName;
 	public ArrayList<ESEUser> userList;
 
-	public ESEGroup(String groupName) {
+	public ESEGroup(String groupName, ESEUser owner) {
 		this.groupName = groupName;
+		this.owner = owner;
 		this.initialize();
 	}
 
