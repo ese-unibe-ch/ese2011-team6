@@ -4,6 +4,7 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 
@@ -42,6 +43,24 @@ public class ESEUser extends Model {
 		this.password = password;
 
 		this.initialize();
+	}
+
+	// --------------------- //
+	// GETTERS METHODS //
+	// -------------------- //
+	/**
+	 * 
+	 * @param username
+	 *            of the current User
+	 * @return
+	 */
+	public static List<ESEUser> getAllOtherUsers(String username) {
+		List<ESEUser> allUsers = ESEUser.findAll();
+		ESEUser currentUser = ESEUser.find("byUsername", username).first();
+
+		allUsers.remove(currentUser);
+
+		return allUsers;
 	}
 
 	// --------------------- //
