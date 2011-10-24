@@ -8,6 +8,7 @@ import models.ESEGroup;
 import models.ESEUser;
 import net.sf.oval.constraint.AssertNullCheck;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import play.db.jpa.GenericModel.JPAQuery;
@@ -20,8 +21,7 @@ import play.test.UnitTest;
  */
 public class ESEUserTest extends UnitTest {
 
-	//TODO use Factory!!
-	@Test //"@Before" doesn't work! ... (but @Test does...)
+	@Before
 	public void setup() {
 		//set up database		
 	    Fixtures.deleteDatabase();

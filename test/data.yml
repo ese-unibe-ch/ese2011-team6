@@ -23,19 +23,75 @@ ESEUser(jack):
 #Calendars    
 ESECalendar(bobCal1):
     name:    BobsCalendarOne
-    user:    bob
+    owner:   bob
     
 ESECalendar(bobCal2):
     name:    BobsCalendarTwo
-    user:    bob
+    owner:   bob
     
 ESECalendar(bobCal3):
     name:    BobsCalendarThree
-    user:    bob
+    owner:   bob
     
 ESECalendar(billCal1):
     name:    BillsCalendarOne
-    user:    bill
-    
-    
+    owner:   bill
 
+   
+#Events 
+ESEEvent(bobCal1Event1)
+    name:        BobCal1Event1
+    strStart:    28.12.2011 06:15
+    strEnd:      28.12.2011 10:00
+    strIsPublic: false
+    owner:       bob
+
+ESEEvent(bobCal1Event2)
+    name:        BobCal1Event2
+    strStart:    28.11.2011 18:00
+    strEnd:      04.12.2011 17:00
+    strIsPublic: true
+    owner:       bob
+
+ESEEvent(bobCal1Event3)
+    name:        BobCal1Event3
+    strStart:    12.12.2011 12:00
+    strEnd:      13.12.2011 00:00
+    strIsPublic: true
+    owner:       bob
+    
+ESEEvent(bobCal2Event1)
+    name:        BobCal2Event1
+    strStart:    31.12.2011 14:00
+    strEnd:      01.01.2011 11:00
+    strIsPublic: true
+    owner:       bob
+    
+ESEEvent(billCal1Event1)
+    name:        BillCal1Event1
+    strStart:    06.12.2011 17:00
+    strEnd:      06.12.2011 20:00
+    strIsPublic: true
+    owner:       bill
+    
+ESEEvent(billCal1Event2)
+    name:        BillCal1Event2
+    strStart:    24.12.2011 20:00
+    strEnd:      24.12.2011 23:00
+    strIsPublic: true
+    owner:       bill
+    
+ESEEvent(billCal1Event3)
+    name:        BillCal1Event3
+    strStart:    25.12.2011 06:00
+    strEnd:      14.01.2011 18:00
+    strIsPublic: false
+    owner:       bill
+    
+ESEEvent(billCal1Event4)
+    name:        BillCal1Event4
+    strStart:    16.02.2011 12:00
+    strEnd:      16.02.2011 16:00
+    strIsPublic: false
+    owner:       bill
+    
