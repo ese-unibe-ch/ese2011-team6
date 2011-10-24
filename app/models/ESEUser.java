@@ -4,8 +4,11 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 
 import play.data.validation.Required;
 import play.db.jpa.Model;
@@ -20,8 +23,11 @@ public class ESEUser extends Model {
 	public String username;
 	@Required
 	public String password;
-	public ArrayList<ESECalendar> calendarList;
-	public ArrayList<ESEGroup> groupList;
+
+	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+	public List<ESECalendar> calendarList;
+	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+	public List<ESEGroup> groupList;
 
 	public String firstName = "";
 	public String familyName = "";
@@ -45,20 +51,67 @@ public class ESEUser extends Model {
 	}
 
 	// --------------------- //
+	// GETTERS METHODS //
+	// -------------------- //
+
+	// STATIC METHODS:
+	/**
+	 * 
+	 * @param username
+	 *            of the current User
+	 * @return
+	 */
+	public static List<ESEUser> getAllOtherUsers(String username) {
+		List<ESEUser> allUsers = ESEUser.findAll();
+		ESEUser user = ESEUser.find("byUsername", username).first();
+
+		allUsers.remove(user);
+
+		return allUsers;
+	}
+
+	public static List<ESEGroup> getGroupsOfUser(String username) {
+		ESEUser user = ESEUser.find("byUsername", username).first();
+
+		return user.getMyGroups();
+	}
+
+	// "THIS" GETTERS:
+
+	public List<ESECalendar> getAllCalendars() {
+		return this.calendarList;
+	}
+
+	public List<ESEGroup> getMyGroups() {
+		return this.groupList;
+	}
+
+	public ESEGroup getGroup(String groupName) {
+		for (ESEGroup group : this.groupList) {
+			if (group.getGroupName().equals(groupName)) {
+				return group;
+			}
+		}
+		// TODO LK: Throw an exception
+		return null;
+	}
+
+	// --------------------- //
 	// CREATE/REMOVE METHODS //
 	// -------------------- //
 
 	public void createCalendar(@Required String calendarName) {
 		this.validateNewCalendar(calendarName);
 
-		ESECalendar calendar = new ESECalendar(calendarName);
+		ESECalendar calendar = ESEFactory.createCalendar(calendarName, this);
 
 		this.calendarList.add(calendar);
 	}
 
 	public void removeCalendar(@Required long calendarID) {
-		ESECalendar calendar = ESECalendar.findById(calendarID); // TODO: test
-																	// this!
+		ESECalendar calendar = ESECalendar.findById(calendarID); // LK @
+																	// TEAM_TEST:
+																	// test this
 		this.calendarList.remove(calendar);
 		calendar.delete(); // DB stuff
 	}
@@ -66,7 +119,32 @@ public class ESEUser extends Model {
 	public void createGroup(@Required String groupName) {
 		this.validateNewGroup(groupName);
 
-		ESEGroup group = new ESEGroup(groupName);
+		ESEGroup group = ESEFactory.createGroup(groupName, this);
+		this.groupList.add(group);
+	}
+
+	public void removeGroup(@Required String groupName) {
+		ESEGroup group = ESEGroup.find("byGroupNameAndUsername", groupName, // TODO:
+																			// LK
+																			// @
+																			// TEAM_TEST:
+																			// Test
+																			// this!
+				username).first();// TODO:
+		// LK:
+		// what
+		// if
+		// the
+		// group
+		// is
+		// not
+		// the
+		// group
+		// of
+		// this
+		// user?
+		this.groupList.remove(group);
+		group.delete();
 	}
 
 	// --------------- //
@@ -97,6 +175,12 @@ public class ESEUser extends Model {
 		}
 	}
 
+	public void addUserToGroup(@Required String userName,
+			@Required String groupName) {
+		ESEGroup group = this.getGroup(groupName);
+		group.addUser(userName);
+	}
+
 	// --------------- //
 	// PRIVATE METHODS //
 	// --------------- //
@@ -105,7 +189,7 @@ public class ESEUser extends Model {
 		this.calendarList = new ArrayList<ESECalendar>();
 		this.groupList = new ArrayList<ESEGroup>();
 
-		ESEGroup groupFriends = new ESEGroup("Friends");
+		ESEGroup groupFriends = ESEFactory.createGroup("Friends", this);
 		this.groupList.add(groupFriends);
 	}
 

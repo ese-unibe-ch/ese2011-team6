@@ -18,8 +18,8 @@ public class ESEEvent extends Model
 	public Date endDate;
 	public boolean isPublic;
 
-	public ESEEvent(String eventName,
-			String strStart, String strEnd, ESECalendar correspondingCalendar, String strIsPublic)
+	public ESEEvent(@Required String name, @Required String strStart,
+			@Required String strEnd, @Required String strIsPublic) {
 	{
 		this.eventName = eventName;
 		this.startDate = ConversionHelper.convertStringToDate(strStart);

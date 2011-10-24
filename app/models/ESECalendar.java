@@ -89,6 +89,7 @@ public class ESECalendar extends Model
 			if (e.getEventName().equals(eventName))
 			{
 				this.eventList.remove(e);
+				e.delete(); // DB stuff
 				break;
 			}
 		}
