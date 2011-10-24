@@ -41,7 +41,7 @@ public class ESEFactoryTest extends UnitTest{
 	public void shouldAddCalendarToDataBase() {
 		Fixtures.deleteDatabase();
 		assertEquals(ESECalendar.count(),0);
-		ESEFactory.createCalendar("Testcalendar1");
+		ESEFactory.createCalendar("Testcalendar1", null);
 		assertEquals(ESECalendar.count(),1);
 	}
 	
@@ -57,7 +57,7 @@ public class ESEFactoryTest extends UnitTest{
 	public void shouldAddGroupToDataBase() {
 		Fixtures.deleteDatabase();
 		assertEquals(ESEGroup.count(),0);
-		ESEFactory.createGroup("TestGroupName");
+		ESEFactory.createGroup("TestGroupName", null);
 		assertEquals(ESEGroup.count(),1);
 	}
 	

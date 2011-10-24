@@ -24,7 +24,7 @@ public class ESECalendarTest extends UnitTest{
 
 	@Before
 	public void setUp() {
-		testCalendar = new ESECalendar("TestCalendarName");
+		testCalendar = new ESECalendar("TestCalendarName", null);
 		
 		testCalendar.addEvent("TestEvent1", "20.10.2011 20:00", "20.10.2011 20:30", "true");
 		testCalendar.addEvent("TestEvent2", "21.10.2011 20:00", "21.10.2011 20:30", "false");

@@ -25,7 +25,8 @@ public class ESEGroupTest extends UnitTest{
 	
 	@Before
 	public void setUp() {
-		this.testGroup = new ESEGroup("TestGroupName1");
+		//added agrument "null" to constructor
+		this.testGroup = new ESEGroup("TestGroupName1", null);
 	}
 	
 	@Test
