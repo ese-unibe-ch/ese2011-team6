@@ -87,10 +87,14 @@ public class ESECalendar extends Model {
 		this.name = newName;
 	}
 
-	public void removeEvent(@Required String eventName) {
+	public void removeEvent(@Required String eventName) { // TODO: LK: What
+															// happen if two
+															// events have the
+															// same name?
 		for (ESEEvent e : eventList) {
 			if (e.getEventName().equals(eventName)) {
 				eventList.remove(e);
+				e.delete(); // DB stuff
 				break;
 			}
 		}

@@ -68,12 +68,15 @@ public class ESEUser extends Model {
 		return allUsers;
 	}
 
+	public List<ESECalendar> getAllCalendars() {
+		return this.calendarList;
+	}
+
 	// --------------------- //
 	// CREATE/REMOVE METHODS //
 	// -------------------- //
 
 	public void createCalendar(@Required String calendarName) {
-		System.out.println("CREATE CALENDAR: " + calendarName);
 		this.validateNewCalendar(calendarName);
 
 		ESECalendar calendar = ESEFactory.createCalendar(calendarName, this);
@@ -95,7 +98,23 @@ public class ESEUser extends Model {
 		this.groupList.add(group);
 	}
 
-	// TODO GET CALENDAR
+	public void removeGroup(@Required String groupName) {
+		ESEGroup group = ESEGroup.find("byGroupName", groupName).first();// TODO:
+																			// LK:
+																			// what
+																			// if
+																			// the
+																			// group
+																			// is
+																			// not
+																			// the
+																			// group
+																			// of
+																			// this
+																			// user?
+		this.groupList.remove(group);
+		group.delete();
+	}
 
 	// --------------- //
 	// EDIT METHODS //
