@@ -30,8 +30,10 @@ public class ESECalendar extends Model {
 	public void addEvent(@Required String eventName,
 			@Required String startDate, @Required String endDate,
 			@Required String isPublic) {
-		ESEEvent newEvent = new ESEEvent(eventName, startDate, endDate,
-				isPublic);
+		// ESEEvent newEvent = new ESEEvent(eventName, startDate, endDate,
+		// isPublic);
+		ESEEvent newEvent = ESEFactory.createEvent(eventName, startDate,
+				endDate, isPublic);
 		for (ESEEvent existingEvent : eventList) {
 			if (checkEventOverlaps(existingEvent, newEvent)) {
 				// TODO: Complain as new event overlaps with other event
