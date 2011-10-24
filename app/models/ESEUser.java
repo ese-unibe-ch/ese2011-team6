@@ -53,6 +53,8 @@ public class ESEUser extends Model {
 	// --------------------- //
 	// GETTERS METHODS //
 	// -------------------- //
+
+	// STATIC METHODS:
 	/**
 	 * 
 	 * @param username
@@ -61,15 +63,37 @@ public class ESEUser extends Model {
 	 */
 	public static List<ESEUser> getAllOtherUsers(String username) {
 		List<ESEUser> allUsers = ESEUser.findAll();
-		ESEUser currentUser = ESEUser.find("byUsername", username).first();
+		ESEUser user = ESEUser.find("byUsername", username).first();
 
-		allUsers.remove(currentUser);
+		allUsers.remove(user);
 
 		return allUsers;
 	}
 
+	public static List<ESEGroup> getGroupsOfUser(String username) {
+		ESEUser user = ESEUser.find("byUsername", username).first();
+
+		return user.getMyGroups();
+	}
+
+	// "THIS" GETTERS:
+
 	public List<ESECalendar> getAllCalendars() {
 		return this.calendarList;
+	}
+
+	public List<ESEGroup> getMyGroups() {
+		return this.groupList;
+	}
+
+	public ESEGroup getGroup(String groupName) {
+		for (ESEGroup group : this.groupList) {
+			if (group.getGroupName().equals(groupName)) {
+				return group;
+			}
+		}
+		// TODO LK: Throw an exception
+		return null;
 	}
 
 	// --------------------- //
@@ -85,8 +109,9 @@ public class ESEUser extends Model {
 	}
 
 	public void removeCalendar(@Required long calendarID) {
-		ESECalendar calendar = ESECalendar.findById(calendarID); // TODO: test
-																	// this!
+		ESECalendar calendar = ESECalendar.findById(calendarID); // LK @
+																	// TEAM_TEST:
+																	// test this
 		this.calendarList.remove(calendar);
 		calendar.delete(); // DB stuff
 	}
@@ -142,6 +167,12 @@ public class ESEUser extends Model {
 		} else {
 			// TODO Throw an exception or do something similar
 		}
+	}
+
+	public void addUserToGroup(@Required String userName,
+			@Required String groupName) {
+		ESEGroup group = this.getGroup(groupName);
+		group.addUser(userName);
 	}
 
 	// --------------- //

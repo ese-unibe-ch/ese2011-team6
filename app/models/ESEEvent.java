@@ -20,8 +20,8 @@ public class ESEEvent extends Model {
 	public ESEEvent(@Required String name, @Required String strStart,
 			@Required String strEnd, @Required String strIsPublic) {
 		this.name = name;
-		this.startDate = ConversionHelper.convertStringToDate(strStart);
-		this.endDate = ConversionHelper.convertStringToDate(strEnd);
+		this.startDate = ESEConversionHelper.convertStringToDate(strStart);
+		this.endDate = ESEConversionHelper.convertStringToDate(strEnd);
 		this.isPublic = Boolean.parseBoolean(strIsPublic);
 	}
 
