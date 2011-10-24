@@ -114,7 +114,7 @@ public class ESEUserTest extends UnitTest {
 		hansi.createCalendar("Shopping Liste");
 		assertEquals(2,hansi.calendarList.size());
 		
-		ESECalendar husi = ESECalendar.find("byName", "Hausaufgaben").first();		
+		ESECalendar husi = ESECalendar.find("byNameAndOwner", "Hausaufgaben", hansi).first();		
 		ESECalendar shop = ESECalendar.find("byName", "Shopping Liste").first();
 		assertNotNull(husi);
 		assertNotNull(shop);
@@ -255,6 +255,14 @@ public class ESEUserTest extends UnitTest {
 		
 		jack.editFirstName("Hans");
 		assertEquals("Hans", jack.firstName);
+		
+	}
+	
+	//TODO
+	@Test
+	public void shouldNotRemoveSomebodyElsesFriendGroup(){
+		ESEUser hansi = ESEFactory.createUser("hansi", "sehrgeheim", "Hans", "Müller");
+		ESEUser hansi2 = ESEFactory.createUser("hansi2", "sehrgeheim", "Hans", "Müller");
 		
 	}
 }

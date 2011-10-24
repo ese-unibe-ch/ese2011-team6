@@ -24,7 +24,7 @@ ESEUser(jack):
 ESEGroup(bobFriends):
     groupName:   BobFriends
     owner:       bob
-        
+    
 ESEGroup(billFriends):
     groupName:   BillFriends
     owner:       bill
@@ -32,7 +32,11 @@ ESEGroup(billFriends):
 ESEGroup(jackFriends):
     groupName:   JackFriends   
     owner:       jack
-    
+
+#Groups -additional
+ESEGroup(billOtherFriends)
+    groupName:   BillOtherFriends
+    owner:       bill    
     
 #Calendars    
 ESECalendar(bobCal1):
