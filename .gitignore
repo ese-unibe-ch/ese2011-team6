@@ -12,3 +12,7 @@
 /test-result
 /tmp
 /hs_err_pid2494.log
+
+# sync.sh
+/.git_old
+/.git_orig
