@@ -183,7 +183,7 @@ public class ESEUser extends Model {
 		this.calendarList = new ArrayList<ESECalendar>();
 		this.groupList = new ArrayList<ESEGroup>();
 
-		ESEGroup groupFriends = new ESEGroup("Friends", this);
+		ESEGroup groupFriends = ESEFactory.createGroup("Friends", this);
 		this.groupList.add(groupFriends);
 	}
 
