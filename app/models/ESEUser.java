@@ -124,25 +124,14 @@ public class ESEUser extends Model {
 	}
 
 	public void removeGroup(@Required String groupName) {
-		ESEGroup group = ESEGroup.find("byGroupNameAndUsername", groupName, // TODO:
-																			// LK
-																			// @
-																			// TEAM_TEST:
-																			// Test
-																			// this!
-				username).first();// TODO:
-		// LK:
-		// what
-		// if
-		// the
-		// group
-		// is
-		// not
-		// the
-		// group
-		// of
-		// this
-		// user?
+		ESEGroup group = ESEGroup.find("byGroupNameAndUsername", groupName,
+				username).first(); // TODO:
+		// LK
+		// @
+		// TEAM_TEST:
+		// Test
+		// this!
+
 		this.groupList.remove(group);
 		group.delete();
 	}
