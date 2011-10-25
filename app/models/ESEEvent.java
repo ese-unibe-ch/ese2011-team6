@@ -18,8 +18,9 @@ public class ESEEvent extends Model {
 	public Date endDate;
 	public boolean isPublic;
 
-	public ESEEvent(@Required String name, @Required String strStart,
-			@Required String strEnd, @Required String strIsPublic) {
+	public ESEEvent(@Required String eventName, @Required String strStart,
+			@Required String strEnd, @Required String strIsPublic,
+			ESECalendar correspondingCalendar) {
 		this.eventName = eventName;
 		this.startDate = ESEConversionHelper.convertStringToDate(strStart);
 		this.endDate = ESEConversionHelper.convertStringToDate(strEnd);
@@ -68,4 +69,7 @@ public class ESEEvent extends Model {
 		this.isPublic = Boolean.parseBoolean(publicViewable);
 	}
 
+	public String getName() {
+		return this.eventName;
+	}
 }

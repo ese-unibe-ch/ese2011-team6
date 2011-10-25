@@ -4,7 +4,7 @@
 package models;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -25,10 +25,10 @@ public class ESEGroup extends Model {
 	public ArrayList<ESEUser> userList;
 
 	public ESEGroup(String groupName, ESEUser owner) {
+		this.initialize();
 		this.groupName = groupName;
 		this.owner = owner;
 
-		this.initialize();
 	}
 
 	private void initialize() {
@@ -85,7 +85,7 @@ public class ESEGroup extends Model {
 									// exist in the list
 	}
 
-	public ArrayList<ESEUser> getAllUser() {
+	public List<ESEUser> getAllUser() {
 		return this.userList;
 	}
 
@@ -99,14 +99,14 @@ public class ESEGroup extends Model {
 		return this.userList.contains(user);
 	}
 
-	@Override
-	public String toString() { // TODO: LK: correct?
-		String strName = "Group " + this.groupName;
-		String[] arrayUsers = (String[]) this.userList.toArray();
-		String strUsers = "Users: " + Arrays.toString(arrayUsers);
-
-		return strName + " " + strUsers;
-	}
+	// @Override
+	// public String toString() { // TODO: LK: correct?
+	// String strName = "Group " + this.groupName;
+	// String[] arrayUsers = (String[]) this.userList.toArray();
+	// String strUsers = "Users: " + Arrays.toString(arrayUsers);
+	//
+	// return strName + " " + strUsers;
+	// }
 
 	public String getGroupName() {
 		return this.groupName;

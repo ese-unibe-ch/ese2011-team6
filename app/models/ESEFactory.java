@@ -16,16 +16,17 @@ public abstract class ESEFactory {
 	}
 
 	public static ESEEvent createEvent(String eventName, String strStart,
-			String strEnd, String strIsPublic) {
-		ESEEvent event = new ESEEvent(eventName, strStart, strEnd, strIsPublic);
-		event.save();
+			String strEnd, String strIsPublic, ESECalendar correspondingCalendar) {
+		ESEEvent event = new ESEEvent(eventName, strStart, strEnd, strIsPublic,
+				correspondingCalendar);
+		// event.save();
 
 		return event;
 	}
 
 	public static ESEGroup createGroup(String groupName, ESEUser owner) {
 		ESEGroup group = new ESEGroup(groupName, owner);
-		group.save();
+		// group.save();
 
 		return group;
 	}

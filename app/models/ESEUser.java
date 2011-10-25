@@ -179,6 +179,7 @@ public class ESEUser extends Model {
 		this.groupList = new ArrayList<ESEGroup>();
 
 		ESEGroup groupFriends = ESEFactory.createGroup("Friends", this);
+		System.out.println("----------OK BIS HIER--------");
 		this.groupList.add(groupFriends);
 	}
 

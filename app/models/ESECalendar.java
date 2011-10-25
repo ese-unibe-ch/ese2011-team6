@@ -32,7 +32,7 @@ public class ESECalendar extends Model {
 			@Required String isPublic) {
 		// TODO: Has eventName to be unique? //LK @RC: a eventName is not unique
 		ESEEvent newEvent = ESEFactory.createEvent(eventName, startDate,
-				endDate, isPublic);
+				endDate, isPublic, this);
 		for (ESEEvent existingEvent : this.eventList) {
 			if (checkEventOverlaps(existingEvent, newEvent)) {
 				// TODO: Complain as new event overlaps with other event
@@ -106,7 +106,7 @@ public class ESECalendar extends Model {
 		// ends at "calendarDay" 23:59
 		ESEEvent pseudoEvent = new ESEEvent("CompareHelperEvent",
 				calendarDay.substring(0, 10) + " 00:00", calendarDay.substring(
-						0, 10) + " 23:59", "1");
+						0, 10) + " 23:59", "1", this);
 		for (ESEEvent e : this.eventList) {
 			if (checkEventOverlaps(e, pseudoEvent)) {
 				eventsFormDate.add(e);
@@ -142,5 +142,9 @@ public class ESECalendar extends Model {
 
 	public Iterator<ESEEvent> getPublicEventsAsIterator() {
 		return this.getAllEventsAsList().iterator();
+	}
+
+	public String getName() {
+		return this.calendarName;
 	}
 }

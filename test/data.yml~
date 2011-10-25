@@ -34,7 +34,7 @@ ESEGroup(jackFriends):
     owner:       jack
 
 #Groups -additional
-ESEGroup(billOtherFriends):
+ESEGroup(billOtherFriends)
     groupName:   BillOtherFriends
     owner:       bill    
     
