@@ -1,7 +1,7 @@
 #{extends 'main.html' /}
 #{set title:'XXX: title' /}
 
-#{logged_in_as /}
+#{head /}
 
 #{ifErrors}
 	input error..
@@ -28,4 +28,4 @@
 	<input type="submit" value="submit event" />
 #{/form}
 
-#{logout /}
+#{tail /}

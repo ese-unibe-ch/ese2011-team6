@@ -1,7 +1,7 @@
 #{extends 'main.html' /}
 #{set title:'XXX: title' /}
 
-#{logged_in_as /}
+#{head /}
 
 #{list le}
 	${_.getId()}
@@ -15,4 +15,4 @@
 	empty
 #{/else}
 
-#{logout /}
+#{tail /}
