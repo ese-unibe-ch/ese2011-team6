@@ -96,6 +96,10 @@ public class ESEUser extends Model {
 		return null;
 	}
 
+	public boolean validatePassword(String p) {
+		return p.equals(password);
+	}
+
 	// --------------------- //
 	// CREATE/REMOVE METHODS //
 	// -------------------- //
