@@ -25,6 +25,7 @@ public class ESECalendar extends Model {
 		this.calendarName = calendarName;
 		this.eventList = new ArrayList<ESEEvent>();
 		this.owner = owner;
+		this.owner.addCalendar(this);	/* XXX: right place? */
 	}
 
 	public void addEvent(@Required String eventName,
@@ -82,6 +83,10 @@ public class ESECalendar extends Model {
 
 	public String getCalendarName() {
 		return this.calendarName;
+	}
+
+	public ESEUser getOwner() {
+		return this.owner;
 	}
 
 	public void renameCalendar(@Required String newName) {

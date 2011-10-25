@@ -76,7 +76,15 @@ public class ESEUser extends Model {
 		return user.getMyGroups();
 	}
 
+	public static ESEUser getUser(String user) {
+		return find("byUsername", user).first();
+	}
+
 	// "THIS" GETTERS:
+
+	public String getUsername() {
+		return this.username;
+	}
 
 	public List<ESECalendar> getAllCalendars() {
 		return this.calendarList;
@@ -103,6 +111,10 @@ public class ESEUser extends Model {
 	// --------------------- //
 	// CREATE/REMOVE METHODS //
 	// -------------------- //
+
+	public void addCalendar(@Required ESECalendar calendar) {
+		this.calendarList.add(calendar);	/* XXX: right place? */
+	}
 
 	public void createCalendar(@Required String calendarName) {
 		this.validateNewCalendar(calendarName);

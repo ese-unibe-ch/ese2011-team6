@@ -1,6 +1,6 @@
 package controllers;
 
-import java.util.ArrayList;
+import java.util.List;
 import play.mvc.*;
 import models.*;
 
@@ -8,7 +8,20 @@ import models.*;
 public class usr extends Controller
 {
 	public static void ls (
+		String mod,
+		String id
 	) {
-		render();
+		ESEUser u;
+		List<ESECalendar> lc;
+		String authid = Secure.Security.connected();
+		String user = id==null ?authid :id;
+
+		if ((u = ESEUser.getUser(user)) == null) {
+			user = authid;
+			u = ESEUser.getUser(user);
+		}
+		lc = u.getAllCalendars();
+
+		render(lc);
 	}
 }

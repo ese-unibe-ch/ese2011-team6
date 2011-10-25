@@ -8,10 +8,7 @@ public class sec extends Secure.Security
 		String user,
 		String pass
 	) {
-		ESEUser u = ESEUser
-			.find("byUsername", user)
-			.first();
-
+		ESEUser u = ESEUser.getUser(user);
 		if (u == null) {
 			return false;
 		}

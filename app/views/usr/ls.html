@@ -3,6 +3,13 @@
 
 #{logged_in_as /}
 
-XXX: content
+#{list lc}
+	${_.getOwner().getUsername()}'s
+	${_.getCalendarName()}
+	<br />
+#{/list}
+#{else}
+	empty
+#{/else}
 
 #{logout /}
