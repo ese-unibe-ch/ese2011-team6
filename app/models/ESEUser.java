@@ -112,10 +112,6 @@ public class ESEUser extends Model {
 	// CREATE/REMOVE METHODS //
 	// -------------------- //
 
-	public void addCalendar(@Required ESECalendar calendar) {
-		this.calendarList.add(calendar);	/* XXX: right place? */
-	}
-
 	public void createCalendar(@Required String calendarName) {
 		this.validateNewCalendar(calendarName);
 

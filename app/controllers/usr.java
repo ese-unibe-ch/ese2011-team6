@@ -7,7 +7,7 @@ import models.*;
 @With(Secure.class)
 public class usr extends Controller
 {
-	public static void ls_cal (
+	public static void ls_cals (
 		String id
 	) {
 		ESEUser u;

@@ -3,9 +3,12 @@
 
 #{logged_in_as /}
 
-#{list lu}
+#{list le}
 	${_.getId()}
-	${_.getUsername()}
+	${_.getName()}
+	${_.getStartDate().toString()}
+	${_.getEndDate().toString()}
+	${_.isPublic().toString()}
 	<br />
 #{/list}
 #{else}

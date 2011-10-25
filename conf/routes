@@ -3,9 +3,10 @@
 #	module -> id -> action -> parameters
 
 *	/					module:secure
-*	/					usr.ls_cal
+*	/					usr.ls_cals
 *	/usr					usr.ls
-*	/usr/{id}				usr.ls_cal
+*	/usr/{id}				usr.ls_cals
+*	/cal/{id}				cal.ls_evts
 
 GET	/public/				staticDir:public
 GET	/favicon.ico				404

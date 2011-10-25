@@ -25,7 +25,6 @@ public class ESECalendar extends Model {
 		this.calendarName = calendarName;
 		this.eventList = new ArrayList<ESEEvent>();
 		this.owner = owner;
-		this.owner.addCalendar(this);	/* XXX: right place? */
 	}
 
 	public void addEvent(@Required String eventName,
@@ -79,6 +78,11 @@ public class ESECalendar extends Model {
 				.getStartDate().getTime()
 				&& existingEvent.getEndDate().getTime() <= newEvent
 						.getEndDate().getTime();
+	}
+
+	public static ESECalendar getCalendar(String id) {
+		long cid = Long.parseLong(id);
+		return findById(cid);
 	}
 
 	public String getCalendarName() {
