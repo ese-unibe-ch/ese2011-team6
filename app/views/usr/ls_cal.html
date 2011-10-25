@@ -3,8 +3,9 @@
 
 #{logged_in_as /}
 
-#{list lu}
-	${_.getUsername()}
+#{list lc}
+	${_.getOwner().getUsername()}'s
+	${_.getCalendarName()}
 	<br />
 #{/list}
 #{else}

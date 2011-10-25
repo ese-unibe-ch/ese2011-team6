@@ -7,8 +7,7 @@ import models.*;
 @With(Secure.class)
 public class usr extends Controller
 {
-	public static void ls (
-		String mod,
+	public static void ls_cal (
 		String id
 	) {
 		ESEUser u;
@@ -21,7 +20,15 @@ public class usr extends Controller
 			u = ESEUser.getUser(user);
 		}
 		lc = u.getAllCalendars();
-
 		render(lc);
+	}
+
+	public static void ls (
+	) {
+		List<ESEUser> lu;
+		String authid = Secure.Security.connected();
+
+		lu = ESEUser.getAllOtherUsers(authid);
+		render(lu);
 	}
 }
