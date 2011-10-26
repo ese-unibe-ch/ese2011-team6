@@ -62,7 +62,7 @@ public class ESEEventTest extends UnitTest {
 		ESECalendar testCal = ESEFactory.createCalendar("testCal", testUser);
 		
 		ESEEvent eventToModify = ESEFactory.createEvent("unmodified", 
-		"25.10.2011 00:00", "26.10.2011 00:00", "1", testCal);
+		"25.10.2011 00:00", "26.10.2011 00:00", "true", testCal);
 		
 		assertEquals("unmodified", eventToModify.getEventName());
 		assertEquals("25.10.2011 00:00", 
@@ -74,7 +74,7 @@ public class ESEEventTest extends UnitTest {
 		eventToModify.editEventName("modified event");
 		eventToModify.editStartDate("25.10.2011 12:00");
 		eventToModify.editEndDate("26.10.2011 12:00");
-		eventToModify.editVisibility("0");
+		eventToModify.editVisibility("false");
 	
 		assertEquals("modified event", eventToModify.getEventName());
 		assertEquals("25.10.2011 12:00", 
