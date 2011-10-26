@@ -54,7 +54,7 @@ public class cal extends Controller
 		render(id, le, y, m, d, cy, cm, cd, days, mname);
 	}
 
-	public static void ls_evts_cur (
+	public static void ls_evts (
 		String id
 	) {
 		cal.ls_evts(id, null, null, null);
@@ -94,7 +94,7 @@ public class cal extends Controller
 				ESEFactory.createEvent(
 					name, beg, end, pub, c);
 			}
-			cal.ls_evts_cur(id);
+			cal.ls_evts(id);
 		}
 		params.flash();
 		validation.keep();
@@ -109,7 +109,7 @@ public class cal extends Controller
 		if (c != null && permitted(c)) {
 			c.removeEvent(Long.parseLong(eid));
 		}
-		cal.ls_evts_cur(id);
+		cal.ls_evts(id);
 	}
 
 	public static Boolean permitted (
