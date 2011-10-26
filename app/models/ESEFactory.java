@@ -19,7 +19,7 @@ public abstract class ESEFactory {
 			String strEnd, String strIsPublic, ESECalendar correspondingCalendar) {
 		ESEEvent event = new ESEEvent(eventName, strStart, strEnd, strIsPublic,
 				correspondingCalendar);
-		// event.save();
+		event.save();
 
 		return event;
 	}
