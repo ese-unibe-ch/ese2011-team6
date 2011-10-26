@@ -1,57 +1,9 @@
-# Compiled source #
-###################
-*.com
-*.class
-*.o
-*.so
-
-# ignoring some files we don't want on our repo
-# e.g. nasty editor backup files and OS X FS information
-*~
-
-#OSX
-
-.DS_Store
-Icon?
-
-# Thumbnails
-._*
-
-# Files that might appear on external disk
-.Spotlight-V100
-.Trashes
-
-#Linux
-!.gitignore
-*~
-*.sw[a-p]
-
-# KDE
-.directory
-
-# Logs and databases #
-######################
-*.log
-*.sql
-*.sqlite
-
-# Merge backups #
-.orig
-
 # eclipse
 /.classpath
 /.project
 /.settings
 /bin
 /eclipse
-.metadata
-bin/**
-tmp/**
-tmp/**/*
-*.tmp
-*.bak
-*.swp
-*~.nib
 
 # play!
 /lib
@@ -59,7 +11,7 @@ tmp/**/*
 /modules
 /test-result
 /tmp
-eclipse/*.launch
+/hs_err_pid2494.log
 
 # sync.sh
 /.git_old
