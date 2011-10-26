@@ -5,6 +5,7 @@ import java.util.List;
 import models.ESECalendar;
 import models.ESEEvent;
 import models.ESEFactory;
+import models.ESEUser;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -25,11 +26,20 @@ public class ESECalendarTest extends UnitTest {
 				"21.10.2011 20:30", "false");
 		testCalendar.addEvent("TestEvent3", "22.10.2011 20:00",
 				"22.10.2011 20:30", "true");
+		
+		assertEquals(3, testCalendar.getAllEventsAsList().size());
 	}
 
 	@Test
 	public void shouldReturnCorrectName() {
 		assertEquals(testCalendar.getName(), "TestCalendarName");
+	}
+	
+	@Test
+	public void shouldReturnCorrectOwner() {
+		ESEUser testUser = ESEFactory.createUser("testUser", "pw");
+		ESECalendar testCalendar2 = ESEFactory.createCalendar("TestCalendarName", testUser);
+		assertEquals(testCalendar2.owner,testUser);
 	}
 
 	@Test
