@@ -14,3 +14,6 @@ POST	/cal/{id}/add				cal.add_evt_post
 
 GET	/public/				staticDir:public
 GET	/favicon.ico				404
+
+# Import Secure routes
+*       /                                       module:secure
