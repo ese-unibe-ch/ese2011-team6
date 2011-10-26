@@ -49,7 +49,7 @@ public class ESEFactoryTest extends UnitTest {
 	public void shouldAddGroupToDataBase() {
 		Fixtures.deleteDatabase();
 		assertEquals(ESEGroup.count(), 0);
-		ESEFactory.createGroup("TestGroupName", null);
+		ESEFactory.createGroup("TestGroupName", null).save();
 		assertEquals(ESEGroup.count(), 1);
 	}
 
