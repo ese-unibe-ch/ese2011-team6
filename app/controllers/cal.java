@@ -14,14 +14,18 @@ public class cal extends Controller
 		String id
 	) {
 		ESECalendar c;
+		String cal_owner;
 		List<ESEEvent> le = null;
 		String authid = Secure.Security.connected();
 
 		if ((c = ESECalendar.getCalendar(id)) != null) {
-			le = ESEEvent.find("correspondingCalendar", c)
-				.fetch();
+			le = c.getAllEventsAsList();
 		}
-		render(le);
+		cal_owner = c.getOwner().getUsername();
+		if (!authid.equals(cal_owner)) {
+			le = c.getPublicEventsAsList();
+		}
+		render(id, le);
 	}
 
 	public static void add_evt (
@@ -38,7 +42,9 @@ public class cal extends Controller
 		String pub
 	) {
 		Date dbeg, dend;
+		String cal_owner;
 		Boolean err_date = false;
+		String authid = Secure.Security.connected();
 		ESECalendar c = ESECalendar.getCalendar(id);
 		SimpleDateFormat sdf = new SimpleDateFormat(
 			"dd.MM.yyyy HH:mm");
@@ -53,8 +59,13 @@ public class cal extends Controller
 			err_date = true;
 		}
 		if (!validation.hasErrors() && !err_date && c != null) {
-			pub = pub==null ?"false" :"true";
-			ESEFactory.createEvent(name, beg, end, pub, c);
+			cal_owner = c.getOwner().getUsername();
+			if (authid.equals(cal_owner)) {
+				pub = pub==null ?"false" :"true";
+				ESEFactory.createEvent(
+					name, beg, end, pub, c);
+			}
+			cal.ls_evts(id);
 		}
 		params.flash();
 		validation.keep();

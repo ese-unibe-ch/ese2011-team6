@@ -6,7 +6,7 @@
 #{list lc}
 	${_.getId()}
 	${_.getOwner().getUsername()}'s
-	${_.getCalendarName()}
+	<a href="/cal/${_.getId()}">${_.getCalendarName()}</a>
 	<br />
 #{/list}
 #{else}
