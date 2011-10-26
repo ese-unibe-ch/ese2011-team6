@@ -7,6 +7,7 @@
 *	/usr					usr.ls
 *	/usr/{id}				usr.ls_cals
 *	/cal/{id}				cal.ls_evts
+*	/cal/{id}/{year}/{month}/{day}		cal.ls_evts
 GET	/cal/{id}/add				cal.add_evt
 POST	/cal/{id}/add				cal.add_evt_post
 *	/cal/{id}/rm				cal.rm_evt

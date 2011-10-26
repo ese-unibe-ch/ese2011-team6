@@ -1,0 +1,21 @@
+/* main.css */
+
+div.month {
+	border: solid 1px black;
+	width: 300px;
+	min-height: 200px;
+}
+
+div.day {
+	float: left;
+	width: 20px;
+	padding: 10px;
+}
+
+div.selected {
+	background-color: lightblue;
+}
+
+div.today {
+	background-color: yellow;
+}
