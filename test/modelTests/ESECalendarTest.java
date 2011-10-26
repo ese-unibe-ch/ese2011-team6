@@ -55,7 +55,8 @@ public class ESECalendarTest extends UnitTest {
 	public void shouldRemoveCorrectEvent() {
 		assertTrue(testCalendar.eventList.get(1).getName().equals("TestEvent2"));
 		assertTrue(testCalendar.eventList.get(2).getName().equals("TestEvent3"));
-		testCalendar.removeEvent("TestEvent2");
+		ESEEvent e2 = ESEEvent.find("byEventName", "TestEvent2").first();
+		testCalendar.removeEvent(e2.id);
 		assertFalse(testCalendar.eventList.get(1).getName()
 				.equals("TestEvent2"));
 		assertTrue(testCalendar.eventList.get(1).getName().equals("TestEvent3"));
