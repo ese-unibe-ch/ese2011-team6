@@ -57,7 +57,21 @@ public class ESECalendarTest extends UnitTest {
 		assertTrue(testCalendar.eventList.get(1).getName().equals("TestEvent2"));
 		assertTrue(testCalendar.eventList.get(2).getName().equals("TestEvent3"));
 		ESEEvent e2 = ESEEvent.find("byEventName", "TestEvent2").first();
+		ESEEvent e2b = ESEEvent.find("byEventName", "TestEvent2").first();
+		ESEEvent e3 = ESEEvent.find("byEventName", "TestEvent3").first();
+		
+		/*
+		TODO: Team Model: Problems with database or wrong specified test?
+		System.out.println("e2: " + e2.id);
+		System.out.println("e2b: " + e2b.id);
+		System.out.println("e3: " + e3.id);
+		System.out.println("Place 0 in List: " + testCalendar.eventList.get(0).id);
+		System.out.println("Place 1 in List: " + testCalendar.eventList.get(1).id);
+		System.out.println("Place 2 in List: " + testCalendar.eventList.get(2).id);
+		*/
+		
 		testCalendar.removeEvent(e2.id);
+		
 		assertFalse(testCalendar.eventList.get(1).getName().equals("TestEvent2"));
 		assertTrue(testCalendar.eventList.get(1).getName().equals("TestEvent3"));
 	}

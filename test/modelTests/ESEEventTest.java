@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import models.ESEEvent;
+import models.ESEFactory;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,23 +18,10 @@ public class ESEEventTest extends UnitTest {
 
 	@Before
 	public void setUp() {
-		this.testEvent1 = new ESEEvent("testEvent1", "25.10.2011 08:15",
+		this.testEvent1 = ESEFactory.createEvent("testEvent1", "25.10.2011 08:15",
 				"25.10.2011 10:00", "false", null);
-		this.testEvent1.save();
-		this.testEvent2 = new ESEEvent("testEvent2", "26.10.2011 08:15",
+		this.testEvent2 = ESEFactory.createEvent("testEvent2", "26.10.2011 08:15",
 				"26.10.2011 10:00", "true", null);
-		this.testEvent2.save();
-
-		ESEEvent controllTestEvent1 = ESEEvent
-				.find("byEventName", "testEvent1").first();
-		ESEEvent controllTestEvent2 = ESEEvent
-				.find("byEventName", "testEvent2").first();
-
-		assertNotNull(controllTestEvent1);
-		assertNotNull(controllTestEvent2);
-
-		assertEquals(controllTestEvent1.getEventName(), "testEvent1");
-
 	}
 
 	@Test

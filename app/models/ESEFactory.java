@@ -27,6 +27,8 @@ public abstract class ESEFactory {
 	public static ESEGroup createGroup(String groupName, ESEUser owner) {
 		ESEGroup group = new ESEGroup(groupName, owner);
 		// group.save();
+		// TODO: @ team-test: Warum ist das group.save() hier auskommentiert? 
+		// -> ESEFactoryTest, #shouldAddGroupToDatabase() fails
 
 		return group;
 	}
