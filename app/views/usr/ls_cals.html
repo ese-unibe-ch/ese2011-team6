@@ -1,0 +1,16 @@
+#{extends 'main.html' /}
+#{set title:'XXX: title' /}
+
+#{head /}
+
+#{list lc}
+	${_.getId()}
+	${_.getOwner().getUsername()}'s
+	<a href="/cal/${_.getId()}">${_.getCalendarName()}</a>
+	<br />
+#{/list}
+#{else}
+	empty
+#{/else}
+
+#{tail /}

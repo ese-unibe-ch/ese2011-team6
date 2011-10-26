@@ -76,7 +76,15 @@ public class ESEUser extends Model {
 		return user.getMyGroups();
 	}
 
+	public static ESEUser getUser(String user) {
+		return find("byUsername", user).first();
+	}
+
 	// "THIS" GETTERS:
+
+	public String getUsername() {
+		return this.username;
+	}
 
 	public List<ESECalendar> getAllCalendars() {
 		return this.calendarList;
@@ -94,6 +102,10 @@ public class ESEUser extends Model {
 		}
 		// TODO LK: Throw an exception
 		return null;
+	}
+
+	public boolean validatePassword(String p) {
+		return p.equals(password);
 	}
 
 	// --------------------- //

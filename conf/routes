@@ -1,15 +1,16 @@
-# Routes
-# This file defines all application routes (Higher priority routes first)
-# ~~~~
+# routes
+#
+#	module -> id -> action -> parameters
 
-# Home page
-GET     /                                       Application.index
+*	/					module:secure
+*	/					usr.ls_cals
+*	/usr					usr.ls
+*	/usr/{id}				usr.ls_cals
+*	/cal/{id}				cal.ls_evts
+*	/cal/{id}/{year}/{month}/{day}		cal.ls_evts
+GET	/cal/{id}/add				cal.add_evt
+POST	/cal/{id}/add				cal.add_evt_post
+*	/cal/{id}/rm				cal.rm_evt
 
-# Ignore favicon requests
-GET     /favicon.ico                            404
-
-# Map static resources from the /app/public folder to the /public path
-GET     /public/                                staticDir:public
-
-# Catch all
-*       /{controller}/{action}                  {controller}.{action}
+GET	/public/				staticDir:public
+GET	/favicon.ico				404

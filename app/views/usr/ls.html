@@ -1,0 +1,15 @@
+#{extends 'main.html' /}
+#{set title:'XXX: title' /}
+
+#{head /}
+
+#{list lu}
+	${_.getId()}
+	<a href="/usr/${_.getUsername()}">${_.getUsername()}</a>
+	<br />
+#{/list}
+#{else}
+	empty
+#{/else}
+
+#{tail /}

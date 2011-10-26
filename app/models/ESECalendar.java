@@ -81,23 +81,27 @@ public class ESECalendar extends Model
 		return newStartTime <= existingStartTime && existingEndTime <= newEndTime;
 	}
 
-	public String getCalendarName()
-	{
+	public static ESECalendar getCalendar(String id) {
+		long cid = Long.parseLong(id);
+		return findById(cid);
+	}
+
+	public String getCalendarName() {
 		return this.calendarName;
 	}
 
-	public void renameCalendar(@Required String newName)
-	{
+	public ESEUser getOwner() {
+		return this.owner;
+	}
+
+	public void renameCalendar(@Required String newName) {
 		this.calendarName = newName;
 		this.save();
 	}
 
-	public void removeEvent(@Required String eventName)
-	{
-		for (ESEEvent e : this.eventList)
-		{
-			if (e.getEventName().equals(eventName))
-			{
+	public void removeEvent(@Required Long id) {
+		for (ESEEvent e : this.eventList) {
+			if (e.getId() == id) {
 				this.eventList.remove(e);
 				e.delete(); // DB stuff
 				this.save();

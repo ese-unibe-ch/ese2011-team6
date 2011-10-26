@@ -1,0 +1,31 @@
+#{extends 'main.html' /}
+#{set title:'XXX: title' /}
+
+#{head /}
+
+#{ifErrors}
+	input error..
+	<br />
+#{/ifErrors}
+
+#{form @cal.add_evt_post(id, name, beg, end, pub)}
+	<label for="name">name: </label>
+	<input type="text" name="name" id="name" />
+	<br />
+
+	<label for="beg">beg: </label>
+	<input type="text" name="beg" id="beg" />
+	<br />
+
+	<label for="end">end: </label>
+	<input type="text" name="end" id="end" />
+	<br />
+
+	<label for="pub">pub: </label>
+	<input type="checkbox" name="pub" id="pub" />
+	<br />
+
+	<input type="submit" value="submit event" />
+#{/form}
+
+#{tail /}

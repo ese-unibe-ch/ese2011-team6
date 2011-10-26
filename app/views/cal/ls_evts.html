@@ -1,0 +1,68 @@
+#{extends 'main.html' /}
+#{set title:'XXX: title' /}
+
+#{head /}
+
+%{
+	if (m == 1) {
+		mp = 12;
+		yp = y-1;
+		mn = m+1;
+		yn = y;
+	}
+	else if (m == 12) {
+		mp = m-1;
+		yp = y;
+		mn = 1;
+		yn = y+1;
+	}
+	else {
+		mp = m-1;
+		yp = y;
+		mn = m+1;
+		yn = y;
+	}
+}%
+
+<a href="/cal/${id}/${yp}/${mp}/1">prev</a> |
+<a href="/cal/${id}">${mname}, ${y}</a> |
+<a href="/cal/${id}/${yn}/${mn}/1">next</a>
+<br />
+<br />
+<div class="month">
+%{
+	for (i in 1..days) {
+		cls = "day";
+		if (i == d) {
+			cls += " selected";
+		}
+		if (y == cy && m == cm && i == cd) {
+			cls += " today";
+		}
+}%
+<div class="${cls}">
+	<a href="/cal/${id}/${y}/${m}/${i}">${i}</a>
+</div>
+%{
+	}
+}%
+</div>
+<br />
+
+#{list le}
+	${_.getId()} |
+	${_.getName()} |
+	${_.getStartDate().toString()} |
+	${_.getEndDate().toString()} |
+	${_.isPublic().toString()} |
+	#{a @cal.rm_evt(id, _.getId())}delete#{/a}
+	<br />
+#{/list}
+#{else}
+	empty
+	<br />
+#{/else}
+<br />
+
+<a href="/cal/${id}/add">add event</a> |
+#{tail /}
