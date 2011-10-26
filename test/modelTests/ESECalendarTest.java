@@ -4,6 +4,7 @@ import java.util.List;
 
 import models.ESECalendar;
 import models.ESEEvent;
+import models.ESEFactory;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +17,7 @@ public class ESECalendarTest extends UnitTest {
 
 	@Before
 	public void setUp() {
-		testCalendar = new ESECalendar("TestCalendarName", null);
+		testCalendar = ESEFactory.createCalendar("TestCalendarName", null);
 
 		testCalendar.addEvent("TestEvent1", "20.10.2011 20:00",
 				"20.10.2011 20:30", "true");
@@ -57,8 +58,7 @@ public class ESECalendarTest extends UnitTest {
 		assertTrue(testCalendar.eventList.get(2).getName().equals("TestEvent3"));
 		ESEEvent e2 = ESEEvent.find("byEventName", "TestEvent2").first();
 		testCalendar.removeEvent(e2.id);
-		assertFalse(testCalendar.eventList.get(1).getName()
-				.equals("TestEvent2"));
+		assertFalse(testCalendar.eventList.get(1).getName().equals("TestEvent2"));
 		assertTrue(testCalendar.eventList.get(1).getName().equals("TestEvent3"));
 	}
 
