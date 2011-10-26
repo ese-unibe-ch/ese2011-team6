@@ -9,6 +9,7 @@
 *	/cal/{id}				cal.ls_evts
 GET	/cal/{id}/add				cal.add_evt
 POST	/cal/{id}/add				cal.add_evt_post
+*	/cal/{id}/rm				cal.rm_evt
 
 GET	/public/				staticDir:public
 GET	/favicon.ico				404

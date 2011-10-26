@@ -4,15 +4,17 @@
 #{head /}
 
 #{list le}
-	${_.getId()}
-	${_.getName()}
-	${_.getStartDate().toString()}
-	${_.getEndDate().toString()}
-	${_.isPublic().toString()}
+	${_.getId()} |
+	${_.getName()} |
+	${_.getStartDate().toString()} |
+	${_.getEndDate().toString()} |
+	${_.isPublic().toString()} |
+	#{a @cal.rm_evt(id, _.getId())}delete#{/a}
 	<br />
 #{/list}
 #{else}
 	empty
+	<br />
 #{/else}
 
 <a href="/cal/${id}/add">add event</a> |

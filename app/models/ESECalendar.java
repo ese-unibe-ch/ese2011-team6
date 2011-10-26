@@ -97,9 +97,9 @@ public class ESECalendar extends Model {
 		this.calendarName = newName;
 	}
 
-	public void removeEvent(@Required String eventName) {
+	public void removeEvent(@Required Long id) {
 		for (ESEEvent e : this.eventList) {
-			if (e.getEventName().equals(eventName)) {
+			if (e.getId() == id) {
 				this.eventList.remove(e);
 				e.delete(); // DB stuff
 				break;

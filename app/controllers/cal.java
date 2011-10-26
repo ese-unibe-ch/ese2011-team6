@@ -14,16 +14,12 @@ public class cal extends Controller
 		String id
 	) {
 		ESECalendar c;
-		String cal_owner;
 		List<ESEEvent> le = null;
-		String authid = Secure.Security.connected();
 
 		if ((c = ESECalendar.getCalendar(id)) != null) {
-			le = c.getAllEventsAsList();
-		}
-		cal_owner = c.getOwner().getUsername();
-		if (!authid.equals(cal_owner)) {
-			le = c.getPublicEventsAsList();
+			le = permitted(c)
+				?c.getAllEventsAsList()
+				:c.getPublicEventsAsList();
 		}
 		render(id, le);
 	}
@@ -42,9 +38,7 @@ public class cal extends Controller
 		String pub
 	) {
 		Date dbeg, dend;
-		String cal_owner;
 		Boolean err_date = false;
-		String authid = Secure.Security.connected();
 		ESECalendar c = ESECalendar.getCalendar(id);
 		SimpleDateFormat sdf = new SimpleDateFormat(
 			"dd.MM.yyyy HH:mm");
@@ -59,8 +53,7 @@ public class cal extends Controller
 			err_date = true;
 		}
 		if (!validation.hasErrors() && !err_date && c != null) {
-			cal_owner = c.getOwner().getUsername();
-			if (authid.equals(cal_owner)) {
+			if (permitted(c)) {
 				pub = pub==null ?"false" :"true";
 				ESEFactory.createEvent(
 					name, beg, end, pub, c);
@@ -70,5 +63,24 @@ public class cal extends Controller
 		params.flash();
 		validation.keep();
 		add_evt(id);
+	}
+
+	public static void rm_evt (
+		String id,
+		String eid
+	) {
+		ESECalendar c = ESECalendar.getCalendar(id);
+		if (c != null && permitted(c)) {
+			c.removeEvent(Long.parseLong(eid));
+		}
+		cal.ls_evts(id);
+	}
+
+	public static Boolean permitted (
+		ESECalendar c
+	) {
+		String authid = Secure.Security.connected();
+		String cal_owner = c.getOwner().getUsername();
+		return authid.equals(cal_owner);
 	}
 }
