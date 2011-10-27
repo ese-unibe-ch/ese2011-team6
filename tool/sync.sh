@@ -1,6 +1,6 @@
 #!/bin/sh -e
 
-m_mutt=$(which mutt)
+#m_mutt=$(which mutt)
 m_addr=ese-team5@iam.unibe.ch
 
 m_safe=$1
@@ -85,6 +85,6 @@ m_backup
 
 m_main | tee $m_temp
 
-test -n $m_mutt &&
-	test -f $m_temp.done &&
-	mutt -s "git-sync: $(date)" -- $m_addr <$m_temp
+#test -n $m_mutt &&
+#	test -f $m_temp.done &&
+#	mutt -s "git-sync: $(date)" -- $m_addr <$m_temp
