@@ -1,7 +1,7 @@
 /* main.css */
 
 div.month {
-	width: 360px;
+	width: 370px;
 	min-height: 280px;
 	border: solid 1px black;
 }
@@ -9,11 +9,17 @@ div.month {
 div.day, div.thead {
 	float: left;
 	width: 30px;
-	padding: 10px;
+	padding: 8px;
+	margin: 2px;
+	text-align: center;
 }
 
 div.thead {
 	font-weight: bold;
+}
+
+div.event {
+	background-color: lightpink;
 }
 
 div.selected {

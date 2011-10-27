@@ -25,7 +25,7 @@ public class cal extends Controller
 				?c.getAllEventsAsList()
 				:c.getPublicEventsAsList();
 		}
-		emonth = new ESEMonth(year, month, day);
+		emonth = new ESEMonth(year, month, day, c);
 		render(id, le, emonth);
 	}
 
@@ -78,13 +78,16 @@ public class cal extends Controller
 
 	public static void rm_evt (
 		String id,
+		String year,
+		String month,
+		String day,
 		String eid
 	) {
 		ESECalendar c = ESECalendar.getCalendar(id);
 		if (c != null && permitted(c)) {
 			c.removeEvent(Long.parseLong(eid));
 		}
-		cal.ls_evts(id);
+		cal.ls_evts(id, year, month, day);
 	}
 
 	public static Boolean permitted (

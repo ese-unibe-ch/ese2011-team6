@@ -1,6 +1,9 @@
 package controllers;
 
 import java.util.Calendar;
+import java.util.ArrayList;
+import java.util.Formatter;
+import models.*;
 
 public class ESEMonth
 {
@@ -26,9 +29,11 @@ public class ESEMonth
 	public ESEMonth (
 		String year,
 		String month,
-		String day
+		String day,
+		ESECalendar ecal
 	) {
 		int dow;
+		ArrayList<ESEEvent> evts;
 
 		if (year == null || month == null || day == null) {
 			y = cyear();
@@ -63,6 +68,12 @@ public class ESEMonth
 			}
 			if (y == cy && m == cm && i+1 == cd) {
 				edays[i].append_cssc("today");
+			}
+			evts = ecal.getListOfEventsRunningAtDay(
+				String.format("%02d.%02d.%d %s",
+					i+1, m, y, "12:00"));
+			if (evts.size() > 0) {
+				edays[i].append_cssc("event");
 			}
 		}
 	}
