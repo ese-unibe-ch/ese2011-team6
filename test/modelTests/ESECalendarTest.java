@@ -4,6 +4,8 @@ import java.util.List;
 
 import models.ESECalendar;
 import models.ESEEvent;
+import models.ESEFactory;
+import models.ESEUser;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +18,7 @@ public class ESECalendarTest extends UnitTest {
 
 	@Before
 	public void setUp() {
-		testCalendar = new ESECalendar("TestCalendarName", null);
+		testCalendar = ESEFactory.createCalendar("TestCalendarName", null);
 
 		testCalendar.addEvent("TestEvent1", "20.10.2011 20:00",
 				"20.10.2011 20:30", "true");
@@ -24,11 +26,20 @@ public class ESECalendarTest extends UnitTest {
 				"21.10.2011 20:30", "false");
 		testCalendar.addEvent("TestEvent3", "22.10.2011 20:00",
 				"22.10.2011 20:30", "true");
+		
+		assertEquals(3, testCalendar.getAllEventsAsList().size());
 	}
 
 	@Test
 	public void shouldReturnCorrectName() {
 		assertEquals(testCalendar.getName(), "TestCalendarName");
+	}
+	
+	@Test
+	public void shouldReturnCorrectOwner() {
+		ESEUser testUser = ESEFactory.createUser("testUser", "pw");
+		ESECalendar testCalendar2 = ESEFactory.createCalendar("TestCalendarName", testUser);
+		assertEquals(testCalendar2.owner,testUser);
 	}
 
 	@Test
@@ -55,9 +66,23 @@ public class ESECalendarTest extends UnitTest {
 	public void shouldRemoveCorrectEvent() {
 		assertTrue(testCalendar.eventList.get(1).getName().equals("TestEvent2"));
 		assertTrue(testCalendar.eventList.get(2).getName().equals("TestEvent3"));
-		testCalendar.removeEvent("TestEvent2");
-		assertFalse(testCalendar.eventList.get(1).getName()
-				.equals("TestEvent2"));
+		ESEEvent e2 = ESEEvent.find("byEventName", "TestEvent2").first();
+		ESEEvent e2b = ESEEvent.find("byEventName", "TestEvent2").first();
+		ESEEvent e3 = ESEEvent.find("byEventName", "TestEvent3").first();
+		
+		/*
+		TODO: Team Model: Problems with database or wrong specified test?
+		System.out.println("e2: " + e2.id);
+		System.out.println("e2b: " + e2b.id);
+		System.out.println("e3: " + e3.id);
+		System.out.println("Place 0 in List: " + testCalendar.eventList.get(0).id);
+		System.out.println("Place 1 in List: " + testCalendar.eventList.get(1).id);
+		System.out.println("Place 2 in List: " + testCalendar.eventList.get(2).id);
+		*/
+		
+		testCalendar.removeEvent(e2.id);
+		
+		assertFalse(testCalendar.eventList.get(1).getName().equals("TestEvent2"));
 		assertTrue(testCalendar.eventList.get(1).getName().equals("TestEvent3"));
 	}
 

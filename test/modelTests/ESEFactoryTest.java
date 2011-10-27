@@ -15,7 +15,6 @@ public class ESEFactoryTest extends UnitTest {
 
 	@Before
 	public void setUp() {
-		// no setup needed so far
 		Fixtures.deleteDatabase();
 		Fixtures.loadModels("data.yml");
 	}
@@ -23,8 +22,8 @@ public class ESEFactoryTest extends UnitTest {
 	@Test
 	public void testsCorrectWorkingOfDatabase() {
 
-		assertEquals(ESEUser.count(), 2);
-		// Fixtures.deleteDatabase();
+		assertEquals(ESEUser.count(), 3);
+		Fixtures.deleteDatabase();
 		assertEquals(ESEUser.count(), 0);
 	}
 
@@ -50,7 +49,7 @@ public class ESEFactoryTest extends UnitTest {
 	public void shouldAddGroupToDataBase() {
 		Fixtures.deleteDatabase();
 		assertEquals(ESEGroup.count(), 0);
-		ESEFactory.createGroup("TestGroupName", null);
+		ESEFactory.createGroup("TestGroupName", null).save();
 		assertEquals(ESEGroup.count(), 1);
 	}
 
