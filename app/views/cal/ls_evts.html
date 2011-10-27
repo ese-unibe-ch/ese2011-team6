@@ -4,52 +4,44 @@
 #{head /}
 
 %{
-	if (m == 1) {
+	if (emonth.m == 1) {
 		mp = 12;
-		yp = y-1;
-		mn = m+1;
-		yn = y;
+		yp = emonth.y-1;
+		mn = emonth.m+1;
+		yn = emonth.y;
 	}
-	else if (m == 12) {
-		mp = m-1;
-		yp = y;
+	else if (emonth.m == 12) {
+		mp = emonth.m-1;
+		yp = emonth.y;
 		mn = 1;
-		yn = y+1;
+		yn = emonth.y+1;
 	}
 	else {
-		mp = m-1;
-		yp = y;
-		mn = m+1;
-		yn = y;
+		mp = emonth.m-1;
+		yp = emonth.y;
+		mn = emonth.m+1;
+		yn = emonth.y;
 	}
 }%
 
 <a href="/cal/${id}/${yp}/${mp}/1">prev</a> |
-<a href="/cal/${id}">${mname}, ${y}</a> |
+<a href="/cal/${id}">${emonth.mname}, ${emonth.y}</a> |
 <a href="/cal/${id}/${yn}/${mn}/1">next</a>
 <br />
 <br />
 <div class="month">
 %{
-	cls = "thead";
 	for (i in 0..6) {
 }%
-<div class="${cls}">
-	${dow[i].substring(0,2)}
+<div class="${emonth.thead[i].get_cssc()}">
+	${emonth.thead[i].get_head().substring(0,2)}
 </div>
 %{
 	}
-	for (i in 1..days) {
-		cls = "day";
-		if (i == d) {
-			cls += " selected";
-		}
-		if (y == cy && m == cm && i == cd) {
-			cls += " today";
-		}
+	for (i in 0..emonth.days-1) {
 }%
-<div class="${cls}">
-	<a href="/cal/${id}/${y}/${m}/${i}">${i}</a>
+<div class="${emonth.edays[i].get_cssc()}">
+	<a href="/cal/${id}/${emonth.y}/${emonth.m}/${i}">${i+1}</a>
 </div>
 %{
 	}
