@@ -31,6 +31,14 @@
 <br />
 <div class="month">
 %{
+	cls = "thead";
+	for (i in 0..6) {
+}%
+<div class="${cls}">
+	${dow[i].substring(0,2)}
+</div>
+%{
+	}
 	for (i in 1..days) {
 		cls = "day";
 		if (i == d) {

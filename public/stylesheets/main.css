@@ -1,15 +1,19 @@
 /* main.css */
 
 div.month {
+	width: 360px;
+	min-height: 280px;
 	border: solid 1px black;
-	width: 300px;
-	min-height: 200px;
 }
 
-div.day {
+div.day, div.thead {
 	float: left;
-	width: 20px;
+	width: 30px;
 	padding: 10px;
+}
+
+div.thead {
+	font-weight: bold;
 }
 
 div.selected {
