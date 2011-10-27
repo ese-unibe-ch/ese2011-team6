@@ -82,6 +82,11 @@ public class ESECalendar extends Model
 		return newStartTime <= existingStartTime && existingEndTime <= newEndTime;
 	}
 
+	public static ESECalendar getCalendar(String id) {
+		long cid = Long.parseLong(id);
+		return findById(cid);
+	}
+
 	/**
 	 * @deprecated Es soll stattdessen {@link #getCalendarName()} verwendet werden
 	 */
