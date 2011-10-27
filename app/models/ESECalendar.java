@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import javax.persistence.*;
 import play.data.validation.Required;
+import play.db.jpa.JPABase;
 import play.db.jpa.Model;
 
 @Entity
@@ -122,17 +123,7 @@ public class ESECalendar extends Model
 
 	public void removeEvent(@Required Long eventId)
 	{
-		for (ESEEvent e : this.eventList)
-		{
-			if (e.getId().equals(eventId))
-			{
-				this.eventList.remove(e);
-				e.delete(); // DB stuff
-				this.save();
-				break;
-			}
-		}
-		//TODO: Complain as this event is not in the list
+		this.removeEvent(((ESEEvent) ESEEvent.findById(eventId)).getEventName());
 	}
 
 	public ArrayList<ESEEvent> getListOfEventsRunningAtDay(@Required String calendarDay)
