@@ -1,12 +1,8 @@
 package modelTests;
 
-import models.ESECalendar;
-import models.ESEFactory;
-import models.ESEGroup;
-import models.ESEUser;
+import models.*;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import play.test.Fixtures;
 import play.test.UnitTest;
@@ -25,7 +21,6 @@ public class ESEUserTest extends UnitTest {
 		Fixtures.deleteDatabase();
 		Fixtures.loadModels("data.yml");
 	}
-
 	@Test
 	public void createUserWithFacotry2Para() {
 
@@ -82,7 +77,7 @@ public class ESEUserTest extends UnitTest {
 	}
 
 	@Test
-	public void shouldCreatCalendarDBUser() {
+	public void shouldCreateCalendarDBUser() {
 		/*
 		 * TODO use method to get Calendar by String name instead of using index
 		 * as soon as it is available
@@ -223,9 +218,9 @@ public class ESEUserTest extends UnitTest {
 	@Test
 	public void shouldRemoveGroupeNewUser() {
 		// set up
-		ESEUser hansi = ESEFactory.createUser("hansi", "sehrgeheim", "Hans",
-				"Müller");
+		ESEUser hansi = ESEFactory.createUser("hansi", "sehrgeheim", "Hans", "Müller");
 		hansi.groupList.add(ESEFactory.createGroup("studies", hansi));
+		hansi.save();
 		hansi.groupList.add(ESEFactory.createGroup("best buddies", hansi));
 
 		assertEquals(3, hansi.groupList.size());

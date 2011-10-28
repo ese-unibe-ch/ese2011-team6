@@ -3,28 +3,28 @@ package modelTests;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import models.ESECalendar;
-import models.ESEConversionHelper;
-import models.ESEEvent;
-import models.ESEFactory;
-import models.ESEUser;
+import models.*;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
+import play.test.Fixtures;
 import play.test.UnitTest;
 
 public class ESEEventTest extends UnitTest {
 
 	private ESEEvent testEvent1;
 	private ESEEvent testEvent2;
+	private ESEUser testUser;
+	private ESECalendar testCalendar;
 
 	@Before
 	public void setUp() {
+		this.testUser = ESEFactory.createUser("testUser", "pw");
+		this.testCalendar = ESEFactory.createCalendar("TestCalendarName", testUser);
 		this.testEvent1 = ESEFactory.createEvent("testEvent1", "25.10.2011 08:15",
-				"25.10.2011 10:00", "false", null);
+				"25.10.2011 10:00", "false", testCalendar);
 		this.testEvent2 = ESEFactory.createEvent("testEvent2", "26.10.2011 08:15",
-				"26.10.2011 10:00", "true", null);
+				"26.10.2011 10:00", "true", testCalendar);
 	}
 
 	@Test

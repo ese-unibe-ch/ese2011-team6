@@ -2,23 +2,21 @@ package modelTests;
 
 import java.util.List;
 
-import models.ESECalendar;
-import models.ESEEvent;
-import models.ESEFactory;
-import models.ESEUser;
+import models.*;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import play.test.UnitTest;
 
 public class ESECalendarTest extends UnitTest {
 
 	public ESECalendar testCalendar;
+	public ESEUser testUser;
 
 	@Before
 	public void setUp() {
-		testCalendar = ESEFactory.createCalendar("TestCalendarName", null);
+		testUser = ESEFactory.createUser("testUser", "pw");
+		testCalendar = ESEFactory.createCalendar("TestCalendarName", testUser);
 
 		testCalendar.addEvent("TestEvent1", "20.10.2011 20:00",
 				"20.10.2011 20:30", "true");
@@ -37,7 +35,6 @@ public class ESECalendarTest extends UnitTest {
 	
 	@Test
 	public void shouldReturnCorrectOwner() {
-		ESEUser testUser = ESEFactory.createUser("testUser", "pw");
 		ESECalendar testCalendar2 = ESEFactory.createCalendar("TestCalendarName", testUser);
 		assertEquals(testCalendar2.owner,testUser);
 	}
@@ -64,37 +61,48 @@ public class ESECalendarTest extends UnitTest {
 
 	@Test
 	public void shouldRemoveCorrectEvent() {
+		assertTrue(testCalendar.eventList.get(0).getName().equals("TestEvent1"));
 		assertTrue(testCalendar.eventList.get(1).getName().equals("TestEvent2"));
 		assertTrue(testCalendar.eventList.get(2).getName().equals("TestEvent3"));
+		ESEEvent e1 = ESEEvent.find("byEventName", "TestEvent1").first();
 		ESEEvent e2 = ESEEvent.find("byEventName", "TestEvent2").first();
-		ESEEvent e2b = ESEEvent.find("byEventName", "TestEvent2").first();
 		ESEEvent e3 = ESEEvent.find("byEventName", "TestEvent3").first();
 		
-		/*
-		TODO: Team Model: Problems with database or wrong specified test?
-		System.out.println("e2: " + e2.id);
-		System.out.println("e2b: " + e2b.id);
-		System.out.println("e3: " + e3.id);
-		System.out.println("Place 0 in List: " + testCalendar.eventList.get(0).id);
-		System.out.println("Place 1 in List: " + testCalendar.eventList.get(1).id);
-		System.out.println("Place 2 in List: " + testCalendar.eventList.get(2).id);
-		*/
+		//TODO: Team Model: Problems with database or wrong specified test?
+		System.out.println("e1: " + e1.eventName + ", Id: " + e1.id);
+		System.out.println("e2: " + e2.eventName + ", Id: " + e2.id);
+		System.out.println("e3: " + e3.eventName + ", Id: " + e3.id);
+		System.out.println("Place 0 in List: " + testCalendar.eventList.get(0).eventName + ", Id: " + testCalendar.eventList.get(0).id);
+		System.out.println("Place 1 in List: " +testCalendar.eventList.get(1).eventName + ", Id: " + testCalendar.eventList.get(1).id);
+		System.out.println("Place 2 in List: " + testCalendar.eventList.get(2).eventName + ", Id: " + testCalendar.eventList.get(2).id);
 		
+		//assertEquals(e1, testCalendar.eventList.get(0));
+		//assertEquals(e2, testCalendar.eventList.get(1));
+		//assertEquals(e3, testCalendar.eventList.get(2));
+
 		testCalendar.removeEvent(e2.id);
 		
+		assertEquals(2, testCalendar.eventList.size());
+		assertTrue(testCalendar.eventList.get(0).getName().equals("TestEvent1"));
 		assertFalse(testCalendar.eventList.get(1).getName().equals("TestEvent2"));
 		assertTrue(testCalendar.eventList.get(1).getName().equals("TestEvent3"));
+
+		testCalendar.removeEvent(testCalendar.eventList.get(0).id);
+
+		assertEquals(1, testCalendar.eventList.size());		
+		assertFalse(testCalendar.eventList.get(0).getName().equals("TestEvent1"));
+		assertTrue(testCalendar.eventList.get(0).getName().equals("TestEvent3"));
 	}
 
 	@Test
 	public void shouldReturnEventsOfCertainDay() {
 		List<ESEEvent> testList = testCalendar
-				.getListOfEventsRunningAtDay("20.10.2011 13:00");
+				.getListOfEventsRunningAtDay("20.10.2011 13:00", false);
 		assertTrue(testList.size() == 1);
 
 		testCalendar.addEvent("TestEvent5", "20.10.2011 14:00",
 				"20.10.2011 15:00", "true");
-		testList = testCalendar.getListOfEventsRunningAtDay("20.10.2011 13:00");
+		testList = testCalendar.getListOfEventsRunningAtDay("20.10.2011 13:00", false);
 		assertTrue(testList.size() == 2);
 		assertEquals(testList.get(0).getName(), "TestEvent1");
 		assertEquals(testList.get(1).getName(), "TestEvent5");

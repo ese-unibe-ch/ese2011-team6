@@ -2,17 +2,13 @@ package modelTests;
 
 import static org.junit.Assert.*;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import models.ESEConversionHelper;
-import models.ESEEvent;
+import models.*;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import play.test.UnitTest;
 
