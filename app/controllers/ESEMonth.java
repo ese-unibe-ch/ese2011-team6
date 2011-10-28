@@ -22,6 +22,7 @@ public class ESEMonth
 	public int y, m, d, cy, cm, cd, days;
 	public String mname;
 	public String[] dow;
+	public String date_human;
 
 	public ESEDay[] thead;
 	public ESEDay[] edays;
@@ -51,6 +52,7 @@ public class ESEMonth
 		days = monthdays[m-1];
 		mname = monthnames[m-1];
 		dow = dayofweek(y, m, 1);
+		date_human = fmt_human(y, m, d);
 
 		thead = new ESEDay[7];
 		for (int i=0; i<7; i++) {
@@ -70,8 +72,7 @@ public class ESEMonth
 				edays[i].append_cssc("today");
 			}
 			evts = ecal.getListOfEventsRunningAtDay(
-				String.format("%02d.%02d.%d %s",
-					i+1, m, y, "12:00"));
+				fmt_human(y, m, i+1));
 			if (evts.size() > 0) {
 				edays[i].append_cssc("event");
 			}
@@ -114,5 +115,12 @@ public class ESEMonth
 			adj = 2;
 		}
 		return ((int)(23*m/9)+d+4+y+(int)(z/4)-(int)(z/100)+(int)(z/400)-adj)%7;
+	}
+
+	public String fmt_human (
+		int y, int m, int d
+	) {
+		return String.format("%02d.%02d.%d %s",
+			d, m, y, "12:00");
 	}
 }

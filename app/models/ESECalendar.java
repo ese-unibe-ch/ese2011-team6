@@ -131,6 +131,28 @@ public class ESECalendar extends Model
 		this.removeEvent(((ESEEvent) ESEEvent.findById(eventId)).getEventName());
 	}
 
+	public ArrayList<ESEEvent> getListOfPubEventsRunningAtDay(@Required String calendarDay)
+	{
+		ArrayList<ESEEvent> eventsFormDate = new ArrayList<ESEEvent>();
+		// Create pseudo event that
+		// starts at "calendarDay" 00:00 and
+		// ends at "calendarDay" 23:59
+		ESEEvent pseudoEvent = new ESEEvent("CompareHelperEvent",
+				calendarDay.substring(0, 10) + " 00:00",
+				calendarDay.substring(0, 10) + " 23:59", this, "1");
+		for (ESEEvent e : this.eventList)
+		{
+			if (checkEventOverlaps(e, pseudoEvent))
+			{
+				if (!e.isPublic()) {
+					continue;
+				}
+				eventsFormDate.add(e);
+			}
+		}
+		return eventsFormDate;
+	}
+
 	public ArrayList<ESEEvent> getListOfEventsRunningAtDay(@Required String calendarDay)
 	{
 		ArrayList<ESEEvent> eventsFormDate = new ArrayList<ESEEvent>();

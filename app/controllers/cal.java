@@ -17,15 +17,17 @@ public class cal extends Controller
 		String day
 	) {
 		ESECalendar c;
-		ESEMonth emonth;
+		ESEMonth emonth = null;
 		List<ESEEvent> le = null;
 
 		if ((c = ESECalendar.getCalendar(id)) != null) {
+			emonth = new ESEMonth(year, month, day, c);
 			le = permitted(c)
-				?c.getAllEventsAsList()
-				:c.getPublicEventsAsList();
+				?c.getListOfPubEventsRunningAtDay(
+					emonth.date_human)
+				:c.getListOfEventsRunningAtDay(
+					emonth.date_human);
 		}
-		emonth = new ESEMonth(year, month, day, c);
 		render(id, le, emonth);
 	}
 
