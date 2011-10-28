@@ -23,9 +23,9 @@ public class cal extends Controller
 		if ((c = ESECalendar.getCalendar(id)) != null) {
 			emonth = new ESEMonth(year, month, day, c);
 			le = permitted(c)
-				?c.getListOfPubEventsRunningAtDay(
+				?c.getListOfEventsRunningAtDay(
 					emonth.date_human)
-				:c.getListOfEventsRunningAtDay(
+				:c.getListOfPubEventsRunningAtDay(
 					emonth.date_human);
 		}
 		render(id, le, emonth);
@@ -43,9 +43,10 @@ public class cal extends Controller
 		String ename,
 		String ebeg,
 		String eend,
-		String epub
+		String epub,
+		Boolean err_date
 	) {
-		render(id, eid, ename, ebeg, eend, epub);
+		render(id, eid, ename, ebeg, eend, epub, err_date);
 	}
 
 	public static void add_evt_post (
@@ -84,7 +85,7 @@ public class cal extends Controller
 		}
 		params.flash();
 		validation.keep();
-		add_evt(id, eid, name, beg, end, pub);
+		add_evt(id, eid, name, beg, end, pub, err_date);
 	}
 
 	public static void edit_evt (
@@ -100,7 +101,7 @@ public class cal extends Controller
 				e.getStartDate()),
 			ESEConversionHelper.convertDateToString(
 				e.getEndDate()),
-			((Boolean)e.isPublic()).toString());
+			((Boolean)e.isPublic()).toString(), null);
 	}
 
 	public static void rm_evt (

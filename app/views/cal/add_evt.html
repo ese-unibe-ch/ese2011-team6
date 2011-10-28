@@ -4,7 +4,7 @@
 #{head /}
 
 #{ifErrors}
-	input error..
+	input error
 	<br />
 #{/ifErrors}
 
@@ -15,11 +15,11 @@
 
 	<label for="beg">beg: </label>
 	<input type="text" name="beg" id="beg" value="${ebeg}" />
-	<br />
+	${err_date ?'invalid date' :''}<br />
 
 	<label for="end">end: </label>
 	<input type="text" name="end" id="end" value="${eend}" />
-	<br />
+	${err_date ?'invalid date' :''}<br />
 
 	<label for="pub">pub: </label>
 	<input type="checkbox" name="pub" id="pub"
