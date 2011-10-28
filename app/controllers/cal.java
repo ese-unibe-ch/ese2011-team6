@@ -38,13 +38,19 @@ public class cal extends Controller
 	}
 
 	public static void add_evt (
-		String id
+		String id,
+		String eid,
+		String ename,
+		String ebeg,
+		String eend,
+		String epub
 	) {
-		render(id);
+		render(id, eid, ename, ebeg, eend, epub);
 	}
 
 	public static void add_evt_post (
 		String id,
+		String eid,
 		@Required String name,
 		@Required String beg,
 		@Required String end,
@@ -68,6 +74,9 @@ public class cal extends Controller
 		if (!validation.hasErrors() && !err_date && c != null) {
 			if (permitted(c)) {
 				pub = pub==null ?"false" :"true";
+				if (eid != null) {
+					c.removeEvent(Long.parseLong(eid));
+				}
 				ESEFactory.createEvent(
 					name, beg, end, pub, c);
 			}
@@ -75,15 +84,31 @@ public class cal extends Controller
 		}
 		params.flash();
 		validation.keep();
-		add_evt(id);
+		add_evt(id, eid, name, beg, end, pub);
+	}
+
+	public static void edit_evt (
+		String id,
+		String eid,
+		String year,
+		String month,
+		String day
+	) {
+		ESEEvent e = ESEEvent.findById(Long.parseLong(eid));
+		add_evt(id, eid, e.getEventName(),
+			ESEConversionHelper.convertDateToString(
+				e.getStartDate()),
+			ESEConversionHelper.convertDateToString(
+				e.getEndDate()),
+			((Boolean)e.isPublic()).toString());
 	}
 
 	public static void rm_evt (
 		String id,
+		String eid,
 		String year,
 		String month,
-		String day,
-		String eid
+		String day
 	) {
 		ESECalendar c = ESECalendar.getCalendar(id);
 		if (c != null && permitted(c)) {
