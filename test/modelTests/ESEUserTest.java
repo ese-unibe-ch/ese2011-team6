@@ -65,14 +65,14 @@ public class ESEUserTest extends UnitTest {
 		hansi.createCalendar("Hausaufgaben");
 		assertNotNull(hansi.calendarList.get(0));
 		assertEquals(1, hansi.calendarList.size());
-		assertEquals("Hausaufgaben", hansi.calendarList.get(0).getName());
+		assertEquals("Hausaufgaben", hansi.calendarList.get(0).getCalendarName());
 
 		// add by using factory
 		hansi.calendarList.add(ESEFactory.createCalendar("Wichtige Sachen",
 				hansi));
 		assertEquals(2, hansi.calendarList.size());
-		assertEquals("Wichtige Sachen", hansi.calendarList.get(1).getName());
-		assertEquals("Hausaufgaben", hansi.calendarList.get(0).getName());
+		assertEquals("Wichtige Sachen", hansi.calendarList.get(1).getCalendarName());
+		assertEquals("Hausaufgaben", hansi.calendarList.get(0).getCalendarName());
 
 	}
 
@@ -92,14 +92,14 @@ public class ESEUserTest extends UnitTest {
 		bill.createCalendar("Hausaufgaben");
 		assertNotNull(bill.calendarList.get(1));
 		assertEquals(2, bill.calendarList.size());
-		assertEquals("Hausaufgaben", bill.calendarList.get(1).getName());
+		assertEquals("Hausaufgaben", bill.calendarList.get(1).getCalendarName());
 
 		// add by using factory
 		bill.calendarList.add(ESEFactory
 				.createCalendar("Wichtige Sachen", bill));
 		assertEquals(3, bill.calendarList.size());
 		assertNotNull(bill.calendarList.get(2));
-		assertEquals("Wichtige Sachen", bill.calendarList.get(2).getName());
+		assertEquals("Wichtige Sachen", bill.calendarList.get(2).getCalendarName());
 	}
 
 	@Test
