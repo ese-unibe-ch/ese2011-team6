@@ -186,11 +186,28 @@ public class ESECalendar extends Model
 		return findCalendarById(Long.parseLong(id));
 	}
 
+	/**
+	 * Returns a certain ESECalendar by its id
+	 * @param id
+	 * @return a certain ESECalendar by its id
+	 */
 	public static ESECalendar findCalendarById(long id)
 	{
 		return findById(id);
 	}
 
+	/**Returns a list of {@link ESEEvent}s at a certain certain day in the list of
+	 * ESEEvents of this ESECalendar. Depending on the parameter onlyPublic only 
+	 * public ESEEvents are returned, or <i>all</i> ESEEvents of a certain day 
+	 * (i.e. also private events) are returned.
+	 * 
+	 *  This method uses a String Object in the format "dd.MM.yyyy HH:mm"
+	 *  as argument to show ESEEvents of a certain day.
+	 * 
+	 * @param calendarDay
+	 * @param onlyPublic
+	 * @return ESEEvents of a certain day
+	 */
 	public ArrayList<ESEEvent> getListOfEventsRunningAtDay(@Required String calendarDay, boolean onlyPublic)
 	{
 		//TODO: Find a better way to verify input
@@ -216,17 +233,51 @@ public class ESECalendar extends Model
 		return eventsFormDate;
 	}
 
+	/**Returns a list of {@link ESEEvent}s at a certain certain day in the list of
+	 * ESEEvents of this ESECalendar. Depending on the parameter onlyPublic only 
+	 * public ESEEvents are returned, or <i>all</i> ESEEvents of a certain day 
+	 * (i.e. also private events) are returned.
+	 * 
+	 * This method uses a date Object as argument to show ESEEvents of a certain day.
+	 * 
+	 * @param calendarDay
+	 * @param onlyPublic
+	 * @return ESEEvents of a certain day
+	 */
 	public ArrayList<ESEEvent> getListOfEventsRunningAtDay(@Required Date calendarDay, boolean onlyPublic)
 	{
 		String calendarDayString = ESEConversionHelper.convertDateToString(calendarDay);
 		return getListOfEventsRunningAtDay(calendarDayString, onlyPublic);
 	}
 
+	/**Returns an Iterator of {@link ESEEvent}s at a certain certain day in the list of
+	 * ESEEvents of this ESECalendar. Depending on the parameter onlyPublic only 
+	 * public ESEEvents are returned, or <i>all</i> ESEEvents of a certain day 
+	 * (i.e. also private events) are returned.
+	 * 
+	 *  This method uses a String Object in the format "dd.MM.yyyy HH:mm"
+	 *  as argument to show ESEEvents of a certain day.
+	 * 
+	 * @param calendarDay
+	 * @param onlyPublic
+	 * @return ESEEvents of a certain day
+	 */
 	public Iterator<ESEEvent> getIteratorOfEventsRunningAtDay(@Required String calendarDay, boolean onlyPublic)
 	{
 		return this.getListOfEventsRunningAtDay(calendarDay, onlyPublic).iterator();
 	}
 
+	/**Returns an iterator of {@link ESEEvent}s at a certain certain day in the list of
+	 * ESEEvents of this ESECalendar. Depending on the parameter onlyPublic only 
+	 * public ESEEvents are returned, or <i>all</i> ESEEvents of a certain day 
+	 * (i.e. also private events) are returned.
+	 * 
+	 * This method uses a date Object as argument to show ESEEvents of a certain day.
+	 * 
+	 * @param calendarDay
+	 * @param onlyPublic
+	 * @return ESEEvents of a certain day
+	 */
 	public Iterator<ESEEvent> getIteratorOfEventsRunningAtDay(@Required Date calendarDay, boolean onlyPublic)
 	{
 		return this.getListOfEventsRunningAtDay(calendarDay, onlyPublic).iterator();
