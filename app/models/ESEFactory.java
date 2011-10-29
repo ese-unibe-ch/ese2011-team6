@@ -12,14 +12,6 @@ public abstract class ESEFactory
 {
 	public static ESECalendar createCalendar(String calendarName, ESEUser owner)
 	{
-		//TODO: Calendar must be unique
-		for (ESECalendar cal : owner.calendarList)
-		{
-			if (cal.calendarName.equals(calendarName))
-			{
-				// TODO: Complain as new calendar is not new at all
-			}
-		}
 		ESECalendar calendar = new ESECalendar(calendarName, owner);
 		calendar.save();
 

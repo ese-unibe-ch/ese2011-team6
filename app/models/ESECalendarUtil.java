@@ -12,8 +12,7 @@ import java.util.Date;
  */
 public class ESECalendarUtil {
 	
-	private java.util.Calendar cal = java.util.Calendar.getInstance();
-//	private static ESECalendarUtil util;
+	private static java.util.Calendar cal;
 	
 	/**
 	 * Private constructor. Use {@link #getInstanceToday()} to receive a valid
@@ -34,18 +33,34 @@ public class ESECalendarUtil {
 	 * @return ESECalendarUtil
 	 */
 	public static ESECalendarUtil getInstanceToday(){
-		ESECalendarUtil util = new ESECalendarUtil();
-		return util;	
+		cal = java.util.Calendar.getInstance();
+		return new ESECalendarUtil();	
 	}
 	
-	public static ESECalendarUtil getInstanceOfDate(Date date){
-		//TODO
-		return null;
+	/**
+	 * Sets the calendar at this
+	 * specific date.
+	 * 
+	 * @param day
+	 */
+	public void setAtDate(Date date){
+		cal.setTime(date);
 	}
 	
-	public static ESECalendarUtil getInstanceOfStringDate(String date){
-		//TODO
-		return null;
+	/**
+	 * Sets the calendar at this month within the
+	 * same year. <br>
+	 * Months are numbered starting from 1 (jan) to
+	 * 12 (dec). <p>
+	 * 
+	 * Wrong input is not handled.
+	 * 
+	 * @param int month
+	 */
+	public void setMonth(int month){
+		assert(month >0);
+		assert(month <=12);
+		cal.set(cal.MONTH, month-1);
 	}
 	
 	/**
@@ -61,37 +76,20 @@ public class ESECalendarUtil {
 	}
 	
 	/**
-	 * Sets the calendar at this
-	 * specific date.
-	 * 
-	 * @param day
-	 */
-	public void setAtDate(Date day){
-		//TODO
-	}
-	/**
-	 * Sets the calendar at this month within the
-	 * same year. <br>
-	 * Months are numbered starting from 1 (jan) to
-	 * 12 (dec). <p>
-	 * 
-	 * Wrong input is not handled.
-	 * 
-	 * @param int month
-	 */
-	public void setMonth(int month){
-		//TODO
-	}
-	
-	/**
 	 * Returns the weekday which this month starts with. <br>
 	 * Weekdays are numbered from 1(monday) to 7(sunday).
 	 * 
 	 * @return int weekday
 	 */
 	public int getFirstMondayOfCurrentMonth(){
-		//TODO
-		return 0;
+
+		Date temp = cal.getTime(); //save original date		
+		cal.set(cal.DATE, 1);
+		int weekday = cal.get(cal.DAY_OF_WEEK);
+		int monday = ((8-weekday)%7)+2;//calculate date from weekday		
+		cal.setTime(temp); //setting pointer back
+		
+		return monday;
 	}
 	
 	/**
@@ -101,8 +99,14 @@ public class ESECalendarUtil {
 	 * @return int weekday
 	 */
 	public int getFirstWeekdayOfCurrentMonth(){
-		//TODO
-		return 0;
+		
+		Date temp = cal.getTime(); //save original date
+		cal.set(cal.DATE, 1);
+		int weekday = cal.get(cal.DAY_OF_WEEK);	
+		System.out.println("weekday: "+weekday);
+		cal.setTime(temp); //setting pointer back
+		weekday = ((weekday + 5)%7)+1;
+		return weekday;
 	}
 	
 	/**
