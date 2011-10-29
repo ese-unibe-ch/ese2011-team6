@@ -1,6 +1,7 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import javax.persistence.*;
@@ -45,6 +46,7 @@ public class ESECalendar extends Model
 		boolean endDateOverlaps = endDateLiesInBetweenExistingEvent(existingEvent, newEvent);
 		boolean embracesEvent = eventIsSubsetOfExistingEvent(existingEvent, newEvent);
 		boolean isInEvent = eventContainsExistingEvent(existingEvent, newEvent);
+
 		return startDateOverlaps || endDateOverlaps || embracesEvent || isInEvent;
 	}
 
@@ -53,6 +55,7 @@ public class ESECalendar extends Model
 		long existingStartTime = existingEvent.getStartDate().getTime();
 		long newStartTime = newEvent.getStartDate().getTime();
 		long existingEndTime = existingEvent.getEndDate().getTime();
+
 		return existingStartTime <= newStartTime && newStartTime <= existingEndTime;
 	}
 
@@ -61,6 +64,7 @@ public class ESECalendar extends Model
 		long existingStartTime = existingEvent.getStartDate().getTime();
 		long newEndTime = newEvent.getEndDate().getTime();
 		long existingEndTime = existingEvent.getEndDate().getTime();
+
 		return existingStartTime <= newEndTime && newEndTime <= existingEndTime;
 	}
 
@@ -70,6 +74,7 @@ public class ESECalendar extends Model
 		long newStartTime = newEvent.getStartDate().getTime();
 		long newEndTime = newEvent.getEndDate().getTime();
 		long existingEndTime = existingEvent.getEndDate().getTime();
+
 		return existingStartTime <= newStartTime && newEndTime <= existingEndTime;
 	}
 
@@ -79,12 +84,8 @@ public class ESECalendar extends Model
 		long existingStartTime = existingEvent.getStartDate().getTime();
 		long existingEndTime = existingEvent.getEndDate().getTime();
 		long newEndTime = newEvent.getEndDate().getTime();
-		return newStartTime <= existingStartTime && existingEndTime <= newEndTime;
-	}
 
-	public static ESECalendar getCalendar(String id) {
-		long cid = Long.parseLong(id);
-		return findById(cid);
+		return newStartTime <= existingStartTime && existingEndTime <= newEndTime;
 	}
 
 	/**
@@ -131,8 +132,23 @@ public class ESECalendar extends Model
 		this.removeEvent(((ESEEvent) ESEEvent.findById(eventId)).getEventName());
 	}
 
-	public ArrayList<ESEEvent> getListOfPubEventsRunningAtDay(@Required String calendarDay)
+	/**
+	 * @deprecated Es soll stattdessen {@link #findCalendarById(String)} verwendet werden
+	 */
+	public static ESECalendar getCalendar(String id)
 	{
+		return findCalendarById(Long.parseLong(id));
+	}
+
+	public static ESECalendar findCalendarById(long id)
+	{
+		return findById(id);
+	}
+
+	public ArrayList<ESEEvent> getListOfEventsRunningAtDay(@Required String calendarDay, boolean onlyPublic)
+	{
+		//TODO: Find a better way to verify input
+		ESEConversionHelper.convertStringToDate(calendarDay);
 		ArrayList<ESEEvent> eventsFormDate = new ArrayList<ESEEvent>();
 		// Create pseudo event that
 		// starts at "calendarDay" 00:00 and
@@ -142,39 +158,32 @@ public class ESECalendar extends Model
 				calendarDay.substring(0, 10) + " 23:59", this, "1");
 		for (ESEEvent e : this.eventList)
 		{
-			if (checkEventOverlaps(e, pseudoEvent))
+			if (checkEventOverlaps(e, pseudoEvent) && (!onlyPublic || e.isPublic()))
 			{
-				if (!e.isPublic()) {
-					continue;
-				}
+				//if (onlyPublic && !e.isPublic())
+				//{
+					//continue;
+				//}
 				eventsFormDate.add(e);
 			}
 		}
 		return eventsFormDate;
 	}
 
-	public ArrayList<ESEEvent> getListOfEventsRunningAtDay(@Required String calendarDay)
+	public ArrayList<ESEEvent> getListOfEventsRunningAtDay(@Required Date calendarDay, boolean onlyPublic)
 	{
-		ArrayList<ESEEvent> eventsFormDate = new ArrayList<ESEEvent>();
-		// Create pseudo event that
-		// starts at "calendarDay" 00:00 and
-		// ends at "calendarDay" 23:59
-		ESEEvent pseudoEvent = new ESEEvent("CompareHelperEvent",
-				calendarDay.substring(0, 10) + " 00:00",
-				calendarDay.substring(0, 10) + " 23:59", this, "1");
-		for (ESEEvent e : this.eventList)
-		{
-			if (checkEventOverlaps(e, pseudoEvent))
-			{
-				eventsFormDate.add(e);
-			}
-		}
-		return eventsFormDate;
+		String calendarDayString = ESEConversionHelper.convertDateToString(calendarDay);
+		return getListOfEventsRunningAtDay(calendarDayString, onlyPublic);
 	}
 
-	public Iterator<ESEEvent> getIteratorOfEventsRunningAtDay(@Required String calendarDay)
+	public Iterator<ESEEvent> getIteratorOfEventsRunningAtDay(@Required String calendarDay, boolean onlyPublic)
 	{
-		return this.getListOfEventsRunningAtDay(calendarDay).iterator();
+		return this.getListOfEventsRunningAtDay(calendarDay, onlyPublic).iterator();
+	}
+
+	public Iterator<ESEEvent> getIteratorOfEventsRunningAtDay(@Required Date calendarDay, boolean onlyPublic)
+	{
+		return this.getListOfEventsRunningAtDay(calendarDay, onlyPublic).iterator();
 	}
 
 	public ArrayList<ESEEvent> getAllEventsAsList()
