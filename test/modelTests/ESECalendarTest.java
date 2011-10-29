@@ -97,12 +97,12 @@ public class ESECalendarTest extends UnitTest {
 	@Test
 	public void shouldReturnEventsOfCertainDay() {
 		List<ESEEvent> testList = testCalendar
-				.getListOfEventsRunningAtDay("20.10.2011 13:00", false);
+				.getListOfEventsRunningAtDay("20.10.2011 13:00");
 		assertTrue(testList.size() == 1);
 
 		testCalendar.addEvent("TestEvent5", "20.10.2011 14:00",
 				"20.10.2011 15:00", "true");
-		testList = testCalendar.getListOfEventsRunningAtDay("20.10.2011 13:00", false);
+		testList = testCalendar.getListOfEventsRunningAtDay("20.10.2011 13:00");
 		assertTrue(testList.size() == 2);
 		assertEquals(testList.get(0).getName(), "TestEvent1");
 		assertEquals(testList.get(1).getName(), "TestEvent5");
