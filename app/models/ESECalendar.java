@@ -113,9 +113,6 @@ public class ESECalendar extends Model
 		return newStartTime <= existingStartTime && existingEndTime <= newEndTime;
 	}
 
-		return newStartTime <= existingStartTime && existingEndTime <= newEndTime;
-	}
-
 	/**
 	 * @deprecated Es soll stattdessen {@link #getCalendarName()} verwendet werden
 	 */
