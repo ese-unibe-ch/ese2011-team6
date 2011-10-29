@@ -22,14 +22,14 @@ public class ESEEventTest extends UnitTest {
 		this.testUser = ESEFactory.createUser("testUser", "pw");
 		this.testCalendar = ESEFactory.createCalendar("TestCalendarName", testUser);
 		this.testEvent1 = ESEFactory.createEvent("testEvent1", "25.10.2011 08:15",
-				"25.10.2011 10:00", "false", testCalendar);
+				"25.10.2011 10:00", testCalendar, "false");
 		this.testEvent2 = ESEFactory.createEvent("testEvent2", "26.10.2011 08:15",
-				"26.10.2011 10:00", "true", testCalendar);
+				"26.10.2011 10:00", testCalendar, "true");
 	}
 
 	@Test
 	public void shouldReturnCorrectName() {
-		assertEquals(testEvent1.getName(), "testEvent1");
+		assertEquals(testEvent1.getEventName(), "testEvent1");
 	}
 
 	@Test
@@ -62,7 +62,7 @@ public class ESEEventTest extends UnitTest {
 		ESECalendar testCal = ESEFactory.createCalendar("testCal", testUser);
 		
 		ESEEvent eventToModify = ESEFactory.createEvent("unmodified", 
-		"25.10.2011 00:00", "26.10.2011 00:00", "true", testCal);
+		"25.10.2011 00:00", "26.10.2011 00:00", testCal, "true");
 		
 		assertEquals("unmodified", eventToModify.getEventName());
 		assertEquals("25.10.2011 00:00", 
