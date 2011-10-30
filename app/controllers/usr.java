@@ -2,6 +2,7 @@ package controllers;
 
 import java.util.List;
 import play.mvc.*;
+import play.data.validation.*;
 import models.*;
 
 @With(Secure.class)
@@ -30,5 +31,42 @@ public class usr extends Controller
 
 		lu = ESEUser.getAllOtherUsers(authid);
 		render(lu);
+	}
+
+	public static void add_usr (
+		@Required String uname
+	) {
+		render(uname);
+	}
+
+	public static void add_usr_post (
+		@Required String uname,
+		@Required String pass,
+		String fname,
+		String lname
+	) {
+		ESEUser u = null;
+		if (!validation.hasErrors()) {
+			if ((u = ESEUser.getUser(uname)) != null) {
+				u.editPassword(pass);
+				u.editFirstName(pass);
+				u.editFamilyName(pass);
+			}
+			else {
+				ESEFactory.createUser(uname, pass, fname, lname);
+			}
+			usr.ls();
+		}
+		params.flash();
+		validation.keep();
+		add_usr(uname);
+	}
+
+	public static void rm_usr (
+		String uname
+	) {
+		ESEUser u = ESEUser.find("byUsername", uname).first();
+		u.delete();
+		usr.ls();
 	}
 }

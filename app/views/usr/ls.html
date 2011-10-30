@@ -5,7 +5,9 @@
 
 #{list lu}
 	${_.getId()}
-	<a href="/usr/${_.getUsername()}">${_.getUsername()}</a>
+	<a href="/usr/${_.getUsername()}">${_.getUsername()}</a> |
+	#{a @usr.add_usr(_.getUsername())}edit#{/a} |
+	#{a @usr.rm_usr(_.getUsername())}delete#{/a}
 	<br />
 #{/list}
 #{else}
