@@ -24,7 +24,7 @@ public class ESEFactoryTest extends UnitTest {
 		ESEUser testUser = ESEFactory.createUser("User", "Pass");
 		ESECalendar testCalendar = ESEFactory.createCalendar("Testcalendar1", testUser);
 		ESEEvent testEvent = ESEFactory.createEvent("Event",
-				"28.10.2011 12:00", "28.10.2011 12:00", "true", testCalendar);
+				"28.10.2011 12:00", "28.10.2011 12:00", testCalendar, "true");
 
 		assertEquals(testUser, (ESEUser) ESEUser.find("byUsername", "User").first());
 		assertEquals(testCalendar, (ESECalendar) ESECalendar.find("byCalendarName", "Testcalendar1").first());
@@ -41,12 +41,14 @@ public class ESEFactoryTest extends UnitTest {
 
 	@Test
 	public void shouldAddEventToDataBase() {
-		// LK @ TEAM_TEST: FIX THIS!
 		Fixtures.deleteDatabase();
 		assertEquals(ESEEvent.count(), 0);
+		
+		ESEUser testUser = ESEFactory.createUser("User", "Pass");
+		ESECalendar testCalendar = ESEFactory.createCalendar("Testcalendar1", testUser);
+		
 		ESEFactory.createEvent("AnotherTestevent", "13.04.2011 13:00",
-		"14.04.2011 14:00", "true",
-		ESEFactory.createCalendar("Testcalendar1", ESEFactory.createUser("User", "Pass")) );
+		"14.04.2011 14:00", testCalendar, "true" );
 		assertEquals(ESEEvent.count(), 1);
 	}
 
