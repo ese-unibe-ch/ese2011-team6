@@ -62,6 +62,68 @@ public class ESECalendarUtil {
 		assert(month <=12);
 		cal.set(cal.MONTH, month-1);
 	}
+
+	/**
+	 * Returns the current month indicated by numbers
+	 * from 1(jan) to 12 (dec).
+	 * 
+	 * @return int month
+	 */
+	public int getMonth(){
+		int month = cal.get(cal.MONTH);
+		assert(0<=month);
+		assert(month<12);
+		return month+1;
+	}
+	
+	/**
+	 * Sets the calendar at this month within the
+	 * same year. <br>
+	 * Months are numbered starting from 1 (jan) to
+	 * 12 (dec). <p>
+	 * 
+	 * Wrong input is not handled.
+	 * 
+	 * @param int month
+	 */
+	public void setYear(int year){
+		cal.set(cal.YEAR, year-1);
+	}
+
+	/**
+	 * Returns the current year.
+	 * 
+	 * @return int year
+	 */
+	public int getYear(){
+		return cal.get(cal.YEAR);
+	}
+	
+	/**
+	 * Sets the calendar at this date within the
+	 * same month. <br>
+	 * 
+	 * Wrong input is not handled.
+	 * 
+	 * @param int month
+	 */
+	public void setDayOfMonth(int dayOfMonth){
+		assert(dayOfMonth >0);
+		assert(dayOfMonth <=31);
+		cal.set(cal.DAY_OF_MONTH, dayOfMonth);
+	}
+
+	/**
+	 * Returns the current day of the month (date).
+	 * 
+	 * @return int date
+	 */
+	public int getDayOfMonth(){
+		int dayOfMonth = cal.get(cal.DAY_OF_MONTH);
+		assert(0<dayOfMonth);
+		assert(dayOfMonth<=31);
+		return dayOfMonth;
+	}
 	
 	/**
 	 * Returns amount of days in the current month.
@@ -114,14 +176,15 @@ public class ESECalendarUtil {
 	 * All methods relating to "current" one month forth.
 	 */
 	public void setToNextMonth(){
-		//TODO
+		cal.add(cal.MONTH, 1);
 	}
+	
 	/**
 	 * Sets the whole calendar to the previous month.<br>
 	 * All methods relating to "current" one month back.
 	 */	
 	public void setToPreviousMonth(){
-		//TODO
+		cal.add(cal.MONTH,-1);
 	}
 	/**
 	 * Returns the day of month of the last Monday of the previous
