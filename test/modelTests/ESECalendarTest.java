@@ -60,54 +60,46 @@ public class ESECalendarTest extends UnitTest {
 	}
 
 	@Test
-	public void shouldRemoveCorrectEvent() {
-		assertTrue(testCalendar.eventList.get(0).getEventName().equals("TestEvent1"));
-		assertTrue(testCalendar.eventList.get(1).getEventName().equals("TestEvent2"));
-		assertTrue(testCalendar.eventList.get(2).getEventName().equals("TestEvent3"));
-		ESEEvent e1 = ESEEvent.find("byEventName", "TestEvent1").first();
-		ESEEvent e2 = ESEEvent.find("byEventName", "TestEvent2").first();
-		ESEEvent e3 = ESEEvent.find("byEventName", "TestEvent3").first();
-		
-		//TODO: Team Model: Problems with database or wrong specified test?
-		System.out.println("e1: " + e1.eventName + ", Id: " + e1.id);
-		System.out.println("e2: " + e2.eventName + ", Id: " + e2.id);
-		System.out.println("e3: " + e3.eventName + ", Id: " + e3.id);
-		System.out.println("Place 0 in List: " + testCalendar.eventList.get(0).eventName + ", Id: " + testCalendar.eventList.get(0).id);
-		System.out.println("Place 1 in List: " +testCalendar.eventList.get(1).eventName + ", Id: " + testCalendar.eventList.get(1).id);
-		System.out.println("Place 2 in List: " + testCalendar.eventList.get(2).eventName + ", Id: " + testCalendar.eventList.get(2).id);
-		
-		//assertEquals(e1, testCalendar.eventList.get(0));
-		//assertEquals(e2, testCalendar.eventList.get(1));
-		//assertEquals(e3, testCalendar.eventList.get(2));
-
-		testCalendar.removeEvent(e2.id);
-		
-		assertEquals(2, testCalendar.eventList.size());
-		assertTrue(testCalendar.eventList.get(0).getEventName().equals("TestEvent1"));
-		assertFalse(testCalendar.eventList.get(1).getEventName().equals("TestEvent2"));
-		assertTrue(testCalendar.eventList.get(1).getEventName().equals("TestEvent3"));
-
-		testCalendar.removeEvent(testCalendar.eventList.get(0).id);
-
-		assertEquals(1, testCalendar.eventList.size());		
-		assertFalse(testCalendar.eventList.get(0).getEventName().equals("TestEvent1"));
-		assertTrue(testCalendar.eventList.get(0).getEventName().equals("TestEvent3"));
-	}
-
-	@Test
-	public void shouldReturnEventsOfCertainDay() {
+	public void shouldReturnAllEventsOfCertainDay(){
 		List<ESEEvent> testList = testCalendar
-				.getListOfEventsRunningAtDay("20.10.2011 13:00");
+		.getListOfEventsRunningAtDay("20.10.2011 13:00",false);
 		assertTrue(testList.size() == 1);
-
+		
 		testCalendar.addEvent("TestEvent5", "20.10.2011 14:00",
-				"20.10.2011 15:00", "true");
-		testList = testCalendar.getListOfEventsRunningAtDay("20.10.2011 13:00");
+				"20.10.2011 15:00", "false");
+		testList = testCalendar.getListOfEventsRunningAtDay("20.10.2011 13:00",false);
 		assertTrue(testList.size() == 2);
 		assertEquals(testList.get(0).getEventName(), "TestEvent1");
 		assertEquals(testList.get(1).getEventName(), "TestEvent5");
 	}
-
+	
+	@Test
+	public void shouldReturnAllAndOnlyPublicEventsOfCertainDay(){
+		List<ESEEvent> testList = testCalendar
+		.getListOfEventsRunningAtDay("20.10.2011 13:00",true);
+		assertTrue(testList.size() == 1);
+		
+		testList.addAll(testCalendar.getListOfEventsRunningAtDay("21.10.2011 13:00",true));
+		
+		assertTrue(testList.size() == 1);
+		
+		testCalendar.addEvent("TestEvent5", "25.10.2011 14:00",
+				"25.10.2011 15:00", "false");
+		testList.addAll(testCalendar.getListOfEventsRunningAtDay("25.10.2011 13:00",true));
+		
+		assertTrue(testList.size() == 1);
+		
+		testCalendar.addEvent("TestEvent6", "26.10.2011 14:00",
+				"26.10.2011 15:00", "true");
+		testList.addAll(testCalendar.getListOfEventsRunningAtDay("26.10.2011 13:00",true));
+		
+		assertTrue(testList.size() == 2);
+		
+		
+		assertEquals(testList.get(0).getEventName(), "TestEvent1");
+		assertEquals(testList.get(1).getEventName(), "TestEvent6");
+	}
+	
 	@Test
 	public void shouldReturnListOfAllEvents() {
 		assertTrue(testCalendar.getAllEventsAsList().get(0).getEventName()
