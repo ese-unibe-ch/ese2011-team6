@@ -31,13 +31,13 @@ public class ESECalendarUtilTest extends UnitTest{
 	
 	@Test
 	public void shouldGetFirstMondayOfMonth(){
-		int monday = util.getFirstMondayOfCurrentMonth();
+		int monday = util.firstMondayOfCurrentMonth();
 		assertEquals(7, monday);
 		//try another month
 		cal.set(2011, 11, 13);
 		util.setAtDate(cal.getTime());
-		monday = util.getFirstMondayOfCurrentMonth();
-		assertEquals(5, util.getFirstMondayOfCurrentMonth());
+		monday = util.firstMondayOfCurrentMonth();
+		assertEquals(5, util.firstMondayOfCurrentMonth());
 	}
 
 	@Test
@@ -45,13 +45,39 @@ public class ESECalendarUtilTest extends UnitTest{
 		cal.set(2011, 10, 13);
 		util.setAtDate(cal.getTime());
 		
-		int firstWeekDay = util.getFirstWeekdayOfCurrentMonth();
+		int firstWeekDay = util.firstWeekdayOfCurrentMonth();
 		assertEquals(2, firstWeekDay);//2.nov 2011 ist dienstag
 		//try another month
 		cal.set(2012, 5, 10);
 		util.setAtDate(cal.getTime());
-		firstWeekDay = util.getFirstWeekdayOfCurrentMonth();
-		assertEquals(5, util.getFirstWeekdayOfCurrentMonth());
+		firstWeekDay = util.firstWeekdayOfCurrentMonth();
+		assertEquals(5, util.firstWeekdayOfCurrentMonth());
 	}
 	
+	@Test
+	public void shouldSetOneMonthForth(){
+		//check setups
+		cal.set(2012, 5, 10);
+		assertEquals(2012, cal.get(cal.YEAR));
+		assertEquals(5, cal.get(cal.MONTH));
+		assertEquals(10, cal.get(cal.DAY_OF_MONTH));
+		
+		util.setToNextMonth();
+		assertEquals(6, util.getMonth());
+		assertEquals(2012, util.getYear());
+		assertEquals(10, util.getDayOfMonth());
+		
+		//check dec-jan
+		cal.set(cal.MONTH, 11);
+		util.setAtDate(cal.getTime());
+		util.setToNextMonth();
+		assertEquals(2013, cal.get(cal.YEAR));
+		assertEquals(0, cal.get(cal.MONTH));
+		assertEquals(10, cal.get(cal.DAY_OF_MONTH));
+	}
+	
+	@Test
+	public void shouldSetOneMonthBack(){
+		
+	}
 }

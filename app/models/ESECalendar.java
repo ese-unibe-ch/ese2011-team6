@@ -107,7 +107,6 @@ public class ESECalendar extends Model
 		long existingStartTime = existingEvent.getStartDate().getTime();
 		long existingEndTime = existingEvent.getEndDate().getTime();
 		long newEndTime = newEvent.getEndDate().getTime();
-
 		return newStartTime <= existingStartTime && existingEndTime <= newEndTime;
 	}
 
