@@ -14,11 +14,6 @@ public class ESEConversionHelper
 {
 	private static final String inputFormat = "dd.MM.yyyy HH:mm";
 
-	/**
-	 * Converts Strings of the form "dd.MM.yyy HH:mm" to {@link Date} objects
-	 * @param userDateString
-	 * @see Date
-	 */
 	public static Date convertStringToDate(String userDateString)
 	{
 		DateTimeFormatter dateTimeConvert = DateTimeFormat.forPattern(inputFormat);
@@ -26,11 +21,6 @@ public class ESEConversionHelper
 		return dateTimeParser.toDate();
 	}
 
-	/**
-	 * Converts {@link Date} objects to Strings of the form "dd.MM.yyy HH:mm"
-	 * @param date
-	 * @see Date
-	 */
 	public static String convertDateToString(Date date)
 	{
 		SimpleDateFormat simpleDateConverter = new SimpleDateFormat(inputFormat);
