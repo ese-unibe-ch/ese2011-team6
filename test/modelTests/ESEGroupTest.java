@@ -1,9 +1,8 @@
 package modelTests;
 
-import models.ESEGroup;
+import models.*;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import play.test.Fixtures;
 import play.test.UnitTest;
@@ -15,7 +14,7 @@ public class ESEGroupTest extends UnitTest {
 	@Before
 	public void setUp() {
 		// added argument "null" to constructor
-		this.testGroup = new ESEGroup("TestGroupName1", null);
+		this.testGroup = ESEFactory.createGroup("TestGroupName1", ESEFactory.createUser("User", "Pass"));
 		Fixtures.deleteDatabase();
 		Fixtures.loadModels("data.yml");
 	}
@@ -54,11 +53,11 @@ public class ESEGroupTest extends UnitTest {
 		// addUser, or is addUser responsible that non-existing users are
 		// ignored?
 
-		assertEquals(testGroup.userList.size(), 0);
+		assertEquals(0, testGroup.userList.size());
 		this.testGroup.addUser("nouser");
-		assertEquals(testGroup.userList.size(), 0);
+		assertEquals(0, testGroup.userList.size());
 		this.testGroup.addUser("bill");
-		assertEquals(testGroup.userList.size(), 1);
+		assertEquals(1, testGroup.userList.size());
 	}
 
 	@Test

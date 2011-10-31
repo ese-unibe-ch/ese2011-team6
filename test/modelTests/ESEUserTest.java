@@ -1,12 +1,8 @@
 package modelTests;
 
-import models.ESECalendar;
-import models.ESEFactory;
-import models.ESEGroup;
-import models.ESEUser;
+import models.*;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import play.test.Fixtures;
 import play.test.UnitTest;
@@ -25,7 +21,6 @@ public class ESEUserTest extends UnitTest {
 		Fixtures.deleteDatabase();
 		Fixtures.loadModels("data.yml");
 	}
-
 	@Test
 	public void createUserWithFacotry2Para() {
 
@@ -70,19 +65,19 @@ public class ESEUserTest extends UnitTest {
 		hansi.createCalendar("Hausaufgaben");
 		assertNotNull(hansi.calendarList.get(0));
 		assertEquals(1, hansi.calendarList.size());
-		assertEquals("Hausaufgaben", hansi.calendarList.get(0).getName());
+		assertEquals("Hausaufgaben", hansi.calendarList.get(0).getCalendarName());
 
 		// add by using factory
 		hansi.calendarList.add(ESEFactory.createCalendar("Wichtige Sachen",
 				hansi));
 		assertEquals(2, hansi.calendarList.size());
-		assertEquals("Wichtige Sachen", hansi.calendarList.get(1).getName());
-		assertEquals("Hausaufgaben", hansi.calendarList.get(0).getName());
+		assertEquals("Wichtige Sachen", hansi.calendarList.get(1).getCalendarName());
+		assertEquals("Hausaufgaben", hansi.calendarList.get(0).getCalendarName());
 
 	}
 
 	@Test
-	public void shouldCreatCalendarDBUser() {
+	public void shouldCreateCalendarDBUser() {
 		/*
 		 * TODO use method to get Calendar by String name instead of using index
 		 * as soon as it is available
@@ -97,14 +92,14 @@ public class ESEUserTest extends UnitTest {
 		bill.createCalendar("Hausaufgaben");
 		assertNotNull(bill.calendarList.get(1));
 		assertEquals(2, bill.calendarList.size());
-		assertEquals("Hausaufgaben", bill.calendarList.get(1).getName());
+		assertEquals("Hausaufgaben", bill.calendarList.get(1).getCalendarName());
 
 		// add by using factory
 		bill.calendarList.add(ESEFactory
 				.createCalendar("Wichtige Sachen", bill));
 		assertEquals(3, bill.calendarList.size());
 		assertNotNull(bill.calendarList.get(2));
-		assertEquals("Wichtige Sachen", bill.calendarList.get(2).getName());
+		assertEquals("Wichtige Sachen", bill.calendarList.get(2).getCalendarName());
 	}
 
 	@Test
@@ -223,9 +218,9 @@ public class ESEUserTest extends UnitTest {
 	@Test
 	public void shouldRemoveGroupeNewUser() {
 		// set up
-		ESEUser hansi = ESEFactory.createUser("hansi", "sehrgeheim", "Hans",
-				"Müller");
+		ESEUser hansi = ESEFactory.createUser("hansi", "sehrgeheim", "Hans", "Müller");
 		hansi.groupList.add(ESEFactory.createGroup("studies", hansi));
+		hansi.save();
 		hansi.groupList.add(ESEFactory.createGroup("best buddies", hansi));
 
 		assertEquals(3, hansi.groupList.size());
