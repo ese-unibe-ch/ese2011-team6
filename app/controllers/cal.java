@@ -24,9 +24,9 @@ public class cal extends Controller
 			emonth = new ESEMonth(year, month, day, c);
 			le = permitted(c)
 				?c.getListOfEventsRunningAtDay(
-					emonth.date_human)
-				:c.getListOfPubEventsRunningAtDay(
-					emonth.date_human);
+					emonth.date_human, false)
+				:c.getListOfEventsRunningAtDay(
+					emonth.date_human, true);
 		}
 		render(id, le, emonth);
 	}

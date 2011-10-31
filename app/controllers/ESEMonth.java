@@ -72,7 +72,7 @@ public class ESEMonth
 				edays[i].append_cssc("today");
 			}
 			evts = ecal.getListOfEventsRunningAtDay(
-				fmt_human(y, m, i+1));
+				fmt_human(y, m, i+1), false);
 			if (evts.size() > 0) {
 				edays[i].append_cssc("event");
 			}
