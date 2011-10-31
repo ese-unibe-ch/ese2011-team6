@@ -5,6 +5,9 @@
 *	/					module:secure
 *	/					usr.ls_cals
 *	/usr					usr.ls
+GET	/usr/add				usr.add_usr
+POST	/usr/add				usr.add_usr_post
+*	/usr/rm					usr.rm_usr
 *	/usr/{id}				usr.ls_cals
 *	/cal/{id}				cal.ls_evts
 *	/cal/{id}/{year}/{month}/{day}		cal.ls_evts
