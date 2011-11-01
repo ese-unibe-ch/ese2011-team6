@@ -61,16 +61,6 @@ public class ESECalendarTest extends UnitTest {
 		assertTrue(testCalendar.getCalendarName().equals("RenamedTestCalendar"));
 		assertFalse(testCalendar.getCalendarName().equals("TestCalendarName"));
 	}
-	
-	@Test
-	public void shouldRemoveCorrectEventByEventName(){
-		assertEquals(3,testCalendar.eventList.size());
-		assertEquals("TestEvent1",testCalendar.eventList.get(0).getEventName());
-		testCalendar.removeEvent("TestEvent1");
-		assertFalse(testCalendar.eventList.get(0).getEventName().equals("TestEvent1"));
-		
-		assertEquals(2,testCalendar.eventList.size());
-	}
 
 	@Test
 	public void shouldReturnAllEventsOfCertainDay(){
