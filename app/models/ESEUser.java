@@ -135,6 +135,18 @@ public class ESEUser extends Model {
 		return this.calendarList;
 	}
 
+	/**
+	 *	XXX: new routing needs something like this..
+	 */
+	public ESECalendar getCalendar(String name) {
+		for (ESECalendar c : calendarList) {
+			if (name.equals(c.getCalendarName())) {
+				return c;
+			}
+		}
+		return null;
+	}
+
 	/** Returns list of all groups from user.
 	 * @return {@link List} of all groups this user has
 	 * @see ESEGroup
