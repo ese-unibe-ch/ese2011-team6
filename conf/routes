@@ -3,19 +3,24 @@
 # misc.
 #
 *	/		module:secure
-GET	/public/?	staticDir:public
+GET	/public/	staticDir:public
 GET	/favicon.ico	404
+
+# user
+#
+GET	/User/?			ESECtlUser.lsUsers
+GET	/User/add/?		ESECtlUser.addUser
+POST	/User/add/?		ESECtlUser.addUserPost
+GET	/User/mod/?		ESECtlUser.addUser
+GET	/User/del/?		ESECtlUser.delUser
 
 # home
 #
 GET	/							ESECtlUser.lsCalendars
 GET	/{uri_user}/?						ESECtlUser.lsCalendars
 GET	/{uri_user}/{uri_cal}/?					ESECtlCalendar.lsEvents
+GET	/{uri_user}/{uri_cal}/add/?				ESECtlCalendar.addEvent
+POST	/{uri_user}/{uri_cal}/add/?				ESECtlCalendar.addEventPost
+GET	/{uri_user}/{uri_cal}/mod/?				ESECtlCalendar.modEvent
+GET	/{uri_user}/{uri_cal}/del/?				ESECtlCalendar.delEvent
 GET	/{uri_user}/{uri_cal}/{uri_yy}/{uri_mm}/{uri_dd}/?	ESECtlCalendar.lsEvents
-
-# modules
-#
-#GET	/{<User|Calendar|Event|Group>uri_mod}/add/?		ESECtl{uri_mod}.add{uri_mod}
-#POST	/{<User|Calendar|Event|Group>uri_mod}/add/?		ESECtl{uri_mod}.add{uri_mod}Post
-#GET	/{<User|Calendar|Event|Group>uri_mod}/mod/{uri_id}/?	ESECtl{uri_mod}.add{uri_mod}
-#GET	/{<User|Calendar|Event|Group>uri_mod}/del/{uri_id}/?	ESECtl{uri_mod}.del{uri_mod}

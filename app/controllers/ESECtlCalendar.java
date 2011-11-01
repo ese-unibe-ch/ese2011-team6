@@ -6,39 +6,57 @@ import java.text.SimpleDateFormat;
 import play.mvc.*;
 import play.data.validation.*;
 import models.*;
+import utils.*;
 
 @With(Secure.class)
-public class cal extends Controller
+public class ESECtlCalendar extends Controller
 {
-	public static void ls_evts (
-		String id,
-		String year,
-		String month,
-		String day
+	private static String auth_user = Secure.Security.connected();
+
+	public static void lsEvents (
+		String uri_user,
+		String uri_cal,
+		String uri_yy,
+		String uri_mm,
+		String uri_dd
 	) {
+		String user = uri_user==null ?auth_user :uri_user;
+		String cal = uri_cal;
+
+		ESEUser u;
 		ESECalendar c;
-		ESEMonth emonth = null;
+		ESEMessage msg = null;
 		List<ESEEvent> le = null;
 
-		if ((c = ESECalendar.getCalendar(id)) != null) {
-			emonth = new ESEMonth(year, month, day, c);
+		if ((u = ESEUser.getUser(user)) == null) {
+			user = auth_user;
+			u = ESEUser.getUser(user);
+		}
+		if ((c = u.getCalendar(cal)) != null) {
+			msg = new ESEMessage();
+			msg.lsEvents(uri_yy, uri_mm, uri_dd, c);
 			le = permitted(c)
 				?c.getListOfEventsRunningAtDay(
-					emonth.date_human, false)
+					msg.date_human, false)
 				:c.getListOfEventsRunningAtDay(
-					emonth.date_human, true);
+					msg.date_human, true);
 		}
-		render(id, le, emonth);
+		render(user, cal, le, msg);
 	}
 
-	public static void ls_evts (
-		String id
+	public static void lsEvents (
+		String uri_user,
+		String uri_cal
 	) {
-		cal.ls_evts(id, null, null, null);
+		String user = uri_user==null ?auth_user :uri_user;
+		String cal = uri_cal;
+
+		ESECtlCalendar.lsEvents(user, cal, null, null, null);
 	}
 
-	public static void add_evt (
-		String id,
+	public static void addEvent (
+		String uri_user,
+		String uri_cal,
 		String eid,
 		String ename,
 		String ebeg,
@@ -46,57 +64,84 @@ public class cal extends Controller
 		String epub,
 		Boolean err_date
 	) {
-		render(id, eid, ename, ebeg, eend, epub, err_date);
+		String user = uri_user==null ?auth_user :uri_user;
+		String cal = uri_cal;
+
+		render(user, cal, eid, ename, ebeg, eend, epub, err_date);
 	}
 
-	public static void add_evt_post (
-		String id,
+	public static void addEventPost (
+		String uri_user,
+		String uri_cal,
 		String eid,
-		@Required String name,
-		@Required String beg,
-		@Required String end,
-		String pub
+		@Required String ename,
+		@Required String ebeg,
+		@Required String eend,
+		String epub
 	) {
+		String user = uri_user==null ?auth_user :uri_user;
+		String cal = uri_cal;
+
+		ESEUser u;
+		ESECalendar c;
 		Date dbeg, dend;
 		Boolean err_date = false;
-		ESECalendar c = ESECalendar.getCalendar(id);
 		SimpleDateFormat sdf = new SimpleDateFormat(
 			"dd.MM.yyyy HH:mm");
 
 		try {
-			dbeg = sdf.parse(beg);
-			dend = sdf.parse(end);
+			dbeg = sdf.parse(ebeg);
+			dend = sdf.parse(eend);
 			if (dend.compareTo(dbeg) < 0) {
 				throw new Exception();
 			}
 		} catch (Exception e) {
 			err_date = true;
 		}
-		if (!validation.hasErrors() && !err_date && c != null) {
+		if ((u = ESEUser.getUser(user)) == null) {
+			user = auth_user;
+			u = ESEUser.getUser(user);
+		}
+		if (!validation.hasErrors() && !err_date &&
+		   (c = u.getCalendar(cal)) != null) {
 			if (permitted(c)) {
-				pub = pub==null ?"false" :"true";
+				epub = epub==null ?"false" :"true";
 				if (eid != null) {
 					c.removeEvent(Long.parseLong(eid));
 				}
 				ESEFactory.createEvent(
-					name, beg, end, pub, c);
+					ename, ebeg, eend, epub, c);
 			}
-			cal.ls_evts(id);
+			ESECtlCalendar.lsEvents(user, cal);
 		}
 		params.flash();
 		validation.keep();
-		add_evt(id, eid, name, beg, end, pub, err_date);
+		ESECtlCalendar.addEvent(user, cal, eid, ename, ebeg,
+			eend, epub, err_date);
 	}
 
-	public static void edit_evt (
-		String id,
-		String eid,
-		String year,
-		String month,
-		String day
+	public static void modEvent (
+		String uri_user,
+		String uri_cal,
+		String eid
 	) {
-		ESEEvent e = ESEEvent.findById(Long.parseLong(eid));
-		add_evt(id, eid, e.getEventName(),
+		String user = uri_user==null ?auth_user :uri_user;
+		String cal = uri_cal;
+
+		ESEUser u;
+		ESECalendar c;
+		ESEEvent e = null;	/* XXX: needs handling */
+		if ((u = ESEUser.getUser(user)) == null) {
+			user = auth_user;
+			u = ESEUser.getUser(user);
+		}
+		if ((c = u.getCalendar(cal)) != null && permitted(c)) {
+			e = c.getEvent(Long.parseLong(eid));
+		}
+		/**
+		 *	XXX: ugly below
+		 */
+		ESECtlCalendar.addEvent(user, cal, eid, e.getEventName(),
 			ESEConversionHelper.convertDateToString(
 				e.getStartDate()),
 			ESEConversionHelper.convertDateToString(
@@ -104,25 +149,30 @@ public class cal extends Controller
 			((Boolean)e.isPublic()).toString(), null);
 	}
 
-	public static void rm_evt (
-		String id,
-		String eid,
-		String year,
-		String month,
-		String day
+	public static void delEvent (
+		String uri_user,
+		String uri_cal,
+		String eid
 	) {
-		ESECalendar c = ESECalendar.getCalendar(id);
-		if (c != null && permitted(c)) {
+		String user = uri_user==null ?auth_user :uri_user;
+		String cal = uri_cal;
+
+		ESEUser u;
+		ESECalendar c;
+		if ((u = ESEUser.getUser(user)) == null) {
+			user = auth_user;
+			u = ESEUser.getUser(user);
+		}
+		if ((c = u.getCalendar(cal)) != null && permitted(c)) {
 			c.removeEvent(Long.parseLong(eid));
 		}
-		cal.ls_evts(id, year, month, day);
+		ESECtlCalendar.lsEvents(user, cal);
 	}
 
 	public static Boolean permitted (
 		ESECalendar c
 	) {
-		String authid = Secure.Security.connected();
 		String cal_owner = c.getOwner().getUsername();
-		return authid.equals(cal_owner);
+		return auth_user.equals(cal_owner);
 	}
 }
