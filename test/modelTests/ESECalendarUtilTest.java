@@ -57,27 +57,28 @@ public class ESECalendarUtilTest extends UnitTest{
 	@Test
 	public void shouldSetOneMonthForth(){
 		//check setups
-		cal.set(2012, 5, 10);
-		assertEquals(2012, cal.get(cal.YEAR));
-		assertEquals(5, cal.get(cal.MONTH));
-		assertEquals(10, cal.get(cal.DAY_OF_MONTH));
+		cal.set(2012, 5, 10);//java: month 0-11
+		util.setAtDate(cal.getTime());
+		System.out.println(cal.getTime().toString());
+		assertEquals(6, util.getMonth());//ESECalendar: month 1-12
 		
 		util.setToNextMonth();
-		assertEquals(6, util.getMonth());
+		assertEquals(7, util.getMonth());
 		assertEquals(2012, util.getYear());
 		assertEquals(10, util.getDayOfMonth());
 		
 		//check dec-jan
-		cal.set(cal.MONTH, 11);
+		cal.set(cal.MONTH, 11);//java: dec
 		util.setAtDate(cal.getTime());
+		assertEquals(12, util.getMonth());//ESECal: dec
 		util.setToNextMonth();
-		assertEquals(2013, cal.get(cal.YEAR));
-		assertEquals(0, cal.get(cal.MONTH));
-		assertEquals(10, cal.get(cal.DAY_OF_MONTH));
+		assertEquals(2013, util.getYear());
+		assertEquals(1, util.getMonth());
+		assertEquals(10, util.getDayOfMonth());
 	}
 	
 	@Test
 	public void shouldSetOneMonthBack(){
-		
+		//TODO
 	}
 }
