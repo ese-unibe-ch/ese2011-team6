@@ -333,6 +333,22 @@ public class ESECalendarUtil {
 	 */
 	public void reset(){
 		cal.setTime(new Date());
-		//TODO tests
+	}
+	
+	/**
+	 *TODO 
+	 * @return
+	 */
+	public String monthToString(){
+		//TODO
+		return "";
+	}
+	/**
+	 *TODO
+	 * @return
+	 */
+	public String weekDayToString(){
+		//TODO
+		return "";
 	}
 }
