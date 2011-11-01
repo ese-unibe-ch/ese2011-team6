@@ -1,0 +1,30 @@
+*{ You can use plain selenium command using the selenium tag }*
+
+#{selenium 'Test Register a new user'}
+
+	clearSession()
+    open('/login')
+    assertTextPresent('Username')
+    assertTextPresent('Password')
+    type('username','steve')
+    type('password','doocy')
+    clickAndWait('signin')
+    
+    assertTextPresent('logged in as steve')
+    clickAndWait('link=add user')
+    
+    assertTextPresent('username')
+    assertTextPresent('password')
+    assertTextPresent('first name')
+    assertTextPresent('name')
+	type('uname','ptolemy')
+	type('pass','alexandria')
+	clickAndWait('css=input[type=submit]')
+	
+	assertTextPresent('gretchen')
+	assertTextPresent('brian')
+	assertTextPresent('ptolemy')
+    
+    
+    
+#{/selenium}
