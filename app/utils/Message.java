@@ -1,14 +1,15 @@
 package utils;
 
+import java.util.List;
+import java.util.Date;
 import java.util.Calendar;
-import java.util.ArrayList;
 import java.util.Formatter;
 import models.*;
 
-public class ESEMessage
+public class Message
 {
 	/**
-	 *	The only purpose of ESEMessage is to keep the view
+	 *	The only purpose of Message is to keep the view
 	 *	templates as simple/slim as possible.
 	 */
 	class DivDay
@@ -69,20 +70,20 @@ public class ESEMessage
 	/**
 	 *	XXX: we should exchange Date objects..
 	 */
-	public String date_human;
+	public Date date;
 
 	/**
 	 *	Message needed for the visual representation of the
-	 *	calendar, see ESECtlCalendar.lsEvents().
+	 *	calendar, see CtlCalendar.lsEvents().
 	 */
 	public void lsEvents (
 		String year,
 		String month,
 		String day,
-		ESECalendar ec
+		ModCalendar ec
 	) {
 		int cm_dow;
-		ArrayList<ESEEvent> events;
+		List<ModEvent> events;
 
 		/**
 		 *	init selected date
@@ -128,9 +129,9 @@ public class ESEMessage
 		cm_dow = dayofweek(y, m, 1);	/* yes, d=1 */
 
 		/**
-		 *	XXX: we should exchange Date objects..
+		 *	XXX: should go away
 		 */
-		date_human = fmt_human(y, m, d);
+		date = fmt_date(y, m, d);
 
 		/**
 		 *	tag header-divs
@@ -155,8 +156,7 @@ public class ESEMessage
 			if (y == cy && m == cm && i+1 == cd) {
 				edays[i].append_cssc("today");
 			}
-			events = ec.getListOfEventsRunningAtDay(
-				fmt_human(y, m, i+1), false);
+			events = ec.getEventsAt(fmt_date(y, m, i+1), false);
 			if (events.size() > 0) {
 				edays[i].append_cssc("event");
 			}
@@ -202,12 +202,12 @@ public class ESEMessage
 	}
 
 	/**
-	 *	XXX: we should exchange Date objects..
+	 *	XXX: should go away
 	 */
-	public String fmt_human (
+	public Date fmt_date (
 		int y, int m, int d
 	) {
-		return String.format("%02d.%02d.%d %s",
-			d, m, y, "12:00");
+		return new Date(String.format("%02d/%02d/%d %s",
+			d, m, y, "00:00"));
 	}
 }

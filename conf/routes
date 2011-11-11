@@ -8,19 +8,19 @@ GET	/favicon.ico	404
 
 # user
 #
-GET	/User/?			ESECtlUser.lsUsers
-GET	/User/add/?		ESECtlUser.addUser
-POST	/User/add/?		ESECtlUser.addUserPost
-GET	/User/mod/?		ESECtlUser.addUser
-GET	/User/del/?		ESECtlUser.delUser
+#GET	/User/?			CtlUser.lsUsers
+#GET	/User/add/?		CtlUser.addUser
+#POST	/User/add/?		CtlUser.addUserPost
+#GET	/User/mod/?		CtlUser.addUser
+#GET	/User/del/?		CtlUser.delUser
 
 # home
 #
-GET	/							ESECtlUser.lsCalendars
-GET	/{uri_user}/?						ESECtlUser.lsCalendars
-GET	/{uri_user}/{uri_cal}/?					ESECtlCalendar.lsEvents
-GET	/{uri_user}/{uri_cal}/add/?				ESECtlCalendar.addEvent
-POST	/{uri_user}/{uri_cal}/add/?				ESECtlCalendar.addEventPost
-GET	/{uri_user}/{uri_cal}/mod/?				ESECtlCalendar.modEvent
-GET	/{uri_user}/{uri_cal}/del/?				ESECtlCalendar.delEvent
-GET	/{uri_user}/{uri_cal}/{uri_yy}/{uri_mm}/{uri_dd}/?	ESECtlCalendar.lsEvents
+GET	/							CtlUser.lsCalendars
+GET	/{uri_user}/?						CtlUser.lsCalendars
+GET	/{uri_user}/{uri_cal}/?					CtlCalendar.lsEvents
+GET	/{uri_user}/{uri_cal}/add/?				CtlCalendar.addEvent
+POST	/{uri_user}/{uri_cal}/add/?				CtlCalendar.addEventPost
+GET	/{uri_user}/{uri_cal}/mod/?				CtlCalendar.modEvent
+GET	/{uri_user}/{uri_cal}/del/?				CtlCalendar.delEvent
+GET	/{uri_user}/{uri_cal}/{uri_yy}/{uri_mm}/{uri_dd}/?	CtlCalendar.lsEvents

@@ -6,29 +6,29 @@ import play.data.validation.*;
 import models.*;
 
 @With(Secure.class)
-public class ESECtlUser extends Controller
+public class CtlUser extends Controller
 {
 	private static String auth_user = Secure.Security.connected();
 
 	public static void lsCalendars (
 		String uri_user
 	) {
-		ESEUser u;
-		List<ESECalendar> lc;
+		ModUser u;
+		List<ModCalendar> lc;
 		String user = uri_user==null ?auth_user :uri_user;
 
-		if ((u = ESEUser.getUser(user)) == null) {
+		if ((u = ModUser.getUser(user)) == null) {
 			user = auth_user;
-			u = ESEUser.getUser(user);
+			u = ModUser.getUser(user);
 		}
-		lc = u.getAllCalendars();
+		lc = u.getCalendars();
 		render(user, lc);
 	}
 
 	public static void lsUsers (
 	) {
-		List<ESEUser> lu;
-		lu = ESEUser.getAllOtherUsers(auth_user);
+		List<ModUser> lu;
+		lu = ModUser.getUsers();
 		render(lu);
 	}
 
@@ -44,36 +44,35 @@ public class ESECtlUser extends Controller
 		String ufname,
 		String ulname
 	) {
-		ESEUser u = null;
+		ModUser u = null;
 		if (!validation.hasErrors()) {
-			if ((u = ESEUser.getUser(uname)) != null) {
-				u.editPassword(upass);
-				u.editFirstName(upass);
-				u.editFamilyName(upass);
+			if ((u = ModUser.getUser(uname)) != null) {
+				u.setPassword(upass);
+				u.setFirstname(ufname);
+				u.setLastname(ulname);
 			}
 			else {
-				ESEFactory.createUser(uname, upass,
-					ufname, ufname);
+				ModUser.addUser(uname, upass);
 			}
-			ESECtlUser.lsUsers();
+			CtlUser.lsUsers();
 		}
 		params.flash();
 		validation.keep();
-		ESECtlUser.addUser(uname);
+		CtlUser.addUser(uname);
 	}
 
 	public static void delUser (
 		String uname
 	) {
-		ESEUser u = ESEUser.getUser(uname);
+		ModUser u = ModUser.getUser(uname);
 		if (u != null) {
 			/**
-			 *	XXX: ESEUser.removeUser() should exist
+			 *	XXX: ModUser.removeUser() should exist
 			 *	and not only delete the user but also
 			 *	all his/her Calendars and/or Events..
 			 */
 			u.delete();
 		}
-		ESECtlUser.lsUsers();
+		CtlUser.lsUsers();
 	}
 }

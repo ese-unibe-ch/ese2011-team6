@@ -2,13 +2,13 @@ package controllers;
 
 import models.*;
 
-public class ESECtlSecurity extends Secure.Security
+public class CtlSecurity extends Secure.Security
 {
 	static boolean authenticate (
 		String username,
 		String password
 	) {
-		ESEUser u = ESEUser.getUser(username);
+		ModUser u = ModUser.getUser(username);
 		if (u == null) {
 			return false;
 		}

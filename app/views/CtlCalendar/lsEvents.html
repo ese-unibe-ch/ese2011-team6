@@ -32,11 +32,11 @@
 #{list le}
 	${_.getId()} |
 	${_.getName()} |
-	${_.getStartDate().toString()} |
-	${_.getEndDate().toString()} |
+	${_.getBeg().toString()} |
+	${_.getEnd().toString()} |
 	${_.isPublic().toString()} |
-	#{a @ESECtlCalendar.modEvent(user, cal, _.getId())}edit#{/a} |
-	#{a @ESECtlCalendar.delEvent(user, cal, _.getId())}delete#{/a}
+	#{a @CtlCalendar.modEvent(user, cal, _.getId())}edit#{/a} |
+	#{a @CtlCalendar.delEvent(user, cal, _.getId())}delete#{/a}
 	<br />
 #{/list}
 #{else}
