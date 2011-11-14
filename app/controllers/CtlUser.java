@@ -1,78 +1,54 @@
 package controllers;
 
-import java.util.List;
-import play.mvc.*;
-import play.data.validation.*;
+import play.mvc.Controller;
+import play.mvc.With;
 import models.*;
+import utils.*;
 
 @With(Secure.class)
 public class CtlUser extends Controller
 {
-	private static String auth_user = Secure.Security.connected();
-
-	public static void lsCalendars (
-		String uri_user
+	public static void listCalendars (
+		String blob
 	) {
-		ModUser u;
-		List<ModCalendar> lc;
-		String user = uri_user==null ?auth_user :uri_user;
-
-		if ((u = ModUser.getUser(user)) == null) {
-			user = auth_user;
-			u = ModUser.getUser(user);
-		}
-		lc = u.getCalendars();
-		render(user, lc);
+		Message msg = new Message(params, blob, routeArgs);
+		msg.listCalendars();
+		render(msg);
 	}
 
-	public static void lsUsers (
+	public static void listUsers (
+		String blob
 	) {
-		List<ModUser> lu;
-		lu = ModUser.getUsers();
-		render(lu);
+		Message msg = new Message(params, blob, routeArgs);
+		msg.listUsers();
+		render(msg);
 	}
 
 	public static void addUser (
-		String uname
+		String blob
 	) {
-		render(uname);
+		Message msg = new Message(params, blob, routeArgs);
+		msg.addUser();
+		render(msg);
 	}
 
 	public static void addUserPost (
-		@Required String uname,
-		@Required String upass,
-		String ufname,
-		String ulname
+		String blob
 	) {
-		ModUser u = null;
-		if (!validation.hasErrors()) {
-			if ((u = ModUser.getUser(uname)) != null) {
-				u.setPassword(upass);
-				u.setFirstname(ufname);
-				u.setLastname(ulname);
-			}
-			else {
-				ModUser.addUser(uname, upass);
-			}
-			CtlUser.lsUsers();
+		Message msg = new Message(params, blob, routeArgs);
+		if (!msg.addUserPost()) {
+			addUser(msg.BLOB());
 		}
-		params.flash();
-		validation.keep();
-		CtlUser.addUser(uname);
+		listUsers(msg.BLOB());
 	}
 
-	public static void delUser (
-		String uname
+	public static void modUser (
+		String blob
 	) {
-		ModUser u = ModUser.getUser(uname);
-		if (u != null) {
-			/**
-			 *	XXX: ModUser.removeUser() should exist
-			 *	and not only delete the user but also
-			 *	all his/her Calendars and/or Events..
-			 */
-			u.delete();
+		Message msg = new Message(params, blob, routeArgs);
+		if (!msg.modUser()) {
+			listUsers(msg.BLOB());
 		}
-		CtlUser.lsUsers();
+		addUser(msg.BLOB());
 	}
 }

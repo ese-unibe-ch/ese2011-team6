@@ -1,213 +1,363 @@
 package utils;
 
+import java.util.Map;
 import java.util.List;
-import java.util.Date;
-import java.util.Calendar;
-import java.util.Formatter;
+import play.libs.Codec;
+import play.mvc.Scope.Params;
+import play.mvc.Scope.RouteArgs;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.JSONObject;
+import controllers.*;
 import models.*;
 
 public class Message
 {
-	/**
-	 *	The only purpose of Message is to keep the view
-	 *	templates as simple/slim as possible.
-	 */
-	class DivDay
-	{
-		private String head = ""; /* table header */
-		private String cssc = ""; /* css class list */
+	public Params params;
+	public RouteArgs routeArgs;
+	public ModUser curUser;
+	public ModUser selUser;
+	public ModCalendar curCalendar;
+	public DateTime curDate;
+	public DateTime selDate;
+	public String[] cssCalData;
+	public List<ModEvent> events;
+	public List<ModCalendar> calendars;
+	public List<ModUser> users;
+	DateTimeFormatter fmt;
+	DateTimeFormatter fmt_short;
 
-		public void set_head (
-			String h
-		) {
-			head = h;
-		}
-		public String get_head (
-		) {
-			return head;
-		}
-		public void set_cssc (
-			String c
-		) {
-			cssc = c;
-		}
-		public String get_cssc (
-		) {
-			return cssc;
-		}
-		public void append_cssc (
-			String c
-		) {
-			cssc = cssc+" "+c;
-		}
+	public Message (
+		Params params,
+		String blob,
+		RouteArgs routeArgs
+	) {
+		initParams(params, blob);
+		initRouteArgs(routeArgs);
+		fmt = DateTimeFormat.forPattern("dd.MM.yyyy hh:mm");
+		fmt_short = DateTimeFormat.forPattern("dd.MM.yyyy");
 	}
 
-	private int[] monthdays = {
-		31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-
-	private String[] monthnames = {
-		"January", "February", "March", "April", "May", "June",
-		"July", "August", "September", "October", "November",
-		"December" };
-
-	private String[] daysofweek = {
-		"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday",
-		"Friday", "Saturday" };
-
-	/**
-	 *	XXX: Getter/setter for this?  Don't know.
-	 */
-	public int y, m, d;		/* selected date */
-	public int cy, cm, cd;		/* current date */
-	public int mp, mn, yp, yn;	/* previous/next month/year */
-	public int cm_days;		/* number of days, current month */
-	public String cm_name;		/* name, current month */
-	public String[] cm_dow;		/* 1st day of week, current month */
-
-	public DivDay[] thead;		/* header-divs */
-	public DivDay[] edays;		/* day-divs */
-
-	/**
-	 *	XXX: we should exchange Date objects..
-	 */
-	public Date date;
-
-	/**
-	 *	Message needed for the visual representation of the
-	 *	calendar, see CtlCalendar.lsEvents().
-	 */
-	public void lsEvents (
-		String year,
-		String month,
-		String day,
-		ModCalendar ec
+	public void initParams (
+		Params params,
+		String blob
 	) {
-		int cm_dow;
-		List<ModEvent> events;
-
-		/**
-		 *	init selected date
-		 */
-		if (year == null || month == null || day == null) {
-			y = cyear();
-			m = cmonth();
-			d = cday();
+		JSONParser parser;
+		JSONObject paramsBlob;
+		this.params = params;
+		try {
+			parser = new JSONParser();
+			blob = new String(Codec.decodeBASE64(blob));
+			paramsBlob = (JSONObject)parser.parse(blob);
 		}
-		else {
-			y = Integer.parseInt(year);
-			m = Integer.parseInt(month);
-			d = Integer.parseInt(day);
+		catch (Exception e) {
+			return;
 		}
-
-		/**
-		 *	init previous/next month/year
-		 */
-		if (m == 1) {
-			mp = 12;
-			yp = y-1;
-			mn = m+1;
-			yn = y;
-		}
-		else if (m == 12) {
-			mp = m-1;
-			yp = y;
-			mn = 1;
-			yn = y+1;
-		}
-		else {
-			mp = m-1;
-			yp = y;
-			mn = m+1;
-			yn = y;
-		}
-
-		cy = cyear();
-		cm = cmonth();
-		cd = cday();
-		cm_days = monthdays[m-1];
-		cm_name = monthnames[m-1];
-		cm_dow = dayofweek(y, m, 1);	/* yes, d=1 */
-
-		/**
-		 *	XXX: should go away
-		 */
-		date = fmt_date(y, m, d);
-
-		/**
-		 *	tag header-divs
-		 */
-		thead = new DivDay[7];
-		for (int i=0; i<7; i++) {
-			thead[i] = new DivDay();
-			thead[i].append_cssc("thead");
-			thead[i].set_head(daysofweek[(cm_dow+i)%7]);
-		}
-
-		/**
-		 *	tag day-divs
-		 */
-		edays = new DivDay[cm_days];
-		for (int i=0; i<cm_days; i++) {
-			edays[i] = new DivDay();
-			edays[i].append_cssc("day");
-			if (i+1 == d) {
-				edays[i].append_cssc("selected");
+		for (Object key :paramsBlob.keySet()) {
+			if (!key.toString().startsWith("uri_")) {
+				continue;
 			}
-			if (y == cy && m == cm && i+1 == cd) {
-				edays[i].append_cssc("today");
+			if (params.get(key.toString()) != null) {
+				continue;
 			}
-			events = ec.getEventsAt(fmt_date(y, m, i+1), false);
-			if (events.size() > 0) {
-				edays[i].append_cssc("event");
+			params.put(key.toString(),
+				paramsBlob.get(key).toString());
+		}
+	}
+
+	public void pruneParams (
+	) {
+		for (String key :params.allSimple().keySet()) {
+			if (!key.startsWith("uri_err_")) {
+				continue;
 			}
+			params.remove(key);
 		}
 	}
 
-	public int cyear (
+	public String getParamsBlob (
 	) {
-		Calendar c = Calendar.getInstance();
-		return c.get(Calendar.YEAR);
-	}
-
-	public int cmonth (
-	) {
-		Calendar c = Calendar.getInstance();
-		return c.get(Calendar.MONTH)+1;
-	}
-
-	public int cday (
-	) {
-		Calendar c = Calendar.getInstance();
-		return c.get(Calendar.DAY_OF_MONTH);
-	}
-
-	/**
-	 *	derived from http://users.aol.com/s6sj7gt/mikecal.htm
-	 *	output: 0 (sun) -> 6 (sat)
-	 */
-	public int dayofweek (
-		int y, int m, int d
-	) {
-		int z = 0;
-		int adj = 0;
-
-		if (m < 3) {
-			z = y-1;
+		JSONObject obj = new JSONObject();
+		for (String key :params.allSimple().keySet()) {
+			if (!key.startsWith("uri_")) {
+				continue;
+			}
+			obj.put(key, params.get(key));
 		}
-		else {
-			z = y;
-			adj = 2;
-		}
-		return ((int)(23*m/9)+d+4+y+(int)(z/4)-(int)(z/100)+(int)(z/400)-adj)%7;
+		return Codec.encodeBASE64(obj.toString());
 	}
 
-	/**
-	 *	XXX: should go away
-	 */
-	public Date fmt_date (
-		int y, int m, int d
+	public void initRouteArgs (
+		RouteArgs routeArgs
 	) {
-		return new Date(String.format("%02d/%02d/%d %s",
-			d, m, y, "00:00"));
+		this.routeArgs = routeArgs;
+		for (String key :params.allSimple().keySet()) {
+			if (!key.startsWith("uri_")) {
+				continue;
+			}
+			routeArgs.put(key, params.get(key));
+		}
+	}
+
+	public void initUser (
+	) {
+		String sel, cur;
+		sel = params.get("uri_user");
+		cur = CtlSecurity.authUser();
+		selUser = ModUser.getUser(sel);
+		curUser = ModUser.getUser(cur);
+		if (selUser == null) {
+			selUser = curUser;
+		}
+	}
+
+	public void initCalendar (
+	) {
+		String c = params.get("uri_cal");
+		curCalendar = selUser.getCalendar(c);
+	}
+
+	public void initDate (
+	) {
+		String yy = params.get("uri_yy");
+		String mm = params.get("uri_mm");
+		String dd = params.get("uri_dd");
+		curDate = new DateTime();
+		if (yy == null || mm == null || dd == null) {
+			selDate = curDate;
+			return;
+		}
+		selDate = new DateTime(
+			Integer.parseInt(yy),
+			Integer.parseInt(mm),
+			Integer.parseInt(dd),
+			0, 0);
+	}
+
+	public void initCssCal (
+	) {
+		List<ModEvent> le;
+		int daysweek = 7;
+		int days = selDateDays();
+		DateTime d = selDate.withDayOfMonth(1);
+		cssCalData = new String[days];
+
+		for (int i=0; i<days; i++) {
+			if (cssCalData[i] == null) {
+				cssCalData[i] = "";
+			}
+			cssCalData[i] += "day ";
+			if (d.equals(selDate)) {
+				cssCalData[i] += "selected ";
+			}
+			if (d.equals(curDate)) {
+				cssCalData[i] += "today ";
+			}
+			le = curCalendar.getEventsAt(d, curUser);
+			if (le.size() > 0) {
+				cssCalData[i] += "event ";
+			}
+			d = d.plusDays(1);
+		}
+	}
+
+	public int selDateDays (
+	) {
+		return selDate.dayOfMonth().getMaximumValue();
+	}
+
+	public int selDateDow (
+	) {
+		return selDate.withDayOfMonth(1).getDayOfWeek();
+	}
+
+	public void PUT (
+		String key,
+		String val
+	) {
+		params.put(key, val);
+	}
+
+	public void PUT (
+		String key
+	) {
+		params.put(key, "true");
+	}
+
+	public String GET (
+		String key
+	) {
+		return params.get(key);
+	}
+
+	public String BLOB (
+	) {
+		return getParamsBlob();
+	}
+
+	public void listEvents (
+	) {
+		initUser();
+		initCalendar();
+		initDate();
+		initCssCal();
+		if (curCalendar == null) {
+			return;
+		}
+		events = curCalendar.getEventsAt(selDate, curUser);
+	}
+
+	public void delEvent (
+	) {
+		String id;
+
+		initUser();
+		initCalendar();
+		id = GET("uri_eventid");
+		if (id == null || curCalendar == null) {
+			return;
+		}
+		if (!curCalendar.isOwner(curUser)) {
+			return;
+		}
+		curCalendar.delEvent(Long.parseLong(id));
+	}
+
+	public void addEvent (
+	) {
+		if (GET("uri_eventid") != null) {
+			return;
+		}
+		initUser();
+		initCalendar();
+		initDate();
+		PUT("uri_datebeg", selDate.toString(fmt));
+		PUT("uri_dateend", selDate.toString(fmt));
+	}
+
+	public Boolean addEventPost (
+	) {
+		String name;
+		DateTime beg;
+		DateTime end;
+		Boolean pub;
+		String id;
+
+		initUser();
+		initCalendar();
+		if (curCalendar == null) {
+			return false;
+		}
+		if (!curCalendar.isOwner(curUser)) {
+			return false;
+		}
+		name = GET("uri_eventname");
+		if (name.length() == 0) {
+			PUT("uri_err_name");
+			return false;
+		}
+		try {
+			beg = fmt.parseDateTime(GET("uri_datebeg"));
+			end = fmt.parseDateTime(GET("uri_dateend"));
+		} catch (Exception e) {
+			PUT("uri_err_date");
+			return false;
+		}
+		id = GET("uri_eventid");
+		if (id != null) {
+			curCalendar.delEvent(Long.parseLong(id));
+		}
+		pub = GET("uri_eventpub")==null ?false :true;
+		curCalendar.addEvent(name, beg, end, pub);
+		return true;
+	}
+
+	public void modEvent (
+	) {
+		String id;
+
+		initUser();
+		initCalendar();
+		id = GET("uri_eventid");
+		if (id == null || curCalendar == null) {
+			return;
+		}
+		if (!curCalendar.isOwner(curUser)) {
+			return;
+		}
+		ModEvent e = curCalendar.getEvent(Long.parseLong(id));
+		PUT("uri_eventname", e.getName());
+		PUT("uri_datebeg", e.getBeg().toString(fmt));
+		PUT("uri_dateend", e.getEnd().toString(fmt));
+		PUT("uri_eventpub", e.isPublic().toString());
+	}
+
+	public void listCalendars (
+	) {
+		initUser();
+		calendars = selUser.getCalendars();
+	}
+
+	public void listUsers (
+	) {
+		users = ModUser.getUsers();
+	}
+
+	public void addUser (
+	) {
+		return;
+	}
+
+	public Boolean addUserPost (
+	) {
+		String username;
+		String password;
+		String firstname;
+		String lastname;
+		DateTime birthday;
+
+		pruneParams();
+		username = GET("uri_username");
+		if (username.length() == 0) {
+			PUT("uri_err_username");
+			return false;
+		}
+		if (ModUser.getUser(username) != null) {
+			PUT("uri_err_username_exists");
+			return false;
+		}
+		password = GET("uri_password");
+		if (password.length() == 0) {
+			PUT("uri_err_password");
+			return false;
+		}
+		try {
+			birthday = fmt_short
+				.parseDateTime(GET("uri_birthday"));
+		} catch (Exception e) {
+			PUT("uri_err_birthday");
+			return false;
+		}
+		ModUser.addUser(username, password, birthday);
+		return true;
+	}
+
+	public Boolean modUser (
+	) {
+		String id;
+		ModUser user;
+
+		initUser();
+		id = GET("uri_userid");
+		user = ModUser.getUserById(Long.parseLong(id));
+		if (user == null || user != curUser) {
+			return false;
+		}
+		PUT("uri_firstname", user.getFirstname());
+		PUT("uri_lastname", user.getLastname());
+		PUT("uri_birthday", user.getBirthday().toString(fmt_short));
+		return true;
 	}
 }

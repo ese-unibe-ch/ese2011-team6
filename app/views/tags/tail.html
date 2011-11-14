@@ -1,7 +1,5 @@
 <!-- tail.html -->
-#{a @CtlUser.lsCalendars()}home#{/a} |
-*{
-#{a @CtlUser.lsUsers()}users#{/a} |
+#{a @CtlUser.listCalendars()}home#{/a} |
+#{a @CtlUser.listUsers()}users#{/a} |
 #{a @CtlUser.addUser()}add user#{/a} |
-}*
 #{a @Secure.logout()}logout#{/a}

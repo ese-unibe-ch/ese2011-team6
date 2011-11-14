@@ -1,10 +1,9 @@
 package models;
 
-import java.util.Date;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
 import javax.persistence.*;
 import play.db.jpa.*;
+import org.joda.time.*;
 import models.*;
 
 @Entity
@@ -21,14 +20,14 @@ public class ModEvent extends Model
 	public ModEvent (
 		ModCalendar calendar,
 		String name,
-		Date beg,
-		Date end,
+		DateTime beg,
+		DateTime end,
 		Boolean pub
 	) {
 		this.calendar = calendar;
 		this.name = name;
-		this.beg = beg;
-		this.end = end;
+		this.beg = beg.toDate();
+		this.end = end.toDate();
 		this.pub = pub;
 		save();
 	}
@@ -38,14 +37,14 @@ public class ModEvent extends Model
 		return name;
 	}
 
-	public Date getBeg (
+	public DateTime getBeg (
 	) {
-		return beg;
+		return new DateTime(beg);
 	}
 
-	public Date getEnd (
+	public DateTime getEnd (
 	) {
-		return end;
+		return new DateTime(end);
 	}
 
 	public Boolean isPublic (

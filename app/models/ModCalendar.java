@@ -1,10 +1,9 @@
 package models;
 
-import java.util.Date;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
 import javax.persistence.*;
 import play.db.jpa.*;
+import org.joda.time.*;
 import models.*;
 
 @Entity
@@ -39,8 +38,8 @@ public class ModCalendar extends Model
 
 	public ModEvent addEvent (
 		String name,
-		Date beg,
-		Date end,
+		DateTime beg,
+		DateTime end,
 		Boolean pub
 	) {
 		ModEvent e = new ModEvent(this, name, beg, end, pub);
@@ -52,12 +51,13 @@ public class ModCalendar extends Model
 	public void delEvent (
 		Long id
 	) {
-		for (ModEvent e :events)  {
-			if (!e.getId().equals(id)) {
-				continue;
-			}
-			e.delete();
+		ModEvent e;
+		if ((e = getEvent(id)) == null) {
+			return;
 		}
+		events.remove(e);
+		save();
+		e.delete();
 	}
 
 	public ModEvent getEvent (
@@ -73,25 +73,21 @@ public class ModCalendar extends Model
 	}
 
 	public List<ModEvent> getEventsAt (
-		Date date,
-		Boolean pub
+		DateTime date,
+		ModUser user
 	) {
-		Date beg, end;
-		Date a = (Date)date.clone();
-		Date b = (Date)date.clone();
+		DateTime beg, end;
+		DateTime a = date.withTimeAtStartOfDay();
+		DateTime b = date.withTimeAtStartOfDay();
 		List<ModEvent> le = new ArrayList<ModEvent>();
 		for (ModEvent e :events)  {
-			beg = e.getBeg();
-			end = e.getEnd();
-			a.setHours(beg.getHours());	/* XXX: ugly */
-			a.setMinutes(beg.getMinutes());
-			b.setHours(end.getHours());
-			b.setMinutes(end.getMinutes());
+			beg = e.getBeg().withTimeAtStartOfDay();
+			end = e.getEnd().withTimeAtStartOfDay();
 			if (!(beg.compareTo(a) <= 0 &&
 			      end.compareTo(b) >= 0)) {
 				continue;
 			}
-			if (pub && !e.isPublic()) {
+			if (!isOwner(user) && !e.isPublic()) {
 				continue;
 			}
 			le.add(e);

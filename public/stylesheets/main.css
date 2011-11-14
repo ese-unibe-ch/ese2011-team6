@@ -6,7 +6,7 @@ div.month {
 	border: solid 1px black;
 }
 
-div.day, div.thead {
+div.day, div.day_head {
 	float: left;
 	width: 30px;
 	padding: 8px;
@@ -14,7 +14,7 @@ div.day, div.thead {
 	text-align: center;
 }
 
-div.thead {
+div.day_head {
 	font-weight: bold;
 }
 

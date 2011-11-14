@@ -9,9 +9,14 @@ public class CtlSecurity extends Secure.Security
 		String password
 	) {
 		ModUser u = ModUser.getUser(username);
-		if (u == null) {
+		if (u == null || !u.checkPass(password)) {
 			return false;
 		}
-		return u.validatePassword(password);
+		return true;
+	}
+
+	public static String authUser (
+	) {
+		return CtlSecurity.connected();
 	}
 }

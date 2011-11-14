@@ -3,11 +3,13 @@
 
 #{head /}
 
-#{list lc}
+#{list msg.calendars}
 	${_.getId()}
 	${_.getOwner().getName()}'s
-	<a href="/${user}/${_.getName()}">
-		${_.getName()}
+	<a href="/${
+		msg.selUser.getName()}/${
+		_.getName()}">${
+		_.getName()}
 	</a>
 	<br />
 #{/list}

@@ -3,27 +3,28 @@
 
 #{head /}
 
-#{ifErrors}
-	input error
-	<br />
-#{/ifErrors}
-
-#{form @CtlCalendar.addEventPost(user, cal, eid)}
-	<label for="name">name: </label>
-	<input type="text" name="ename" id="ename" value="${ename}" />
+#{form @CtlCalendar.addEventPost(msg.BLOB())}
+	<label for="uri_eventname">name: </label>
+	<input type="text" name="uri_eventname"
+		value="${msg.GET("uri_eventname")}" />
+		${msg.GET("uri_err_name")=='true' ?'error' :''}
 	<br />
 
-	<label for="beg">beg: </label>
-	<input type="text" name="ebeg" id="ebeg" value="${ebeg}" />
-	${err_date ?'invalid date' :''}<br />
+	<label for="uri_datebeg">beg: </label>
+	<input type="text" name="uri_datebeg"
+		value="${msg.GET("uri_datebeg")}" />
+		${msg.GET("uri_err_date")=='true' ?'error' :''}
+	<br />
 
-	<label for="end">end: </label>
-	<input type="text" name="eend" id="eend" value="${eend}" />
-	${err_date ?'invalid date' :''}<br />
+	<label for="uri_dateend">end: </label>
+	<input type="text" name="uri_dateend"
+		value="${msg.GET("uri_dateend")}" />
+		${msg.GET("uri_err_date")=='true' ?'error' :''}
+	<br />
 
-	<label for="pub">pub: </label>
-	<input type="checkbox" name="epub" id="epub"
-		"${epub=='true' ?'checked' :''}" />
+	<label for="uri_eventpub">pub: </label>
+	<input type="checkbox" name="uri_eventpub"
+		value="${msg.GET("uri_eventpub")=='true' ?'checked' :''}" />
 	<br />
 
 	<input type="submit" value="submit event" />

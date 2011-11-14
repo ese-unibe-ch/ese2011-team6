@@ -8,19 +8,18 @@ GET	/favicon.ico	404
 
 # user
 #
-#GET	/User/?			CtlUser.lsUsers
-#GET	/User/add/?		CtlUser.addUser
-#POST	/User/add/?		CtlUser.addUserPost
-#GET	/User/mod/?		CtlUser.addUser
-#GET	/User/del/?		CtlUser.delUser
+GET	/User/?			CtlUser.listUsers
+GET	/User/add/?		CtlUser.addUser
+POST	/User/add/?		CtlUser.addUserPost
+GET	/User/mod/?		CtlUser.modUser
 
 # home
 #
-GET	/							CtlUser.lsCalendars
-GET	/{uri_user}/?						CtlUser.lsCalendars
-GET	/{uri_user}/{uri_cal}/?					CtlCalendar.lsEvents
+GET	/							CtlUser.listCalendars
+GET	/{uri_user}/?						CtlUser.listCalendars
+GET	/{uri_user}/{uri_cal}/?					CtlCalendar.listEvents
 GET	/{uri_user}/{uri_cal}/add/?				CtlCalendar.addEvent
 POST	/{uri_user}/{uri_cal}/add/?				CtlCalendar.addEventPost
 GET	/{uri_user}/{uri_cal}/mod/?				CtlCalendar.modEvent
 GET	/{uri_user}/{uri_cal}/del/?				CtlCalendar.delEvent
-GET	/{uri_user}/{uri_cal}/{uri_yy}/{uri_mm}/{uri_dd}/?	CtlCalendar.lsEvents
+GET	/{uri_user}/{uri_cal}/{uri_yy}/{uri_mm}/{uri_dd}/?	CtlCalendar.listEvents

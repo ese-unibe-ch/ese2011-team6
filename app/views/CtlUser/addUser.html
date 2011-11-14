@@ -3,26 +3,38 @@
 
 #{head /}
 
-#{ifErrors}
-	input error
-	<br />
-#{/ifErrors}
-
-#{form @CtlUser.addUserPost()}
-	<label for="name">username: </label>
-	<input type="text" name="uname" id="uname" value="${uname}" />
-	<br />
-
-	<label for="beg">password: </label>
-	<input type="text" name="upass" id="upass" value="${upass}" />
+#{form @CtlUser.addUserPost(msg.BLOB())}
+	<label for="uri_username">username: </label>
+	<input type="text" name="uri_username"
+		value="${msg.GET("uri_username")}" />
+		${msg.GET("uri_err_username")=='true'
+			?'error: no username provided' :''}
+		${msg.GET("uri_err_username_exists")=='true'
+			?'error: username exists' :''}
 	<br />
 
-	<label for="end">first name: </label>
-	<input type="text" name="ufname" id="ufname" value="${ufname}" />
+	<label for="uri_password">password: </label>
+	<input type="text" name="uri_password"
+		value="${msg.GET("uri_password")}" />
+		${msg.GET("uri_err_password")=='true' ?'error' :''}
 	<br />
 
-	<label for="end">last name: </label>
-	<input type="text" name="ulname" id="ulname" value="${ulname}" />
+	<label for="uri_firstname">firstname: </label>
+	<input type="text" name="uri_firstname"
+		value="${msg.GET("uri_firstname")}" />
+		${msg.GET("uri_err_firstname")=='true' ?'error' :''}
+	<br />
+
+	<label for="uri_lastname">lastname: </label>
+	<input type="text" name="uri_lastname"
+		value="${msg.GET("uri_lastname")}" />
+		${msg.GET("uri_err_lastname")=='true' ?'error' :''}
+	<br />
+
+	<label for="uri_birthday">birthday: </label>
+	<input type="text" name="uri_birthday"
+		value="${msg.GET("uri_birthday")}" />
+		${msg.GET("uri_err_birthday")=='true' ?'error' :''}
 	<br />
 
 	<input type="submit" value="add user" />

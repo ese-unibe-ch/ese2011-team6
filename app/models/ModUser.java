@@ -1,10 +1,9 @@
 package models;
 
-import java.util.Date;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
 import javax.persistence.*;
 import play.db.jpa.*;
+import org.joda.time.DateTime;
 import models.*;
 
 @Entity
@@ -14,27 +13,31 @@ public class ModUser extends Model
 	public String password;
 	public String firstname;
 	public String lastname;
+	public Date birthday;
 
 	@OneToMany(cascade=CascadeType.ALL)
 	public List<ModCalendar> calendars;
 
 	public ModUser (
 		String user,
-		String password
+		String password,
+		DateTime birthday
 	) {
 		this.user = user;
 		this.password = password;
 		this.firstname = "";
 		this.lastname = "";
+		this.birthday = birthday.toDate();
 		calendars = new ArrayList<ModCalendar>();
 		save();
 	}
 
 	public static ModUser addUser (
 		String user,
-		String password
+		String password,
+		DateTime birthday
 	) {
-		return new ModUser(user, password);
+		return new ModUser(user, password, birthday);
 	}
 
 	public static List<ModUser> getUsers (
@@ -48,9 +51,30 @@ public class ModUser extends Model
 		return find("byUser", user).first();
 	}
 
+	public static ModUser getUserById (
+		Long id
+	) {
+		return findById(id);
+	}
+
 	public String getName (
 	) {
 		return user;
+	}
+
+	public String getFirstname (
+	) {
+		return firstname;
+	}
+
+	public String getLastname (
+	) {
+		return lastname;
+	}
+
+	public DateTime getBirthday (
+	) {
+		return new DateTime(birthday);
 	}
 
 	public void setPassword (
@@ -71,7 +95,7 @@ public class ModUser extends Model
 		this.lastname = lastname;
 	}
 
-	public Boolean validatePassword (
+	public Boolean checkPass (
 		String password
 	) {
 		return password.equals(this.password);
