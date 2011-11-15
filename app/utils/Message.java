@@ -15,6 +15,9 @@ import models.*;
 
 public class Message
 {
+	public final String MASTER = "master.html";
+	public final String REGISTRATION = "registration.html";
+
 	public Params params;
 	public RouteArgs routeArgs;
 	public ModUser curUser;
@@ -26,8 +29,10 @@ public class Message
 	public List<ModEvent> events;
 	public List<ModCalendar> calendars;
 	public List<ModUser> users;
-	DateTimeFormatter fmt;
-	DateTimeFormatter fmt_short;
+	public DateTimeFormatter fmt;
+	public DateTimeFormatter fmt_short;
+	public String curTitle = "XXX: title";
+	public String curCaller;
 
 	public Message (
 		Params params,
@@ -36,8 +41,14 @@ public class Message
 	) {
 		initParams(params, blob);
 		initRouteArgs(routeArgs);
-		fmt = DateTimeFormat.forPattern("dd.MM.yyyy hh:mm");
+		fmt = DateTimeFormat.forPattern("dd.MM.yyyy HH:mm");
 		fmt_short = DateTimeFormat.forPattern("dd.MM.yyyy");
+		try {
+			throw new Exception();
+		}
+		catch (Exception e) {
+			curCaller = e.getStackTrace()[1].getMethodName();
+		}
 	}
 
 	public void initParams (
@@ -59,10 +70,10 @@ public class Message
 			if (!key.toString().startsWith("uri_")) {
 				continue;
 			}
-			if (params.get(key.toString()) != null) {
+			if (GET(key.toString()) != null) {
 				continue;
 			}
-			params.put(key.toString(),
+			PUT(key.toString(),
 				paramsBlob.get(key).toString());
 		}
 	}
@@ -77,6 +88,15 @@ public class Message
 		}
 	}
 
+	public String printParams (
+	) {
+		String s = String.format("params:\n");
+		for (String key :params.allSimple().keySet()) {
+			s += String.format("\t%-20s: %s\n", key, GET(key));
+		}
+		return s;
+	}
+
 	public String getParamsBlob (
 	) {
 		JSONObject obj = new JSONObject();
@@ -84,7 +104,7 @@ public class Message
 			if (!key.startsWith("uri_")) {
 				continue;
 			}
-			obj.put(key, params.get(key));
+			obj.put(key, GET(key));
 		}
 		return Codec.encodeBASE64(obj.toString());
 	}
@@ -97,14 +117,14 @@ public class Message
 			if (!key.startsWith("uri_")) {
 				continue;
 			}
-			routeArgs.put(key, params.get(key));
+			routeArgs.put(key, GET(key));
 		}
 	}
 
 	public void initUser (
 	) {
 		String sel, cur;
-		sel = params.get("uri_user");
+		sel = GET("uri_user");
 		cur = CtlSecurity.authUser();
 		selUser = ModUser.getUser(sel);
 		curUser = ModUser.getUser(cur);
@@ -115,15 +135,19 @@ public class Message
 
 	public void initCalendar (
 	) {
-		String c = params.get("uri_cal");
+		String c = GET("uri_cal");
 		curCalendar = selUser.getCalendar(c);
+		if (curCalendar.isOwner(curUser)) {
+			return;
+		}
+		PUT("uri_cal_readonly");
 	}
 
 	public void initDate (
 	) {
-		String yy = params.get("uri_yy");
-		String mm = params.get("uri_mm");
-		String dd = params.get("uri_dd");
+		String yy = GET("uri_yy");
+		String mm = GET("uri_mm");
+		String dd = GET("uri_dd");
 		curDate = new DateTime();
 		if (yy == null || mm == null || dd == null) {
 			selDate = curDate;
@@ -177,19 +201,51 @@ public class Message
 		String key,
 		String val
 	) {
+		System.out.println(curCaller+": "+
+			key+": ["+ GET(key)+"]->["+val+"]");
 		params.put(key, val);
 	}
 
 	public void PUT (
 		String key
 	) {
-		params.put(key, "true");
+		PUT(key, "true");
+	}
+
+	public void PIF (
+		String key,
+		String val
+	) {
+		if (GET(key) != null) {
+			return;
+		}
+		PUT(key, val);
 	}
 
 	public String GET (
 		String key
 	) {
 		return params.get(key);
+	}
+
+	public void DEL (
+		String key
+	) {
+		params.remove(key);
+	}
+
+	public void PUSH (
+		String key
+	) {
+		PUT("_tmp_key", key);
+		PUT("_tmp_val", GET(key));
+	}
+
+	public void POP (
+	) {
+		PUT(GET("_tmp_key"), GET("_tmp_val"));
+		DEL("_tmp_key");
+		DEL("_tmp_val");
 	}
 
 	public String BLOB (
@@ -207,6 +263,8 @@ public class Message
 			return;
 		}
 		events = curCalendar.getEventsAt(selDate, curUser);
+		PIF("uri_datebeg", selDate.toString(fmt));
+		PIF("uri_dateend", selDate.toString(fmt));
 	}
 
 	public void delEvent (
@@ -225,18 +283,6 @@ public class Message
 		curCalendar.delEvent(Long.parseLong(id));
 	}
 
-	public void addEvent (
-	) {
-		if (GET("uri_eventid") != null) {
-			return;
-		}
-		initUser();
-		initCalendar();
-		initDate();
-		PUT("uri_datebeg", selDate.toString(fmt));
-		PUT("uri_dateend", selDate.toString(fmt));
-	}
-
 	public Boolean addEventPost (
 	) {
 		String name;
@@ -245,6 +291,7 @@ public class Message
 		Boolean pub;
 		String id;
 
+		pruneParams();
 		initUser();
 		initCalendar();
 		if (curCalendar == null) {
@@ -255,22 +302,25 @@ public class Message
 		}
 		name = GET("uri_eventname");
 		if (name.length() == 0) {
-			PUT("uri_err_name");
+			PUT("uri_err_eventname");
 			return false;
 		}
 		try {
 			beg = fmt.parseDateTime(GET("uri_datebeg"));
 			end = fmt.parseDateTime(GET("uri_dateend"));
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			PUT("uri_err_date");
+			return false;
+		}
+		pub = GET("uri_eventpub")==null ?false :true;
+		if (!curCalendar.addEvent(name, beg, end, pub)) {
 			return false;
 		}
 		id = GET("uri_eventid");
 		if (id != null) {
 			curCalendar.delEvent(Long.parseLong(id));
 		}
-		pub = GET("uri_eventpub")==null ?false :true;
-		curCalendar.addEvent(name, beg, end, pub);
 		return true;
 	}
 
@@ -336,7 +386,8 @@ public class Message
 		try {
 			birthday = fmt_short
 				.parseDateTime(GET("uri_birthday"));
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			PUT("uri_err_birthday");
 			return false;
 		}

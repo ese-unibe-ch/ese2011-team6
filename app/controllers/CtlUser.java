@@ -13,7 +13,7 @@ public class CtlUser extends Controller
 	) {
 		Message msg = new Message(params, blob, routeArgs);
 		msg.listCalendars();
-		render(msg);
+		renderTemplate(msg.MASTER, msg);
 	}
 
 	public static void listUsers (
@@ -21,7 +21,7 @@ public class CtlUser extends Controller
 	) {
 		Message msg = new Message(params, blob, routeArgs);
 		msg.listUsers();
-		render(msg);
+		renderTemplate(msg.MASTER, msg);
 	}
 
 	public static void addUser (
@@ -29,7 +29,7 @@ public class CtlUser extends Controller
 	) {
 		Message msg = new Message(params, blob, routeArgs);
 		msg.addUser();
-		render(msg);
+		renderTemplate(msg.MASTER, msg);
 	}
 
 	public static void addUserPost (

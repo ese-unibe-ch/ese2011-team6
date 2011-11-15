@@ -36,16 +36,22 @@ public class ModCalendar extends Model
 		return owner;
 	}
 
-	public ModEvent addEvent (
+	public Boolean addEvent (
 		String name,
 		DateTime beg,
 		DateTime end,
 		Boolean pub
 	) {
-		ModEvent e = new ModEvent(this, name, beg, end, pub);
+		ModEvent e;
+		try {
+			e = new ModEvent(this, name, beg, end, pub);
+		}
+		catch (Exception ex) {
+			return false;
+		}
 		events.add(e);
 		save();
-		return e;
+		return true;
 	}
 
 	public void delEvent (

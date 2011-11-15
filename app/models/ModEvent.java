@@ -23,7 +23,10 @@ public class ModEvent extends Model
 		DateTime beg,
 		DateTime end,
 		Boolean pub
-	) {
+	) throws Exception {
+		if (end.compareTo(beg) < 0) {
+			throw new Exception("end < beg");
+		}
 		this.calendar = calendar;
 		this.name = name;
 		this.beg = beg.toDate();

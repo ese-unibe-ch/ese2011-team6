@@ -13,7 +13,7 @@ public class CtlCalendar extends Controller
 	) {
 		Message msg = new Message(params, blob, routeArgs);
 		msg.listEvents();
-		render(msg);
+		renderTemplate(msg.MASTER, msg);
 	}
 
 	public static void delEvent (
@@ -24,21 +24,11 @@ public class CtlCalendar extends Controller
 		listEvents(msg.BLOB());
 	}
 
-	public static void addEvent (
-		String blob
-	) {
-		Message msg = new Message(params, blob, routeArgs);
-		msg.addEvent();
-		render(msg);
-	}
-
 	public static void addEventPost (
 		String blob
 	) {
 		Message msg = new Message(params, blob, routeArgs);
-		if (!msg.addEventPost()) {
-			addEvent(msg.BLOB());
-		}
+		msg.addEventPost();
 		listEvents(msg.BLOB());
 	}
 
@@ -47,6 +37,6 @@ public class CtlCalendar extends Controller
 	) {
 		Message msg = new Message(params, blob, routeArgs);
 		msg.modEvent();
-		addEvent(msg.BLOB());
+		listEvents(msg.BLOB());
 	}
 }
