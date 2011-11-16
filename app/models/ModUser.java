@@ -20,16 +20,19 @@ public class ModUser extends Model
 
 	public ModUser (
 		String user,
-		String password,
-		DateTime birthday
+		String password
 	) {
 		this.user = user;
 		this.password = password;
-		this.firstname = "";
-		this.lastname = "";
-		this.birthday = birthday.toDate();
 		calendars = new ArrayList<ModCalendar>();
 		save();
+	}
+
+	public static ModUser addUser (
+		String user,
+		String password
+	) {
+		return new ModUser(user, password);
 	}
 
 	public static ModUser addUser (
@@ -37,12 +40,20 @@ public class ModUser extends Model
 		String password,
 		DateTime birthday
 	) {
-		return new ModUser(user, password, birthday);
+		ModUser u = new ModUser(user, password);
+		u.setBirthday(birthday);
+		return u;
 	}
 
 	public static List<ModUser> getUsers (
+		String pattern
 	) {
-		return findAll();
+		String query;
+		if (pattern.length() <= 3) {
+			return null;
+		}
+		query = "user like '%"+pattern+"%'";
+		return find(query).fetch();
 	}
 
 	public static ModUser getUser (
@@ -81,18 +92,28 @@ public class ModUser extends Model
 		String password
 	) {
 		this.password = password;
+		save();
 	}
 
 	public void setFirstname (
 		String firstname
 	) {
 		this.firstname = firstname;
+		save();
 	}
 
 	public void setLastname (
 		String lastname
 	) {
 		this.lastname = lastname;
+		save();
+	}
+
+	public void setBirthday (
+		DateTime birthday
+	) {
+		this.birthday = birthday.toDate();
+		save();
 	}
 
 	public Boolean checkPass (
@@ -104,7 +125,13 @@ public class ModUser extends Model
 	public ModCalendar addCalendar (
 		String name
 	) {
-		ModCalendar c = new ModCalendar(this, name);
+		ModCalendar c;
+		try {
+			c = new ModCalendar(this, name);
+		}
+		catch (Exception ex) {
+			return null;
+		}
 		calendars.add(c);
 		save();
 		return c;

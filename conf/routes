@@ -1,25 +1,18 @@
 # routes
 
+# register
+#
+*	/register/?	CtlSecurity.register
+
 # misc.
 #
 *	/		module:secure
 GET	/public/	staticDir:public
 GET	/favicon.ico	404
 
-# user
-#
-GET	/User/?			CtlUser.listUsers
-GET	/User/add/?		CtlUser.addUser
-POST	/User/add/?		CtlUser.addUserPost
-GET	/User/mod/?		CtlUser.modUser
-
-# home
-#
-GET	/							CtlUser.listCalendars
-GET	/{uri_user}/?						CtlUser.listCalendars
-GET	/{uri_user}/{uri_cal}/?					CtlCalendar.listEvents
-GET	/{uri_user}/{uri_cal}/add/?				CtlCalendar.addEvent
-POST	/{uri_user}/{uri_cal}/add/?				CtlCalendar.addEventPost
-GET	/{uri_user}/{uri_cal}/mod/?				CtlCalendar.modEvent
-GET	/{uri_user}/{uri_cal}/del/?				CtlCalendar.delEvent
-GET	/{uri_user}/{uri_cal}/{uri_yy}/{uri_mm}/{uri_dd}/?	CtlCalendar.listEvents
+* /								CtlCalendar.home
+* /{uri_user}/?							CtlCalendar.home
+* /{uri_user}/{uri_cal}/?					CtlCalendar.master
+* /{uri_user}/{uri_cal}/{uri_yy}/{uri_mm}/{uri_dd}/?		CtlCalendar.master
+* /{uri_user}/{uri_cal}/{uri_act}/?				CtlCalendar.{uri_act}
+* /{uri_user}/{uri_cal}/{uri_yy}/{uri_mm}/{uri_dd}/{uri_act}/?	CtlCalendar.{uri_act}

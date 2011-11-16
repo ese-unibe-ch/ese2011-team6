@@ -4,6 +4,7 @@ import java.util.*;
 import javax.persistence.*;
 import play.db.jpa.*;
 import org.joda.time.*;
+import org.joda.time.format.*;
 import models.*;
 
 @Entity
@@ -19,7 +20,11 @@ public class ModCalendar extends Model
 	public ModCalendar (
 		ModUser owner,
 		String name
-	) {
+	) throws Exception {
+		String query = "byNameAndOwner";
+		if (find(query, name, owner).first() != null) {
+			throw new Exception("calendar exists");
+		}
 		this.owner = owner;
 		this.name = name;
 		events = new ArrayList<ModEvent>();
@@ -36,7 +41,7 @@ public class ModCalendar extends Model
 		return owner;
 	}
 
-	public Boolean addEvent (
+	public ModEvent addEvent (
 		String name,
 		DateTime beg,
 		DateTime end,
@@ -47,11 +52,11 @@ public class ModCalendar extends Model
 			e = new ModEvent(this, name, beg, end, pub);
 		}
 		catch (Exception ex) {
-			return false;
+			return null;
 		}
 		events.add(e);
 		save();
-		return true;
+		return e;
 	}
 
 	public void delEvent (
@@ -86,7 +91,7 @@ public class ModCalendar extends Model
 		DateTime a = date.withTimeAtStartOfDay();
 		DateTime b = date.withTimeAtStartOfDay();
 		List<ModEvent> le = new ArrayList<ModEvent>();
-		for (ModEvent e :events)  {
+		for (ModEvent e :events) {
 			beg = e.getBeg().withTimeAtStartOfDay();
 			end = e.getEnd().withTimeAtStartOfDay();
 			if (!(beg.compareTo(a) <= 0 &&
@@ -99,6 +104,58 @@ public class ModCalendar extends Model
 			le.add(e);
 		}
 		return le;
+	}
+
+	public List<String> getOverlaps (
+		ModEvent event,
+		DateTimeFormatter fmt
+	) {
+		String s;
+		DateTime beg, end;
+		DateTime a = event.getBeg();
+		DateTime b = event.getEnd();
+		List<String> ls = new ArrayList<String>();
+		for (ModEvent e :events) {
+			if (e == event) {
+				continue;
+			}
+			beg = e.getBeg();
+			end = e.getEnd();
+			if (beg.compareTo(b) <= 0 &&
+			    a.compareTo(end) <= 0) {
+				s = event.getName()+" overlaps with "+
+					e.getName()+" from ";
+			}
+			else {
+				continue;
+			}
+
+			if (beg.compareTo(a) <= 0 &&
+			    end.compareTo(b) <= 0) {
+				s += a.toString(fmt)+" to "+
+					end.toString(fmt);
+			}
+			else
+			if (beg.compareTo(a) >= 0 &&
+			    end.compareTo(b) >= 0) {
+				s += beg.toString(fmt)+" to "+
+					b.toString(fmt);
+			}
+			else
+			if (beg.compareTo(a) <= 0 &&
+			    end.compareTo(b) >= 0) {
+				s += a.toString(fmt)+" to "+
+					b.toString(fmt);
+			}
+			else
+			if (beg.compareTo(a) >= 0 &&
+			    end.compareTo(b) <= 0) {
+				s += beg.toString(fmt)+" to "+
+					end.toString(fmt);
+			}
+			ls.add(s);
+		}
+		return ls;
 	}
 
 	public Boolean isOwner (

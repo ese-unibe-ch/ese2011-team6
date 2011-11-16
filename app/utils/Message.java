@@ -33,6 +33,7 @@ public class Message
 	public DateTimeFormatter fmt_short;
 	public String curTitle = "XXX: title";
 	public String curCaller;
+	public List<String> curOverlaps;
 
 	public Message (
 		Params params,
@@ -67,6 +68,9 @@ public class Message
 			return;
 		}
 		for (Object key :paramsBlob.keySet()) {
+			if (paramsBlob.get(key) == null) {
+				continue;
+			}
 			if (!key.toString().startsWith("uri_")) {
 				continue;
 			}
@@ -84,7 +88,7 @@ public class Message
 			if (!key.startsWith("uri_err_")) {
 				continue;
 			}
-			params.remove(key);
+			DEL(key);
 		}
 	}
 
@@ -131,6 +135,9 @@ public class Message
 		if (selUser == null) {
 			selUser = curUser;
 		}
+		if (selUser != curUser) {
+			PUT("uri_readonly");
+		}
 	}
 
 	public void initCalendar (
@@ -140,7 +147,6 @@ public class Message
 		if (curCalendar.isOwner(curUser)) {
 			return;
 		}
-		PUT("uri_cal_readonly");
 	}
 
 	public void initDate (
@@ -176,7 +182,7 @@ public class Message
 			if (d.equals(selDate)) {
 				cssCalData[i] += "selected ";
 			}
-			if (d.equals(curDate)) {
+			if (d.equals(curDate.withTimeAtStartOfDay())) {
 				cssCalData[i] += "today ";
 			}
 			le = curCalendar.getEventsAt(d, curUser);
@@ -197,12 +203,25 @@ public class Message
 		return selDate.withDayOfMonth(1).getDayOfWeek();
 	}
 
+	public int selDateLastDow (
+	) {
+		return selDate
+			.withDayOfMonth(selDateDays()).getDayOfWeek();
+	}
+
 	public void PUT (
 		String key,
 		String val
 	) {
-		System.out.println(curCaller+": "+
-			key+": ["+ GET(key)+"]->["+val+"]");
+		String curCaller;
+		try {
+			throw new Exception();
+		}
+		catch (Exception e) {
+			curCaller = e.getStackTrace()[1].getMethodName();
+		}
+		//System.out.println(curCaller+": "+
+		//	key+": ["+ GET(key)+"]->["+val+"]");
 		params.put(key, val);
 	}
 
@@ -231,6 +250,8 @@ public class Message
 	public void DEL (
 		String key
 	) {
+		//System.out.println(curCaller+": "+
+		//	key+": ["+ GET(key)+"]->DELETE!");
 		params.remove(key);
 	}
 
@@ -243,7 +264,12 @@ public class Message
 
 	public void POP (
 	) {
-		PUT(GET("_tmp_key"), GET("_tmp_val"));
+		if (GET("_tmp_val") == null) {
+			DEL(GET("_tmp_key"));
+		}
+		else {
+			PUT(GET("_tmp_key"), GET("_tmp_val"));
+		}
 		DEL("_tmp_key");
 		DEL("_tmp_val");
 	}
@@ -251,6 +277,17 @@ public class Message
 	public String BLOB (
 	) {
 		return getParamsBlob();
+	}
+
+	public Boolean isForm (
+		String name
+	) {
+		String formid = "uri_form_"+name;
+		if (GET(formid) == null) {
+			return false;
+		}
+		DEL(formid);
+		return true;
 	}
 
 	public void listEvents (
@@ -274,6 +311,7 @@ public class Message
 		initUser();
 		initCalendar();
 		id = GET("uri_eventid");
+		DEL("uri_eventid");
 		if (id == null || curCalendar == null) {
 			return;
 		}
@@ -283,27 +321,32 @@ public class Message
 		curCalendar.delEvent(Long.parseLong(id));
 	}
 
-	public Boolean addEventPost (
+	public void addEvent (
 	) {
 		String name;
 		DateTime beg;
 		DateTime end;
 		Boolean pub;
 		String id;
+		ModEvent event;
 
 		pruneParams();
 		initUser();
 		initCalendar();
+		id = GET("uri_eventid");
+		if (!isForm("event")) {
+			return;
+		}
 		if (curCalendar == null) {
-			return false;
+			return;
 		}
 		if (!curCalendar.isOwner(curUser)) {
-			return false;
+			return;
 		}
 		name = GET("uri_eventname");
-		if (name.length() == 0) {
+		if (name == null) {
 			PUT("uri_err_eventname");
-			return false;
+			return;
 		}
 		try {
 			beg = fmt.parseDateTime(GET("uri_datebeg"));
@@ -311,17 +354,19 @@ public class Message
 		}
 		catch (Exception e) {
 			PUT("uri_err_date");
-			return false;
+			return;
 		}
 		pub = GET("uri_eventpub")==null ?false :true;
-		if (!curCalendar.addEvent(name, beg, end, pub)) {
-			return false;
+		event = curCalendar.addEvent(name, beg, end, pub);
+		if (event == null) {
+			PUT("uri_err_date");
+			return;
 		}
-		id = GET("uri_eventid");
 		if (id != null) {
 			curCalendar.delEvent(Long.parseLong(id));
 		}
-		return true;
+		curOverlaps = curCalendar.getOverlaps(event, fmt);
+		DEL("uri_eventid");
 	}
 
 	public void modEvent (
@@ -344,33 +389,44 @@ public class Message
 		PUT("uri_eventpub", e.isPublic().toString());
 	}
 
+	public void addCalendar (
+	) {
+		String name;
+
+		initUser();
+		if (!isForm("calendar")) {
+			return;
+		}
+		name = GET("uri_newcal");
+		if (name == null ||
+		    name.length() < 3) {
+			PUT("uri_err_newcal");
+			return;
+		}
+		if (curUser.addCalendar(name) == null) {
+			PUT("uri_err_newcal_exists");
+		}
+	}
+
 	public void listCalendars (
 	) {
 		initUser();
 		calendars = selUser.getCalendars();
 	}
 
-	public void listUsers (
-	) {
-		users = ModUser.getUsers();
-	}
-
-	public void addUser (
-	) {
-		return;
-	}
-
-	public Boolean addUserPost (
+	public Boolean addUser (
 	) {
 		String username;
 		String password;
-		String firstname;
-		String lastname;
-		DateTime birthday;
+		String passwordc;
 
 		pruneParams();
+		if (!isForm("register")) {
+			return false;
+		}
 		username = GET("uri_username");
-		if (username.length() == 0) {
+		if (username == null ||
+		    username.length() < 3) {
 			PUT("uri_err_username");
 			return false;
 		}
@@ -383,32 +439,63 @@ public class Message
 			PUT("uri_err_password");
 			return false;
 		}
-		try {
-			birthday = fmt_short
-				.parseDateTime(GET("uri_birthday"));
-		}
-		catch (Exception e) {
-			PUT("uri_err_birthday");
+		passwordc = GET("uri_passwordc");
+		if (password.length() == 0 ||
+		    !password.equals(passwordc)) {
+			PUT("uri_err_passwordc");
 			return false;
 		}
-		ModUser.addUser(username, password, birthday);
+		ModUser.addUser(username, password);
+		DEL("uri_username");
+		DEL("uri_password");
+		DEL("uri_passwordc");
 		return true;
 	}
 
 	public Boolean modUser (
 	) {
-		String id;
 		ModUser user;
+		DateTime birthday;
 
 		initUser();
-		id = GET("uri_userid");
-		user = ModUser.getUserById(Long.parseLong(id));
+		user = ModUser.getUser(GET("uri_user"));
 		if (user == null || user != curUser) {
 			return false;
 		}
-		PUT("uri_firstname", user.getFirstname());
-		PUT("uri_lastname", user.getLastname());
-		PUT("uri_birthday", user.getBirthday().toString(fmt_short));
+		if (!isForm("user")) {
+			PUT("uri_firstname", user.getFirstname());
+			PUT("uri_lastname", user.getLastname());
+			PUT("uri_birthday",
+				user.getBirthday().toString(fmt_short));
+			return false;
+		}
+		try {
+			birthday = fmt_short
+				.parseDateTime(GET("uri_birthday"));
+		}
+		catch (Exception e) {
+			birthday = null;
+		}
+		user.setPassword(GET("uri_password"));
+		user.setFirstname(GET("uri_firstname"));
+		user.setLastname(GET("uri_lastname"));
+		user.setBirthday(birthday);
+		DEL("uri_password");
+		DEL("uri_firstname");
+		DEL("uri_lastname");
+		DEL("uri_birthday");
 		return true;
 	}
+
+	public void listUsers (
+	) {
+		String pattern;
+
+		pattern = GET("uri_finduser");
+		if (pattern == null) {
+			return;
+		}
+		users = ModUser.getUsers(pattern);
+	}
+
 }
