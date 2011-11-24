@@ -3,3 +3,7 @@
 /logs
 /modules
 /tmp
+.project
+.classpath
+.settings
+/eclipse

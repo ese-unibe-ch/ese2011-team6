@@ -22,6 +22,13 @@ public class ModCalendar extends Model
 		String name
 	) throws Exception {
 		String query = "byNameAndOwner";
+		/* jokr is there a technical reason or a business logic reason 
+		 * for the constraint that a calendar has to be unique with the 
+		 * name and the owner? If not, it is usually better not to build
+		 * in more constraints than necassary. If you need this constraint
+		 * look into the play validation checks. They provide a simple and
+		 * elegant why to validate stuff like this before saving it.
+		 */
 		if (find(query, name, owner).first() != null) {
 			throw new Exception("calendar exists");
 		}
@@ -52,6 +59,10 @@ public class ModCalendar extends Model
 			e = new ModEvent(this, name, beg, end, pub);
 		}
 		catch (Exception ex) {
+			/* jokr if you catch an exception either throw it or handle it.
+			 * Just returning null doesn't mean that the method really handles it.
+			 * This is quite a severe problem.
+			 */
 			return null;
 		}
 		events.add(e);
@@ -71,6 +82,19 @@ public class ModCalendar extends Model
 		e.delete();
 	}
 
+	/* jokr this isn't a very performant solution to search
+	 * for a event by id which is in this calendar. It would
+	 * be better to get the event with ModEvent.findById(id)
+	 * and then check if this event is owned by the calendar.
+	 * So the method would look like this:
+	 * public ModEvent getEvent(Long id) {
+	 * 		Event e = ModEvent.findById(id);
+	 * 		if(e.calendar.equals(this)
+	 * 			return e;
+	 * 		else
+	 * 			return null;
+	 * }
+	 */
 	public ModEvent getEvent (
 		Long id
 	) {
