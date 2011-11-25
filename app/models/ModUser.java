@@ -10,10 +10,10 @@ import models.*;
 @Entity
 public class ModUser extends Model
 {
-	/* jokr you can use jpa and play validation annotations to describe the instance variables more clearly
-	 * for example use the annotation @Required to define the variables which aren't nullable
-	 * or the jpa annotation @Column(unique=true) to make the username unique (you then should also write
-	 * a play validation check otherwise it just throws a exception
+	/*	jokr you can use jpa and play validation annotations to describe the instance variables more clearly
+	 * 	for example use the annotation @Required to define the variables which aren't nullable
+	 * 	or the jpa annotation @Column(unique=true) to make the username unique (you then should also write
+	 * 	a play validation check otherwise it just throws a exception
 	 */
 	public String user;
 	public String password;
@@ -41,10 +41,10 @@ public class ModUser extends Model
 		return new ModUser(user, password);
 	}
 	
-	/* jokr it seems a bit random what kind of constructors extist to create users
-	 * whith jpa it is better to create one constructor for all not nullable attributes
-	 * and set the others as simple instance variable references. For more details
-	 * look for the comments in the controller
+	/*	jokr it seems a bit random what kind of constructors extist to create users
+	 * 	whith jpa it is better to create one constructor for all not nullable attributes
+	 * 	and set the others as simple instance variable references. For more details
+	 * 	look for the comments in the controller
 	 */
 	public static ModUser addUser (
 		String user,
@@ -56,7 +56,7 @@ public class ModUser extends Model
 		return u;
 	}
 	
-	// jokr it isn't clear which kind of pattern you're expecting
+	//	jokr it isn't clear which kind of pattern you're expecting
 	public static List<ModUser> getUsers (
 		String pattern
 	) {
@@ -67,14 +67,18 @@ public class ModUser extends Model
 		query = "user like '%"+pattern+"%'";
 		return find(query).fetch();
 	}
-
+	
+	/*	jokr This method doesn't work, if there are two users with the
+	 * 	same username. So it should be prohibited by the model to get
+	 * 	to this situation
+	 */
 	public static ModUser getUser (
 		String user
 	) {
 		return find("byUser", user).first();
 	}
 	
-	// jokr this method is not necassary. Just call ModUser.findById(id)
+	//	jokr this method is not necassary. Just call ModUser.findById(id)
 	public static ModUser getUserById (
 		Long id
 	) {
@@ -158,7 +162,7 @@ public class ModUser extends Model
 	public ModCalendar getCalendar (
 		String name
 	) {
-		// jokr the object lc is never used
+		//	jokr the object lc is never used
 		List<ModCalendar> lc = new ArrayList<ModCalendar>();
 		for (ModCalendar c :calendars)  {
 			if (c.getName().equals(name)) {

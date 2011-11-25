@@ -69,7 +69,13 @@ public class ModCalendar extends Model
 		save();
 		return e;
 	}
-
+	
+	/*	jokr If you have a delete method which might not always
+	 * 	delete something (because the requested object doesn't exist e.g.)
+	 * 	it is usual to return the state of success as a boolean, so
+	 * 	the method would return true if it deleted an event, and false if
+	 * 	it didn't
+	 */
 	public void delEvent (
 		Long id
 	) {
@@ -82,18 +88,10 @@ public class ModCalendar extends Model
 		e.delete();
 	}
 
-	/* jokr this isn't a very performant solution to search
-	 * for a event by id which is in this calendar. It would
-	 * be better to get the event with ModEvent.findById(id)
-	 * and then check if this event is owned by the calendar.
-	 * So the method would look like this:
-	 * public ModEvent getEvent(Long id) {
-	 * 		Event e = ModEvent.findById(id);
-	 * 		if(e.calendar.equals(this)
-	 * 			return e;
-	 * 		else
-	 * 			return null;
-	 * }
+	/*	jokr this isn't a very performant solution to search
+	 * 	for a event by id which is in this calendar. It would
+	 * 	be better to get the event with ModEvent.findById(id)
+	 * 	and then check if this event is owned by the calendar.
 	 */
 	public ModEvent getEvent (
 		Long id
@@ -129,7 +127,12 @@ public class ModCalendar extends Model
 		}
 		return le;
 	}
-
+	
+	/*	jokr This method definitly needs some explainatory comments!
+	 * 	I do like though the idea of returning a list of all overlaps!
+	 * 	This can be done much easier though, espiaclly if you already
+	 * 	use jodatime.
+	 */
 	public List<String> getOverlaps (
 		ModEvent event,
 		DateTimeFormatter fmt

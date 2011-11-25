@@ -24,6 +24,11 @@ public class ModEvent extends Model
 		DateTime end,
 		Boolean pub
 	) throws Exception {
+		/*	jokr I think a play.validation.check would be
+		 * 	much more elegant to solve this problem and
+		 * 	even make the validation in the view much easier.
+		 * 	We even discussed it in an excersie lesson I think.
+		 */
 		if (end.compareTo(beg) < 0) {
 			throw new Exception("end < beg");
 		}
