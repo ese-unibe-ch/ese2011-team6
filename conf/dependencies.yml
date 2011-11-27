@@ -1,0 +1,8 @@
+# dependencies.yml
+
+require:
+ - play
+ - play -> secure
+ - com.googlecode.json-simple -> json-simple 1.1
+ - joda-time -> joda-time 2.0:
+     force: true

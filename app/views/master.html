@@ -1,0 +1,252 @@
+#{extends 'main.html' /}
+#{set title:msg.curCaller /}
+
+<div id="header">
+<div id="logo">Jalendar</div>
+<div id="menu">
+logged in as ${session.username} - ${msg.curCaller}
+#{if msg.curCaller == 'master' }
+	#{a @CtlCalendar.profile(msg.BLOB())}profile#{/a} |
+#{/if}
+#{if msg.curCaller != 'register' }
+	#{a @CtlCalendar.home()}home#{/a} |
+	#{a @Secure.logout()}logout#{/a}
+#{/if}
+</div>
+</div>
+
+<!-- ${msg.printParams()} -->
+
+#{if msg.curCaller == 'register' }
+	<div id="form-register">
+	#{form @CtlSecurity.register(null)}
+		<label for="uri_username">username: </label>
+		<input type="text" name="uri_username"
+			value="${msg.GET("uri_username")}" />
+			${msg.GET("uri_err_username")=='true' ?'error' :''}
+		<br />
+
+		<label for="uri_password">password: </label>
+		<input type="password" name="uri_password"
+			value="${msg.GET("uri_password")}" />
+			${msg.GET("uri_err_password")=='true' ?'error' :''}
+		<br />
+
+		<label for="uri_passwordc">confirm: </label>
+		<input type="password" name="uri_passwordc"
+			value="${msg.GET("uri_passwordc")}" />
+			${msg.GET("uri_err_passwordc")=='true' ?'error' :''}
+		<br />
+		<br />
+
+		%{msg.PUT("uri_form_register")}%
+		<input type="hidden" name="blob" value="${msg.BLOB()}" />
+		<input type="submit" value="register!" />
+		%{msg.DEL("uri_form_register")}%
+	#{/form}
+	</div>
+#{/if}
+
+#{if msg.curCaller == 'profile' }
+	<div id="form-profile">
+	#{form @CtlCalendar.profile(null)}
+		<label for="uri_password">password: </label>
+		<input type="password" name="uri_password"
+			value="${msg.GET("uri_password")}" />
+			${msg.GET("uri_err_password")=='true' ?'error' :''}
+		<br />
+
+		<label for="uri_firstname">firstname: </label>
+		<input type="text" name="uri_firstname"
+			value="${msg.GET("uri_firstname")}" />
+			${msg.GET("uri_err_firstname")=='true' ?'error' :''}
+		<br />
+
+		<label for="uri_lastname">lastname: </label>
+		<input type="text" name="uri_lastname"
+			value="${msg.GET("uri_lastname")}" />
+			${msg.GET("uri_err_lastname")=='true' ?'error' :''}
+		<br />
+
+		<label for="uri_birthday">birthday: </label>
+		<input type="text" name="uri_birthday"
+			value="${msg.GET("uri_birthday")}" />
+			${msg.GET("uri_err_birthday")=='true' ?'error' :''}
+		<br />
+
+		%{msg.PUT("uri_form_user")}%
+		<input type="hidden" name="blob" value="${msg.BLOB()}" />
+		<input type="submit" value="edit profile" />
+		%{msg.DEL("uri_form_user")}%
+	#{/form}
+	</div>
+#{/if}
+
+#{if msg.curCaller == 'home' }
+	<div id="list-calendar">
+	#{list msg.calendars}
+		${_.getId()}
+		${_.getOwner().getName()}'s
+		<a href="/${
+			msg.selUser.getName()}/${
+			_.getName()}">${
+			_.getName()}
+		</a>
+		<br />
+	#{/list}
+	#{else}
+		empty
+	#{/else}
+	</div>
+	<br />
+
+	#{if !msg.GET("uri_readonly") }
+		<div id="form-calendar">
+		#{form @CtlCalendar.home(null)}
+			<input type="text" name="uri_newcal"
+				value="${msg.GET("uri_newcal")}" />
+				${msg.GET("uri_err_newcal")
+					?'error' :''}
+				${msg.GET("uri_err_newcal_exists")
+					?'calendar exists' :''}
+			<br />
+
+			%{msg.PUT("uri_form_calendar")}%
+			<input type="hidden" name="blob" value="${msg.BLOB()}" />
+			<input type="submit" value="add calendar" />
+			%{msg.DEL("uri_form_calendar")}%
+		#{/form}
+		</div>
+	#{/if}
+#{/if}
+
+#{if msg.curCaller == 'master' }
+	<div id="finduser">
+	<div id="form-finduser">
+	#{form @CtlCalendar.master(null)}
+		<input type="text" name="uri_finduser" />
+
+		%{msg.PUT("uri_form_find")}%
+		<input type="hidden" name="blob" value="${msg.BLOB()}" />
+		<input type="submit" value="find user" />
+		%{msg.DEL("uri_form_find")}%
+	#{/form}
+	</div>
+	<div id="list-users">
+	#{list msg.users}
+		<a href="/${_.getName()}">${_.getName()}</a>
+		<br />
+	#{/list}
+	</div>
+	</div>
+
+	<div id="calendar">
+	<div id="nav-calendar">
+	<a href="/${
+		msg.selUser.getName()}/${
+		msg.curCalendar.getName()}/${
+		msg.selDate.minusMonths(1).getYear()}/${
+		msg.selDate.minusMonths(1).getMonthOfYear()}/1"><</a> |
+	<a href="/${
+		msg.selUser.getName()}/${
+		msg.curCalendar.getName()}">${
+		msg.curCalendar.getName()}, ${
+		msg.selDate.monthOfYear().getAsText()}, ${
+		msg.selDate.getYear()}</a> |
+	<a href="/${
+		msg.selUser.getName()}/${
+		msg.curCalendar.getName()}/${
+		msg.selDate.plusMonths(1).getYear()}/${
+		msg.selDate.plusMonths(1).getMonthOfYear()}/1">></a>
+	</div>
+
+	<div class="month">
+	<div class="day_head">Mo</div>
+	<div class="day_head">Tu</div>
+	<div class="day_head">We</div>
+	<div class="day_head">Th</div>
+	<div class="day_head">Fr</div>
+	<div class="day_head">Sa</div>
+	<div class="day_head">Su</div>
+
+	#{list 0..msg.selDateDow()-2}
+		<div class="day day-empty">_</div>
+	#{/list}
+
+	#{list 0..msg.selDateDays()-1}
+		<div class="${
+			msg.cssCalData[_]}"><a href="/${
+			msg.selUser.getName()}/${
+			msg.curCalendar.getName()}/${
+			msg.selDate.getYear()}/${
+			msg.selDate.getMonthOfYear()}/${_+1}">${_+1}</a>
+		</div>
+	#{/list}
+
+	#{list 0..6-msg.selDateLastDow()}
+		<div class="day day-empty">_</div>
+	#{/list}
+	</div>
+	</div>
+
+	<div id="list-events">
+	#{list msg.events}
+		${_.getId()} |
+		${_.getName()} |
+		${_.getBeg().toString(msg.fmt)} |
+		${_.getEnd().toString(msg.fmt)} |
+		${_.isPublic().toString()} |
+		#{if !msg.GET("uri_readonly") }
+			%{msg.PUSH("uri_eventid")}%
+			%{msg.PUT("uri_eventid", _.getId().toString())}%
+			#{a @CtlCalendar.modEvent(msg.BLOB())}edit#{/a} |
+			#{a @CtlCalendar.delEvent(msg.BLOB())}delete#{/a}
+			%{msg.POP()}%
+		#{/if}
+		<br />
+	#{/list}
+	#{else}
+		empty
+		<br />
+	#{/else}
+	</div>
+	<br />
+
+	#{if !msg.GET("uri_readonly") }
+		<div id="form-event">
+		#{form @CtlCalendar.master(null)}
+			<label for="uri_eventname">name: </label>
+			<input type="text" name="uri_eventname"
+				value="${msg.GET("uri_eventname")}" />
+				${msg.GET("uri_err_eventname") ?'error' :''}
+
+			<label for="uri_datebeg">begin: </label>
+			<input type="text" name="uri_datebeg"
+				value="${msg.GET("uri_datebeg")}" />
+				${msg.GET("uri_err_date") ?'error' :''}
+
+			<label for="uri_dateend">end: </label>
+			<input type="text" name="uri_dateend"
+				value="${msg.GET("uri_dateend")}" />
+				${msg.GET("uri_err_date") ?'error' :''}
+			<br />
+
+			<label for="uri_eventpub">public: </label>
+			<input type="checkbox" name="uri_eventpub"
+				value="${msg.GET("uri_eventpub") ?'checked' :''}" />
+
+			%{msg.PUT("uri_form_event")}%
+			<input type="hidden" name="blob" value="${msg.BLOB()}" />
+			<input type="submit" value="submit event" />
+			%{msg.DEL("uri_form_event")}%
+		#{/form}
+		<br />
+		#{list msg.curOverlaps}
+			<span class="warning">${_}</span>
+			<br />
+		#{/list}
+		</div>
+	#{/if}
+#{/if}
+
+<!-- ${msg.printParams()} -->

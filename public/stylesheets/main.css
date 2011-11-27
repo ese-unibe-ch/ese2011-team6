@@ -1,0 +1,104 @@
+/* main.css */
+
+div {
+	font-family: monospace;
+}
+
+div#header {
+	min-height: 30px;
+}
+
+div#logo {
+	font-family: helvetica;
+	text-align: center;
+	float: left;
+}
+
+div#menu {
+	float: right;
+}
+
+div#finduser {
+	float: right;
+}
+
+span.warning {
+	color: firebrick;
+}
+
+div#list-events {
+	width: 680px;
+	padding: 10px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+
+div#form-event {
+	width: 850px;
+	padding: 10px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+
+div#nav-calendar {
+	width: 680px;
+	padding: 10px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+
+div.month {
+	width: 700px;
+	min-height: 400px;
+	margin-left: auto;
+	margin-right: auto;
+	font-size: 14px;
+	text-align: center;
+}
+
+div.month div {
+	float: left;
+	width: 98px;
+	text-align: center;
+	border-left: solid 1px white;
+	border-bottom: solid 1px white;
+	background-color: lavender;
+}
+
+div.month div.day-empty {
+	color: white;
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+
+div.day a {
+	display: block;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	text-decoration: none;
+}
+
+div.day a:hover {
+	background-color: white;
+}
+
+div.day_head {
+	font-weight: bold;
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+
+div.event a {
+	background-color: lightpink;
+}
+
+div.selected a {
+	background-color: lightblue;
+}
+
+div.today a {
+	background-color: yellow;
+}

@@ -1,0 +1,18 @@
+# routes
+
+# register
+#
+*	/register/?	CtlSecurity.register
+
+# misc.
+#
+*	/		module:secure
+GET	/public/	staticDir:public
+GET	/favicon.ico	404
+
+* /								CtlCalendar.home
+* /{uri_user}/?							CtlCalendar.home
+* /{uri_user}/{uri_cal}/?					CtlCalendar.master
+* /{uri_user}/{uri_cal}/{uri_yy}/{uri_mm}/{uri_dd}/?		CtlCalendar.master
+* /{uri_user}/{uri_cal}/{uri_act}/?				CtlCalendar.{uri_act}
+* /{uri_user}/{uri_cal}/{uri_yy}/{uri_mm}/{uri_dd}/{uri_act}/?	CtlCalendar.{uri_act}
