@@ -1,0 +1,24 @@
+<div class="search-events" style="halign:center">
+#{form @CtlCalendar.search()}
+	#{field 'name'}
+    	<input type="text" name="${field.name}" id="name" value="#{ifErrors}${flash.name}#{/ifErrors}"/>
+		<input type="submit" value="search event" />
+	#{/field}
+#{/form}
+
+#{if match.size() == 0}
+	No event found, for the string "${name}".
+#{/if}
+#{else}
+	Following events were found:
+<div style="height:200px;font:16px/26px Georgia, Garamond, Serif;overflow-y:scroll; border: 5px">
+	<p style="font-size:10px;"></p>
+	<ul>
+		#{list items: match, as: 'event'}
+			<li><a href=${event.calendar.owner.getName()}/${event.calendar.getName()}/${event.beg.getYear()}/${event.beg.getMonthOfYear()}/${event.beg.getDayOfMonth()}>${event.getName()}</a></li>
+		#{/list}
+	</ul>
+	</div>
+#{/else}
+</div>
+<a href="http://localhost:9000/"><- Back</a>

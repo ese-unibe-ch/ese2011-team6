@@ -132,6 +132,14 @@ logged in as ${session.username} - ${msg.curCaller}
 		%{msg.DEL("uri_form_find")}%
 	#{/form}
 	</div>
+	
+	#{form @CtlCalendar.search()}
+		#{field 'name'}
+    		<input type="text" name="${field.name}" id="name" value="#{ifErrors}${flash.name}#{/ifErrors}"/>
+			<input type="submit" value="search event" />
+		#{/field}
+	#{/form}
+	
 	<div id="list-users">
 	#{list msg.users}
 		<a href="/${_.getName()}">${_.getName()}</a>

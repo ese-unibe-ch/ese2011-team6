@@ -9,6 +9,7 @@
 *	/		module:secure
 GET	/public/	staticDir:public
 GET	/favicon.ico	404
+GET /search	CtlCalendar.search
 
 * /								CtlCalendar.home
 * /{uri_user}/?							CtlCalendar.home
