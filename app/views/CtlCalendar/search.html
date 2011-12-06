@@ -15,7 +15,7 @@
 	<p style="font-size:10px;"></p>
 	<ul>
 		#{list items: match, as: 'event'}
-			<li><a href=${event.calendar.owner.getName()}/${event.calendar.getName()}/${event.beg.getYear()}/${event.beg.getMonthOfYear()}/${event.beg.getDayOfMonth()}>${event.getName()}</a></li>
+			<li><a href="${event.calendar.owner.getName()}/${event.calendar.getName()}/${event.beg.getYear()}/${event.beg.getMonthOfYear()}/${event.beg.getDayOfMonth()}">${event.getName()}</a></li>
 		#{/list}
 	</ul>
 	</div>
