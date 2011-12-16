@@ -1,45 +1,112 @@
 /* main.css */
 
 div {
-	font-family: monospace;
+	font-family: helvetica;
+	font-size: 16px;
 }
 
-div#header {
-	min-height: 30px;
+div.event {
+	margin: 5px;
+	padding: 5px;
+	background-color: lavender;
+}
+
+div.label,
+span.event-name,
+div.list-events-label {
+	font-family: helvetica;
+	font-weight: bold;
+	font-size: 46px;
+	letter-spacing: -4px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+span.label-edit {
+	color: red;
+}
+
+span.event-name,
+div.list-events-label {
+	font-size: 26px;
+	letter-spacing: -2px;
+	padding-bottom: 3px;
+}
+
+div.event-empty,
+div.list-events-label {
+	text-align: center;
+}
+
+span.event-options {
+	font-size: 14px;
+	padding-left: 8px;
+}
+
+label {
+	font-size: 12px;
+}
+
+span.event-details {
+	font-size: 14px;
+	padding-left: 14px;
 }
 
 div#logo {
 	font-family: helvetica;
+	font-weight: bold;
+	font-size: 66px;
+	letter-spacing: -4px;
+	padding: 3px;
 	text-align: center;
-	float: left;
+}
+
+span#logo-sub {
+	font-weight: normal;
+	font-size: 24px;
+	vertical-align: sub;
 }
 
 div#menu {
+	font-size: 14px;
+	text-align: right;
+}
+
+div#right {
+	padding: 40px;
 	float: right;
 }
 
-div#finduser {
-	float: right;
+div#register {
+	text-align: center;
 }
 
-span.warning {
-	color: firebrick;
+div#form-register {
+	display: inline-block;
+	text-align: right;
+}
+
+div#form-profile,
+div#form-event {
+	text-align: right;
+}
+
+div#left {
+	padding: 40px;
+	float: left;
+}
+
+div#list-users,
+div#list-calendar {
+	padding-left: 10px;
+	padding-bottom: 10px;
 }
 
 div#list-events {
-	width: 680px;
+	width: 550px;
 	padding: 10px;
 	margin-left: auto;
 	margin-right: auto;
-	text-align: center;
-}
-
-div#form-event {
-	width: 850px;
-	padding: 10px;
-	margin-left: auto;
-	margin-right: auto;
-	text-align: center;
 }
 
 div#nav-calendar {
@@ -50,9 +117,26 @@ div#nav-calendar {
 	text-align: center;
 }
 
+div#nav-left,
+div#nav-middle,
+div#nav-right {
+	display: inline-block;
+}
+
+div#nav-left a,
+div#nav-middle a,
+div#nav-right a {
+	width: 200px;
+	font-size: 14px;
+	display: inline-block;
+letter-spacing: 2px;
+}
+
+div#nav-middle a {
+}
+
 div.month {
-	width: 700px;
-	min-height: 400px;
+	width: 630px;
 	margin-left: auto;
 	margin-right: auto;
 	font-size: 14px;
@@ -61,7 +145,7 @@ div.month {
 
 div.month div {
 	float: left;
-	width: 98px;
+	width: 88px;
 	text-align: center;
 	border-left: solid 1px white;
 	border-bottom: solid 1px white;
@@ -69,29 +153,32 @@ div.month div {
 }
 
 div.month div.day-empty {
-	color: white;
+	color: lavender;
 	padding-top: 20px;
 	padding-bottom: 20px;
+}
+
+a {
+	text-decoration: none;
 }
 
 div.day a {
 	display: block;
 	padding-top: 20px;
 	padding-bottom: 20px;
-	text-decoration: none;
 }
 
 div.day a:hover {
 	background-color: white;
 }
 
-div.day_head {
+div.day-head {
 	font-weight: bold;
 	padding-top: 20px;
 	padding-bottom: 20px;
 }
 
-div.event a {
+div.day-event a {
 	background-color: lightpink;
 }
 
@@ -101,4 +188,21 @@ div.selected a {
 
 div.today a {
 	background-color: yellow;
+}
+
+input {
+	margin: 2px;
+	border: 1px solid grey;
+}
+
+input.error {
+	background-color: lightpink;
+}
+
+div.warning {
+	margin: 5px;
+	padding: 8px;
+	color: black;
+	font-size: 14px;
+	background-color: lightpink;
 }

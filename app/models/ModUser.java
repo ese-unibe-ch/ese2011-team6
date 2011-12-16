@@ -153,4 +153,13 @@ public class ModUser extends Model
 		}
 		return null;
 	}
+
+	public ModCalendar getCalendarFirst (
+	) {
+		List<ModCalendar> lc = new ArrayList<ModCalendar>();
+		for (ModCalendar c :calendars)  {
+			return c;
+		}
+		return addCalendar("Main Calendar");
+	}
 }

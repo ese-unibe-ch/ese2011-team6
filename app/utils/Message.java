@@ -16,7 +16,6 @@ import models.*;
 public class Message
 {
 	public final String MASTER = "master.html";
-	public final String REGISTRATION = "registration.html";
 
 	public Params params;
 	public RouteArgs routeArgs;
@@ -132,11 +131,18 @@ public class Message
 		cur = CtlSecurity.authUser();
 		selUser = ModUser.getUser(sel);
 		curUser = ModUser.getUser(cur);
+		if (GET("uri_form_useredit") != null &&
+		    GET("uri_form_useredit").equals("true")) {
+			selUser = curUser;
+		}
 		if (selUser == null) {
 			selUser = curUser;
 		}
 		if (selUser != curUser) {
 			PUT("uri_readonly");
+		}
+		else {
+			DEL("uri_readonly");
 		}
 	}
 
@@ -144,6 +150,9 @@ public class Message
 	) {
 		String c = GET("uri_cal");
 		curCalendar = selUser.getCalendar(c);
+		if (curCalendar == null) {
+			curCalendar = selUser.getCalendarFirst();
+		}
 		if (curCalendar.isOwner(curUser)) {
 			return;
 		}
@@ -187,7 +196,7 @@ public class Message
 			}
 			le = curCalendar.getEventsAt(d, curUser);
 			if (le.size() > 0) {
-				cssCalData[i] += "event ";
+				cssCalData[i] += "day-event ";
 			}
 			d = d.plusDays(1);
 		}
@@ -330,7 +339,6 @@ public class Message
 		String id;
 		ModEvent event;
 
-		pruneParams();
 		initUser();
 		initCalendar();
 		id = GET("uri_eventid");
@@ -344,7 +352,7 @@ public class Message
 			return;
 		}
 		name = GET("uri_eventname");
-		if (name == null) {
+		if (name == null || name.length() < 3) {
 			PUT("uri_err_eventname");
 			return;
 		}
@@ -367,6 +375,7 @@ public class Message
 		}
 		curOverlaps = curCalendar.getOverlaps(event, fmt);
 		DEL("uri_eventid");
+		pruneParams();
 	}
 
 	public void modEvent (
@@ -405,7 +414,9 @@ public class Message
 		}
 		if (curUser.addCalendar(name) == null) {
 			PUT("uri_err_newcal_exists");
+			return;
 		}
+		pruneParams();
 	}
 
 	public void listCalendars (
@@ -484,6 +495,7 @@ public class Message
 		DEL("uri_firstname");
 		DEL("uri_lastname");
 		DEL("uri_birthday");
+		pruneParams();
 		return true;
 	}
 
@@ -491,11 +503,17 @@ public class Message
 	) {
 		String pattern;
 
+		if (!isForm("find")) {
+			return;
+		}
 		pattern = GET("uri_finduser");
-		if (pattern == null) {
+		if (pattern == null ||
+		    pattern.length() < 4) {
+			PUT("uri_err_finduser");
 			return;
 		}
 		users = ModUser.getUsers(pattern);
+		pruneParams();
 	}
 
 }

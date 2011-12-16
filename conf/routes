@@ -10,8 +10,8 @@
 GET	/public/	staticDir:public
 GET	/favicon.ico	404
 
-* /								CtlCalendar.home
-* /{uri_user}/?							CtlCalendar.home
+* /								CtlCalendar.master
+* /{uri_user}/?							CtlCalendar.master
 * /{uri_user}/{uri_cal}/?					CtlCalendar.master
 * /{uri_user}/{uri_cal}/{uri_yy}/{uri_mm}/{uri_dd}/?		CtlCalendar.master
 * /{uri_user}/{uri_cal}/{uri_act}/?				CtlCalendar.{uri_act}
