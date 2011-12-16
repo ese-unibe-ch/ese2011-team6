@@ -26,8 +26,8 @@
 		value="${msg.GET("uri_birthday")}" />
 	<br />
 
-	%{msg.PUT("uri_form_user")}%
+	%{msg.setForm("user")}%
 	<input type="hidden" name="blob" value="${msg.BLOB()}" />
 	<input type="submit" value="edit" />
-	%{msg.DEL("uri_form_user")}%
+	%{msg.getForm("user")}%
 #{/form}

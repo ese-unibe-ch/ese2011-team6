@@ -16,7 +16,7 @@
 <div id="header">
 	<div id="menu">
 		#{if msg.curCaller == 'master' }
-			#{include 'header_menu.html' /}
+			#{include 'tags/header_menu.html' /}
 		#{/if}
 		#{if msg.curCaller != 'register' }
 			#{a @Secure.logout()}logout#{/a}
@@ -32,7 +32,7 @@
 #{if msg.curCaller == 'register' }
 	<div id="register">
 		<div id="form-register">
-			#{include 'form_register.html' /}
+			#{include 'tags/form_register.html' /}
 		</div>
 	</div>
 #{/if}
@@ -42,40 +42,40 @@
 	#{if !msg.GET("uri_readonly") }
 		#{if msg.isForm("useredit") }
 			<div id="form-profile">
-				#{include 'form_profile.html' /}
+				#{include 'tags/form_profile.html' /}
 			</div>
 		#{/if}
 		<div id="form-event">
-			#{include 'form_event.html' /}
+			#{include 'tags/form_event.html' /}
 		</div>
 	#{/if}
 	</div>
 
 	<div id="left">
 		<div id="finduser">
-			#{include 'list_users.html' /}
+			#{include 'tags/list_users.html' /}
 			<div id="form-finduser">
-				#{include 'form_finduser.html' /}
+				#{include 'tags/form_finduser.html' /}
 			</div>
 		</div>
 		<div id="calendars">
-			#{include 'list_calendar.html' /}
+			#{include 'tags/list_calendar.html' /}
 			#{if !msg.GET("uri_readonly") }
-				#{include 'form_calendar.html' /}
+				#{include 'tags/form_calendar.html' /}
 			#{/if}
 		</div>
 	</div>
 
 	<div id="calendar">
 		<div id="calendar-nav">
-			#{include 'calendar-nav.html' /}
+			#{include 'tags/calendar_nav.html' /}
 		</div>
 		<div class="calendar-month">
-			#{include 'calendar-month.html' /}
+			#{include 'tags/calendar_month.html' /}
 		</div>
 	</div>
 
 	<div id="list-events">
-		#{include 'list-events.html' /}
+		#{include 'tags/list_events.html' /}
 	</div>
 #{/if}

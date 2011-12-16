@@ -21,8 +21,8 @@
 	<br />
 	<br />
 
-	%{msg.PUT("uri_form_register")}%
+	%{msg.setForm("register")}%
 	<input type="hidden" name="blob" value="${msg.BLOB()}" />
 	<input type="submit" value="register!" />
-	%{msg.DEL("uri_form_register")}%
+	%{msg.getForm("register")}%
 #{/form}

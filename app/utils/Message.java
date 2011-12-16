@@ -284,7 +284,14 @@ public class Message
 		return getParamsBlob();
 	}
 
-	public Boolean isForm (
+	public void setForm (
+		String name
+	) {
+		String formid = "uri_form_"+name;
+		PUT(formid);
+	}
+
+	public Boolean getForm (
 		String name
 	) {
 		String formid = "uri_form_"+name;
@@ -292,6 +299,16 @@ public class Message
 			return false;
 		}
 		DEL(formid);
+		return true;
+	}
+
+	public Boolean isForm (
+		String name
+	) {
+		String formid = "uri_form_"+name;
+		if (GET(formid) == null) {
+			return false;
+		}
 		return true;
 	}
 
@@ -351,7 +368,7 @@ public class Message
 		initUser();
 		initCalendar();
 		id = GET("uri_eventid");
-		if (!isForm("event")) {
+		if (!getForm("event")) {
 			return;
 		}
 		if (curCalendar == null) {
@@ -412,7 +429,7 @@ public class Message
 		String name;
 
 		initUser();
-		if (!isForm("calendar")) {
+		if (!getForm("calendar")) {
 			return;
 		}
 		name = GET("uri_newcal");
@@ -440,7 +457,7 @@ public class Message
 		String passwordc;
 
 		pruneErrors();
-		if (!isForm("register")) {
+		if (!getForm("register")) {
 			return false;
 		}
 		username = GET("uri_username");
@@ -480,7 +497,7 @@ public class Message
 		if (user == null || user != curUser) {
 			return false;
 		}
-		if (!isForm("user")) {
+		if (!getForm("user")) {
 			PUT("uri_firstname", user.getFirstname());
 			PUT("uri_lastname", user.getLastname());
 			PUT("uri_birthday",
@@ -510,11 +527,11 @@ public class Message
 	) {
 		String pattern;
 
-		if (!isForm("find")) {
+		if (!getForm("find")) {
 			return;
 		}
 		pattern = GET("uri_finduser");
-		if (isShort(pattern, 4) {
+		if (isShort(pattern, 4)) {
 			PUT("uri_err_finduser");
 			return;
 		}

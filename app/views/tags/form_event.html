@@ -29,9 +29,9 @@
 	<input type="checkbox" name="uri_eventpub"
 		value="${msg.GET("uri_eventpub") ?'checked' :''}" />
 
-	%{msg.PUT("uri_form_event")}%
+	%{msg.setForm("event")}%
 	<input type="hidden" name="blob" value="${msg.BLOB()}" />
 	<input type="submit" value="${
 		msg.GET("uri_eventid") ?'edit' :'add'}" />
-	%{msg.DEL("uri_form_event")}%
+	%{msg.getForm("event")}%
 #{/form}
