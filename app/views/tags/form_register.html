@@ -1,0 +1,28 @@
+<div class="label">
+	Register
+</div>
+#{form @CtlSecurity.register(null)}
+	<label>Username</label>
+	<input type="text" name="uri_username"
+		class="${msg.GET("uri_err_username") ?'error' :''}"
+		value="${msg.GET("uri_username")}" />
+	<br />
+
+	<label>Password</label>
+	<input type="password" name="uri_password"
+		class="${msg.GET("uri_err_password") ?'error' :''}"
+		value="${msg.GET("uri_password")}" />
+	<br />
+
+	<label>Confirm</label>
+	<input type="password" name="uri_passwordc"
+		class="${msg.GET("uri_err_passwordc") ?'error' :''}"
+		value="${msg.GET("uri_passwordc")}" />
+	<br />
+	<br />
+
+	%{msg.PUT("uri_form_register")}%
+	<input type="hidden" name="blob" value="${msg.BLOB()}" />
+	<input type="submit" value="register!" />
+	%{msg.DEL("uri_form_register")}%
+#{/form}

@@ -1,0 +1,25 @@
+<div id="nav-left">
+	<a href="/${
+		msg.selUser.getName()}/${
+		msg.curCalendar.getName()}/${
+		msg.selDate.minusMonths(1).getYear()}/${
+		msg.selDate.minusMonths(1).getMonthOfYear()}/${
+		msg.selDate.minusMonths(1).getDayOfMonth()}">⬅ ${
+			msg.selDate.minusMonths(1).monthOfYear().getAsText()}</a>
+</div>
+<div id="nav-middle">
+	<a href="/${
+		msg.selUser.getName()}/${
+		msg.curCalendar.getName()}">${
+		msg.selDate.monthOfYear().getAsText()} ${
+		msg.selDate.getYear()}</a>
+</div>
+<div id="nav-right">
+	<a href="/${
+		msg.selUser.getName()}/${
+		msg.curCalendar.getName()}/${
+		msg.selDate.plusMonths(1).getYear()}/${
+		msg.selDate.plusMonths(1).getMonthOfYear()}/${
+		msg.selDate.plusMonths(1).getDayOfMonth()}">${
+			msg.selDate.plusMonths(1).monthOfYear().getAsText()} ➡</a>
+</div>

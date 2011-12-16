@@ -81,7 +81,7 @@ public class Message
 		}
 	}
 
-	public void pruneParams (
+	public void pruneErrors (
 	) {
 		for (String key :params.allSimple().keySet()) {
 			if (!key.startsWith("uri_err_")) {
@@ -131,8 +131,7 @@ public class Message
 		cur = CtlSecurity.authUser();
 		selUser = ModUser.getUser(sel);
 		curUser = ModUser.getUser(cur);
-		if (GET("uri_form_useredit") != null &&
-		    GET("uri_form_useredit").equals("true")) {
+		if (isForm("useredit")) {
 			selUser = curUser;
 		}
 		if (selUser == null) {
@@ -150,9 +149,6 @@ public class Message
 	) {
 		String c = GET("uri_cal");
 		curCalendar = selUser.getCalendar(c);
-		if (curCalendar == null) {
-			curCalendar = selUser.getCalendarFirst();
-		}
 		if (curCalendar.isOwner(curUser)) {
 			return;
 		}
@@ -189,10 +185,10 @@ public class Message
 			}
 			cssCalData[i] += "day ";
 			if (d.equals(selDate)) {
-				cssCalData[i] += "selected ";
+				cssCalData[i] += "day-selected ";
 			}
 			if (d.equals(curDate.withTimeAtStartOfDay())) {
-				cssCalData[i] += "today ";
+				cssCalData[i] += "day-today ";
 			}
 			le = curCalendar.getEventsAt(d, curUser);
 			if (le.size() > 0) {
@@ -299,6 +295,19 @@ public class Message
 		return true;
 	}
 
+	public Boolean isShort (
+		String s,
+		int n
+	) {
+		if (s == null) {
+			return true;
+		}
+		if (s.length() < n) {
+			return true;
+		}
+		return false;
+	}
+
 	public void listEvents (
 	) {
 		initUser();
@@ -352,7 +361,7 @@ public class Message
 			return;
 		}
 		name = GET("uri_eventname");
-		if (name == null || name.length() < 3) {
+		if (isShort(name, 3)) {
 			PUT("uri_err_eventname");
 			return;
 		}
@@ -375,7 +384,7 @@ public class Message
 		}
 		curOverlaps = curCalendar.getOverlaps(event, fmt);
 		DEL("uri_eventid");
-		pruneParams();
+		pruneErrors();
 	}
 
 	public void modEvent (
@@ -407,16 +416,15 @@ public class Message
 			return;
 		}
 		name = GET("uri_newcal");
-		if (name == null ||
-		    name.length() < 3) {
+		if (isShort(name, 3)) {
 			PUT("uri_err_newcal");
 			return;
 		}
 		if (curUser.addCalendar(name) == null) {
-			PUT("uri_err_newcal_exists");
+			PUT("uri_err_newcal");
 			return;
 		}
-		pruneParams();
+		pruneErrors();
 	}
 
 	public void listCalendars (
@@ -431,13 +439,12 @@ public class Message
 		String password;
 		String passwordc;
 
-		pruneParams();
+		pruneErrors();
 		if (!isForm("register")) {
 			return false;
 		}
 		username = GET("uri_username");
-		if (username == null ||
-		    username.length() < 3) {
+		if (isShort(username, 3)) {
 			PUT("uri_err_username");
 			return false;
 		}
@@ -495,7 +502,7 @@ public class Message
 		DEL("uri_firstname");
 		DEL("uri_lastname");
 		DEL("uri_birthday");
-		pruneParams();
+		pruneErrors();
 		return true;
 	}
 
@@ -507,13 +514,11 @@ public class Message
 			return;
 		}
 		pattern = GET("uri_finduser");
-		if (pattern == null ||
-		    pattern.length() < 4) {
+		if (isShort(pattern, 4) {
 			PUT("uri_err_finduser");
 			return;
 		}
 		users = ModUser.getUsers(pattern);
-		pruneParams();
+		pruneErrors();
 	}
-
 }

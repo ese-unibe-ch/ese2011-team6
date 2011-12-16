@@ -1,0 +1,6 @@
+logged in as
+%{msg.PUSH("uri_form_useredit")}%
+%{msg.PUT("uri_form_useredit")}%
+#{a @CtlCalendar.master(msg.BLOB())}${
+	msg.curUser.getName()}#{/a} |
+%{msg.POP()}%

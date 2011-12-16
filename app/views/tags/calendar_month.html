@@ -1,0 +1,25 @@
+<div class="day-head">Mo</div>
+<div class="day-head">Tu</div>
+<div class="day-head">We</div>
+<div class="day-head">Th</div>
+<div class="day-head">Fr</div>
+<div class="day-head">Sa</div>
+<div class="day-head">Su</div>
+
+#{list 0..msg.selDateDow()-2}
+	<div class="day day-empty">_</div>
+#{/list}
+
+#{list 0..msg.selDateDays()-1}
+	<div class="${
+		msg.cssCalData[_]}"><a href="/${
+		msg.selUser.getName()}/${
+		msg.curCalendar.getName()}/${
+		msg.selDate.getYear()}/${
+		msg.selDate.getMonthOfYear()}/${_+1}">${_+1}</a>
+	</div>
+#{/list}
+
+#{list 0..6-msg.selDateLastDow()}
+	<div class="day day-empty">_</div>
+#{/list}

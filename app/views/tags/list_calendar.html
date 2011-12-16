@@ -1,0 +1,14 @@
+<div class="label">
+	${msg.selUser.getName()+"'s"}
+</div>
+<div id="list-calendar">
+	#{list msg.calendars}
+		${_.getId()==msg.curCalendar.getId() ?'★' :'☆'}
+		<a href="/${
+			msg.selUser.getName()}/${
+			_.getName()}">${
+			_.getName()}
+		</a>
+		<br />
+	#{/list}
+</div>

@@ -1,0 +1,35 @@
+&nbsp;
+#{list msg.curOverlaps}
+	<div class="warning">${_}</div>
+#{/list}
+<div class="list-events-label">
+	Events for ${msg.selDate.toString("MMMM d.")}
+</div>
+#{list msg.events}
+	<div class="event">
+		<span class="event-name">
+			✓ ${_.getName()}
+		</span>
+		#{if !msg.GET("uri_readonly") }
+			<span class="event-options">
+				%{msg.PUSH("uri_eventid")}%
+				%{msg.PUT("uri_eventid", _.getId().toString())}%
+				#{a @CtlCalendar.modEvent(msg.BLOB())}edit#{/a} or
+				#{a @CtlCalendar.delEvent(msg.BLOB())}delete#{/a}
+				%{msg.POP()}%
+			</span>
+		#{/if}
+		<br />
+		<span class="event-details">
+			${_.isPublic() ?'Public' :'Private'} event from
+			${_.getBeg().toString(msg.fmt)} to
+			${_.getEnd().toString(msg.fmt)}
+		</span>
+	</div>
+#{/list}
+#{else}
+	<div class="list-events-empty">
+		No events.
+	</div>
+	<br />
+#{/else}

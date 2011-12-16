@@ -1,0 +1,10 @@
+#{form @CtlCalendar.master(null)}
+	<input type="text"
+		class="${msg.GET("uri_err_finduser") ?'error' :''}"
+		name="uri_finduser" />
+
+	%{msg.PUT("uri_form_find")}%
+	<input type="hidden" name="blob" value="${msg.BLOB()}" />
+	<input type="submit" value="find" />
+	%{msg.DEL("uri_form_find")}%
+#{/form}

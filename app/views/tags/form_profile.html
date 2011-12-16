@@ -1,0 +1,33 @@
+<div class="label">
+	<span class="label-edit">Edit</span> Profile
+</div>
+#{form @CtlCalendar.master(null)}
+	<label>New Password</label>
+	<input type="password" name="uri_password"
+		class="${msg.GET("uri_err_password") ?'error' :''}"
+		value="${msg.GET("uri_password")}" />
+	<br />
+
+	<label>First Name</label>
+	<input type="text" name="uri_firstname"
+		class="${msg.GET("uri_err_firstname") ?'error' :''}"
+		value="${msg.GET("uri_firstname")}" />
+	<br />
+
+	<label>Last Name</label>
+	<input type="text" name="uri_lastname"
+		class="${msg.GET("uri_err_lastname") ?'error' :''}"
+		value="${msg.GET("uri_lastname")}" />
+	<br />
+
+	<label>Birthday</label>
+	<input type="text" name="uri_birthday"
+		class="${msg.GET("uri_err_birthday") ?'error' :''}"
+		value="${msg.GET("uri_birthday")}" />
+	<br />
+
+	%{msg.PUT("uri_form_user")}%
+	<input type="hidden" name="blob" value="${msg.BLOB()}" />
+	<input type="submit" value="edit" />
+	%{msg.DEL("uri_form_user")}%
+#{/form}

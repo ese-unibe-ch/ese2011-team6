@@ -19,9 +19,6 @@ public class CtlSecurity extends Secure.Security
 		String username,
 		String password
 	) {
-		if (username.equals("guest")) {
-			return true;
-		}
 		ModUser u = ModUser.getUser(username);
 		if (u == null || !u.checkPass(password)) {
 			return false;

@@ -13,8 +13,6 @@ public class Bootstrap extends Job
 if (ModUser.count() > 0)
 	return;
 
-		ModUser.addUser("guest", "", new DateTime());
-
 		ModUser steve = ModUser.addUser("steve", "doocy",
 			new DateTime(1954, 5, 13, 0, 0));
 		ModUser gretchen = ModUser.addUser("gretchen", "carlson",

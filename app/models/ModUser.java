@@ -147,18 +147,12 @@ public class ModUser extends Model
 	) {
 		List<ModCalendar> lc = new ArrayList<ModCalendar>();
 		for (ModCalendar c :calendars)  {
+			if (name == null) {
+				return c;
+			}
 			if (c.getName().equals(name)) {
 				return c;
 			}
-		}
-		return null;
-	}
-
-	public ModCalendar getCalendarFirst (
-	) {
-		List<ModCalendar> lc = new ArrayList<ModCalendar>();
-		for (ModCalendar c :calendars)  {
-			return c;
 		}
 		return addCalendar("Main Calendar");
 	}

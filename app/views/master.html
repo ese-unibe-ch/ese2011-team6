@@ -1,68 +1,40 @@
 #{extends 'main.html' /}
+
+%{
+	titlePrefix = 'Jalendar - '
+	titleRegister = titlePrefix + 'Register'
+	titleMaster = titlePrefix + msg.selDate.toString(msg.fmt_short)
+}%
+
 #{if msg.curCaller == 'master' }
-	#{set title: 'Jalendar - ' + msg.selDate.toString(msg.fmt_short) /}
+	#{set title: titleMaster /}
 #{/if}
 #{if msg.curCaller == 'register' }
-	#{set title: 'Jalendar - Register' /}
+	#{set title: titleRegister /}
 #{/if}
 
 <div id="header">
-<div id="menu">
-#{if msg.curCaller == 'master' }
-	#{if !msg.curUser.getName().equals("guest") }
-		logged in as
-		%{msg.PUSH("uri_form_useredit")}%
-		%{msg.PUT("uri_form_useredit")}%
-		#{a @CtlCalendar.master(msg.BLOB())}${
-			session.username}#{/a} |
-		%{msg.POP()}%
-	#{/if}
-	#{else}
-		logged in as ${session.username} |
-	#{/else}
-#{/if}
-#{if msg.curCaller != 'register' }
-	#{a @Secure.logout()}logout#{/a}
-#{/if}
-</div> <!-- menu -->
-<div id="logo">
-	Jalendar<span id="logo-sub">β</span>
-</div> <!-- logo -->
-</div> <!-- header -->
+	<div id="menu">
+		#{if msg.curCaller == 'master' }
+			#{include 'header_menu.html' /}
+		#{/if}
+		#{if msg.curCaller != 'register' }
+			#{a @Secure.logout()}logout#{/a}
+		#{/if}
+	</div>
+	<div id="logo">
+		Jalendar<span id="logo-sub">β</span>
+	</div>
+</div>
 
 <!-- ${msg.printParams()} -->
 
 #{if msg.curCaller == 'register' }
 	<div id="register">
-	<div id="form-register">
-	<div class="label">Register</div>
-	#{form @CtlSecurity.register(null)}
-		<label for="uri_username">Username</label>
-		<input type="text" name="uri_username"
-			class="${msg.GET("uri_err_username") ?'error' :''}"
-			value="${msg.GET("uri_username")}" />
-		<br />
-
-		<label for="uri_password">Password</label>
-		<input type="password" name="uri_password"
-			class="${msg.GET("uri_err_password") ?'error' :''}"
-			value="${msg.GET("uri_password")}" />
-		<br />
-
-		<label for="uri_passwordc">Confirm</label>
-		<input type="password" name="uri_passwordc"
-			class="${msg.GET("uri_err_passwordc") ?'error' :''}"
-			value="${msg.GET("uri_passwordc")}" />
-		<br />
-		<br />
-
-		%{msg.PUT("uri_form_register")}%
-		<input type="hidden" name="blob" value="${msg.BLOB()}" />
-		<input type="submit" value="register!" />
-		%{msg.DEL("uri_form_register")}%
-	#{/form}
-	</div> <!-- form-register -->
-	</div> <!-- register -->
+		<div id="form-register">
+			#{include 'form_register.html' /}
+		</div>
+	</div>
 #{/if}
 
 #{if msg.curCaller == 'master' }
@@ -70,236 +42,40 @@
 	#{if !msg.GET("uri_readonly") }
 		#{if msg.isForm("useredit") }
 			<div id="form-profile">
-			<div class="label">
-				<span class="label-edit">Edit</span> Profile
+				#{include 'form_profile.html' /}
 			</div>
-			#{form @CtlCalendar.master(null)}
-				<label for="uri_password">New Password</label>
-				<input type="password" name="uri_password"
-					class="${msg.GET("uri_err_password") ?'error' :''}"
-					value="${msg.GET("uri_password")}" />
-				<br />
-
-				<label for="uri_firstname">First Name</label>
-				<input type="text" name="uri_firstname"
-					class="${msg.GET("uri_err_firstname") ?'error' :''}"
-					value="${msg.GET("uri_firstname")}" />
-				<br />
-
-				<label for="uri_lastname">Last Name</label>
-				<input type="text" name="uri_lastname"
-					class="${msg.GET("uri_err_lastname") ?'error' :''}"
-					value="${msg.GET("uri_lastname")}" />
-				<br />
-
-				<label for="uri_birthday">Birthday</label>
-				<input type="text" name="uri_birthday"
-					class="${msg.GET("uri_err_birthday") ?'error' :''}"
-					value="${msg.GET("uri_birthday")}" />
-				<br />
-
-				%{msg.PUT("uri_form_user")}%
-				<input type="hidden" name="blob" value="${msg.BLOB()}" />
-				<input type="submit" value="edit" />
-				%{msg.DEL("uri_form_user")}%
-			#{/form}
-			</div> <!-- form-profile -->
 		#{/if}
-		#{if !msg.selUser.getName().equals("guest") }
-			<div id="form-event">
-			<div class="label">
-				#{if msg.GET("uri_eventid")}
-					<span class="label-edit">Edit</span> Event
-				#{/if}
-				#{else}
-					Add Event
-				#{/else}
-			</div>
-			#{form @CtlCalendar.master(null)}
-				<label for="uri_eventname">Name </label>
-				<input type="text" name="uri_eventname"
-					class="${msg.GET("uri_err_eventname") ?'error' :''}"
-					value="${msg.GET("uri_eventname")}" />
-				<br />
-
-				<label for="uri_datebeg">Begin </label>
-				<input type="text" name="uri_datebeg"
-					class="${msg.GET("uri_err_date") ?'error' :''}"
-					value="${msg.GET("uri_datebeg")}" />
-				<br />
-
-				<label for="uri_dateend">End </label>
-				<input type="text" name="uri_dateend"
-					class="${msg.GET("uri_err_date") ?'error' :''}"
-					value="${msg.GET("uri_dateend")}" />
-				<br />
-
-				<label for="uri_eventpub">Public Event </label>
-				<input type="checkbox" name="uri_eventpub"
-					value="${msg.GET("uri_eventpub") ?'checked' :''}" />
-
-				%{msg.PUT("uri_form_event")}%
-				<input type="hidden" name="blob" value="${msg.BLOB()}" />
-				<input type="submit" value="${
-					msg.GET("uri_eventid") ?'edit' :'add'}" />
-				%{msg.DEL("uri_form_event")}%
-			#{/form}
-			</div> <!-- form-event -->
-		#{/if}
+		<div id="form-event">
+			#{include 'form_event.html' /}
+		</div>
 	#{/if}
-	</div> <!-- right -->
+	</div>
 
 	<div id="left">
-	<div id="finduser">
-	<div class="label">Find User</div>
-	<div id="list-users">
-	#{list msg.users}
-		<a href="/${_.getName()}">★ ${_.getName()}</a>
-		<br />
-	#{/list}
-	</div> <!-- list-users -->
-	<div id="form-finduser">
-	#{form @CtlCalendar.master(null)}
-		<input type="text"
-			class="${msg.GET("uri_err_finduser") ?'error' :''}"
-			name="uri_finduser" />
-
-		%{msg.PUT("uri_form_find")}%
-		<input type="hidden" name="blob" value="${msg.BLOB()}" />
-		<input type="submit" value="find" />
-		%{msg.DEL("uri_form_find")}%
-	#{/form}
-	</div> <!-- form-finduser -->
-	</div> <!-- finduser -->
-
-	<div id="calendars">
-	#{if !msg.selUser.getName().equals("guest") }
-		<div class="label">${msg.selUser.getName()+"'s"}</div>
-		<div id="list-calendar">
-		#{list msg.calendars}
-			${_.getId()==msg.curCalendar.getId() ?'★' :'☆'}
-			<a href="/${
-				msg.selUser.getName()}/${
-				_.getName()}">${
-				_.getName()}
-			</a>
-			<br />
-		#{/list}
-		#{else}
-			empty
-		#{/else}
-		</div> <!-- list-calendar -->
-	#{/if}
-	#{if !msg.GET("uri_readonly") && !msg.selUser.getName().equals("guest") }
-		<div id="form-calendar">
-		#{form @CtlCalendar.master(null)}
-			<input type="text" name="uri_newcal"
-				class="	${msg.GET("uri_err_newcal") ?'error' :''}
-					${msg.GET("uri_err_newcal_exists") ?'error' :''}"
-				value="${msg.GET("uri_newcal")}" />
-
-			%{msg.PUT("uri_form_calendar")}%
-			<input type="hidden" name="blob" value="${msg.BLOB()}" />
-			<input type="submit" value="add" />
-			%{msg.DEL("uri_form_calendar")}%
-		#{/form}
-		</div> <!-- form-calendar -->
-	#{/if}
-	</div> <!-- calendars -->
-	</div> <!-- left -->
-
-#{if !msg.selUser.getName().equals("guest") }
-	<div id="calendar">
-	<div id="nav-calendar">
-	<div id="nav-left">
-	<a href="/${
-		msg.selUser.getName()}/${
-		msg.curCalendar.getName()}/${
-		msg.selDate.minusMonths(1).getYear()}/${
-		msg.selDate.minusMonths(1).getMonthOfYear()}/${
-		msg.selDate.minusMonths(1).getDayOfMonth()}">⬅ ${
-			msg.selDate.minusMonths(1).monthOfYear().getAsText()}</a>
-	</div> <!-- nav-left -->
-	<div id="nav-middle">
-	<a href="/${
-		msg.selUser.getName()}/${
-		msg.curCalendar.getName()}">${
-		msg.selDate.monthOfYear().getAsText()} ${
-		msg.selDate.getYear()}</a>
-	</div> <!-- nav-middle -->
-	<div id="nav-right">
-	<a href="/${
-		msg.selUser.getName()}/${
-		msg.curCalendar.getName()}/${
-		msg.selDate.plusMonths(1).getYear()}/${
-		msg.selDate.plusMonths(1).getMonthOfYear()}/${
-		msg.selDate.plusMonths(1).getDayOfMonth()}">${
-			msg.selDate.plusMonths(1).monthOfYear().getAsText()} ➡</a>
-	</div> <!-- nav-right -->
-	</div> <!-- nav-calendar -->
-
-	<div class="month">
-	<div class="day-head">Mo</div>
-	<div class="day-head">Tu</div>
-	<div class="day-head">We</div>
-	<div class="day-head">Th</div>
-	<div class="day-head">Fr</div>
-	<div class="day-head">Sa</div>
-	<div class="day-head">Su</div>
-
-	#{list 0..msg.selDateDow()-2}
-		<div class="day day-empty">_</div>
-	#{/list}
-
-	#{list 0..msg.selDateDays()-1}
-		<div class="${
-			msg.cssCalData[_]}"><a href="/${
-			msg.selUser.getName()}/${
-			msg.curCalendar.getName()}/${
-			msg.selDate.getYear()}/${
-			msg.selDate.getMonthOfYear()}/${_+1}">${_+1}</a>
+		<div id="finduser">
+			#{include 'list_users.html' /}
+			<div id="form-finduser">
+				#{include 'form_finduser.html' /}
+			</div>
 		</div>
-	#{/list}
-
-	#{list 0..6-msg.selDateLastDow()}
-		<div class="day day-empty">_</div>
-	#{/list}
-	</div> <!-- month -->
-	</div> <!-- calendar -->
-#{/if}
-
-	#{if !msg.selUser.getName().equals("guest") }
-		<div id="list-events">
-		&nbsp; <!-- EDONTCARE -->
-		#{list msg.curOverlaps}
-			<div class="warning">${_}</div>
-		#{/list}
-		<div class="list-events-label">Events for
-			${msg.selDate.toString("MMMM d.")}</div>
-		#{list msg.events}
-			<div class="event">
-			<span class="event-name">✓ ${_.getName()}</span>
+		<div id="calendars">
+			#{include 'list_calendar.html' /}
 			#{if !msg.GET("uri_readonly") }
-				<span class="event-options">
-				%{msg.PUSH("uri_eventid")}%
-				%{msg.PUT("uri_eventid", _.getId().toString())}%
-				#{a @CtlCalendar.modEvent(msg.BLOB())}edit#{/a} or
-				#{a @CtlCalendar.delEvent(msg.BLOB())}delete#{/a}
-				%{msg.POP()}%
-				</span> <!-- event-options -->
+				#{include 'form_calendar.html' /}
 			#{/if}
-			<br />
-			<span class="event-details">
-			${_.isPublic() ?'Public' :'Private'} event from
-			${_.getBeg().toString(msg.fmt)} to
-			${_.getEnd().toString(msg.fmt)}
-			</span> <!-- event-details -->
-			</div> <!-- event -->
-		#{/list}
-		#{else}
-			<div class="event-empty">No events.</div>
-			<br />
-		#{/else}
-		</div> <!-- list-events -->
-	#{/if}
+		</div>
+	</div>
+
+	<div id="calendar">
+		<div id="calendar-nav">
+			#{include 'calendar-nav.html' /}
+		</div>
+		<div class="calendar-month">
+			#{include 'calendar-month.html' /}
+		</div>
+	</div>
+
+	<div id="list-events">
+		#{include 'list-events.html' /}
+	</div>
 #{/if}

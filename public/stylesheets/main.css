@@ -33,7 +33,7 @@ div.list-events-label {
 	padding-bottom: 3px;
 }
 
-div.event-empty,
+div.list-events-empty,
 div.list-events-label {
 	text-align: center;
 }
@@ -109,7 +109,7 @@ div#list-events {
 	margin-right: auto;
 }
 
-div#nav-calendar {
+div#calendar-nav {
 	width: 680px;
 	padding: 10px;
 	margin-left: auto;
@@ -135,7 +135,7 @@ letter-spacing: 2px;
 div#nav-middle a {
 }
 
-div.month {
+div.calendar-month {
 	width: 630px;
 	margin-left: auto;
 	margin-right: auto;
@@ -143,7 +143,7 @@ div.month {
 	text-align: center;
 }
 
-div.month div {
+div.calendar-month div {
 	float: left;
 	width: 88px;
 	text-align: center;
@@ -152,7 +152,7 @@ div.month div {
 	background-color: lavender;
 }
 
-div.month div.day-empty {
+div.calendar-month div.day-empty {
 	color: lavender;
 	padding-top: 20px;
 	padding-bottom: 20px;
