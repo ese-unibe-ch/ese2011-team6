@@ -1,26 +1,16 @@
 #{extends 'main.html' /}
 
-%{
-	titlePrefix = 'Jalendar - '
-	titleRegister = titlePrefix + 'Register'
-	titleMaster = titlePrefix + msg.selDate.toString(msg.fmt_short)
-}%
-
-#{if msg.curCaller == 'master' }
-	#{set title: titleMaster /}
+#{if msg.curCaller == 'master'}
+	#{set title: 'Jalendar - '
+		+ msg.selDate.toString(msg.fmt_short) /}
 #{/if}
-#{if msg.curCaller == 'register' }
-	#{set title: titleRegister /}
+#{if msg.curCaller == 'register'}
+	#{set title: 'Jalendar - Register' /}
 #{/if}
 
 <div id="header">
 	<div id="menu">
-		#{if msg.curCaller == 'master' }
-			#{include 'tags/header_menu.html' /}
-		#{/if}
-		#{if msg.curCaller != 'register' }
-			#{a @Secure.logout()}logout#{/a}
-		#{/if}
+		#{include 'tags/header_menu.html' /}
 	</div>
 	<div id="logo">
 		Jalendar<span id="logo-sub">β</span>
@@ -29,7 +19,7 @@
 
 <!-- ${msg.printParams()} -->
 
-#{if msg.curCaller == 'register' }
+#{if msg.curCaller == 'register'}
 	<div id="register">
 		<div id="form-register">
 			#{include 'tags/form_register.html' /}
@@ -37,10 +27,10 @@
 	</div>
 #{/if}
 
-#{if msg.curCaller == 'master' }
+#{if msg.curCaller == 'master'}
 	<div id="right">
-	#{if !msg.GET("uri_readonly") }
-		#{if msg.isForm("useredit") }
+	#{if !msg.GET("uri_readonly")}
+		#{if msg.hasFlag("usermod")}
 			<div id="form-profile">
 				#{include 'tags/form_profile.html' /}
 			</div>
@@ -59,8 +49,8 @@
 			</div>
 		</div>
 		<div id="calendars">
-			#{include 'tags/list_calendar.html' /}
-			#{if !msg.GET("uri_readonly") }
+			#{include 'tags/list_calendars.html' /}
+			#{if !msg.GET("uri_readonly")}
 				#{include 'tags/form_calendar.html' /}
 			#{/if}
 		</div>

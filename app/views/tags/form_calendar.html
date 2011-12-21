@@ -4,9 +4,9 @@
 			class="${msg.GET("uri_err_newcal") ?'error' :''}"
 			value="${msg.GET("uri_newcal")}" />
 
-		%{msg.setForm("calendar")}%
+		%{msg.setFlag("form_calendar")}%
 		<input type="hidden" name="blob" value="${msg.BLOB()}" />
 		<input type="submit" value="add" />
-		%{msg.getForm("calendar")}%
+		%{msg.getFlag("form_calendar")}%
 	#{/form}
 </div>

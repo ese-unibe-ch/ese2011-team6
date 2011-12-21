@@ -26,8 +26,8 @@
 		value="${msg.GET("uri_birthday")}" />
 	<br />
 
-	%{msg.setForm("user")}%
+	%{msg.setFlag("form_user")}%
 	<input type="hidden" name="blob" value="${msg.BLOB()}" />
 	<input type="submit" value="edit" />
-	%{msg.getForm("user")}%
+	%{msg.getFlag("form_user")}%
 #{/form}

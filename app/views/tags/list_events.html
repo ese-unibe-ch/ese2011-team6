@@ -10,12 +10,15 @@
 		<span class="event-name">
 			✓ ${_.getName()}
 		</span>
-		#{if !msg.GET("uri_readonly") }
+		#{if !msg.GET("uri_readonly")}
 			<span class="event-options">
-				%{msg.PUSH("uri_eventid")}%
-				%{msg.PUT("uri_eventid", _.getId().toString())}%
-				#{a @CtlCalendar.modEvent(msg.BLOB())}edit#{/a} or
-				#{a @CtlCalendar.delEvent(msg.BLOB())}delete#{/a}
+				%{msg.PUSH("uri_eventid", _.getId().toString())}%
+				%{msg.PUSH("uri_eventmod")}%
+				#{a @CtlCalendar.master(msg.BLOB())}edit#{/a} or
+				%{msg.POP()}%
+				%{msg.PUSH("uri_eventdel")}%
+				#{a @CtlCalendar.master(msg.BLOB())}delete#{/a}
+				%{msg.POP()}%
 				%{msg.POP()}%
 			</span>
 		#{/if}

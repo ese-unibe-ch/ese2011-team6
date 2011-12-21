@@ -6,8 +6,10 @@
 <div class="day-head">Sa</div>
 <div class="day-head">Su</div>
 
-#{list 0..msg.selDateDow()-2}
-	<div class="day day-empty">_</div>
+#{list 0..msg.selDateDow()-1}
+	#{if _!=0}
+		<div class="day day-empty">&nbsp;</div>
+	#{/if}
 #{/list}
 
 #{list 0..msg.selDateDays()-1}
@@ -20,6 +22,8 @@
 	</div>
 #{/list}
 
-#{list 0..6-msg.selDateLastDow()}
-	<div class="day day-empty">_</div>
+#{list 0..msg.selDateLastDow()-7}
+	#{if _!=0}
+		<div class="day day-empty">&nbsp;</div>
+	#{/if}
 #{/list}

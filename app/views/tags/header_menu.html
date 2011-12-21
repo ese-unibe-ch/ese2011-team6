@@ -1,6 +1,12 @@
-logged in as
-%{msg.PUSH("uri_form_useredit")}%
-%{msg.PUT("uri_form_useredit")}%
-#{a @CtlCalendar.master(msg.BLOB())}${
-	msg.curUser.getName()}#{/a} |
-%{msg.POP()}%
+#{if msg.curCaller == 'master' && !msg.hasFlag("anonymous")}
+	logged in as
+	%{msg.PUSH("uri_usermod")}%
+	#{a @CtlCalendar.master(msg.BLOB())}${
+		msg.curUser.getName()}#{/a} |
+	%{msg.POP()}%
+	#{a @Secure.logout()}logout#{/a}
+#{/if}
+#{else}
+	#{a @CtlSecurity.register(null)}register#{/a} |
+	#{a @Secure.login()}login#{/a}
+#{/else}

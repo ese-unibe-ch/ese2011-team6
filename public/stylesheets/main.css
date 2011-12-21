@@ -97,7 +97,7 @@ div#left {
 }
 
 div#list-users,
-div#list-calendar {
+div#list-calendars {
 	padding-left: 10px;
 	padding-bottom: 10px;
 }
@@ -182,7 +182,7 @@ div.day-event a {
 	background-color: lightpink;
 }
 
-div.selected a {
+div.day-selected a {
 	background-color: lightblue;
 }
 

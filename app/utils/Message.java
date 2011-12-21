@@ -2,6 +2,7 @@ package utils;
 
 import java.util.Map;
 import java.util.List;
+import java.util.LinkedList;
 import play.libs.Codec;
 import play.mvc.Scope.Params;
 import play.mvc.Scope.RouteArgs;
@@ -33,6 +34,7 @@ public class Message
 	public String curTitle = "XXX: title";
 	public String curCaller;
 	public List<String> curOverlaps;
+	public LinkedList<String> paramStack;
 
 	public Message (
 		Params params,
@@ -41,6 +43,7 @@ public class Message
 	) {
 		initParams(params, blob);
 		initRouteArgs(routeArgs);
+		paramStack = new LinkedList<String>();
 		fmt = DateTimeFormat.forPattern("dd.MM.yyyy HH:mm");
 		fmt_short = DateTimeFormat.forPattern("dd.MM.yyyy");
 		try {
@@ -124,34 +127,36 @@ public class Message
 		}
 	}
 
-	public void initUser (
+	public Boolean initUser (
 	) {
 		String sel, cur;
 		sel = GET("uri_user");
 		cur = CtlSecurity.authUser();
 		selUser = ModUser.getUser(sel);
 		curUser = ModUser.getUser(cur);
-		if (isForm("useredit")) {
-			selUser = curUser;
+		if (curUser == null) {
+			setFlag("anonymous");
+			curUser = ModUser.getUser("anonymous");
 		}
-		if (selUser == null) {
+		if (selUser == null || hasFlag("usermod")) {
+			if (hasFlag("anonymous")) {
+				return false;
+			}
 			selUser = curUser;
 		}
 		if (selUser != curUser) {
-			PUT("uri_readonly");
+			setFlag("readonly");
 		}
 		else {
-			DEL("uri_readonly");
+			delFlag("readonly");
 		}
+		return true;
 	}
 
 	public void initCalendar (
 	) {
 		String c = GET("uri_cal");
 		curCalendar = selUser.getCalendar(c);
-		if (curCalendar.isOwner(curUser)) {
-			return;
-		}
 	}
 
 	public void initDate (
@@ -261,22 +266,36 @@ public class Message
 	}
 
 	public void PUSH (
+		String key,
+		String val
+	) {
+		String tmpkey = "_TMPKEY_"+key;
+		String tmpval = "_TMPVAL_"+key;
+		PUT(tmpkey, key);
+		PUT(tmpval, GET(key));
+		paramStack.add(key);
+		PUT(key, val);
+	}
+
+	public void PUSH (
 		String key
 	) {
-		PUT("_tmp_key", key);
-		PUT("_tmp_val", GET(key));
+		PUSH(key, "true");
 	}
 
 	public void POP (
 	) {
-		if (GET("_tmp_val") == null) {
-			DEL(GET("_tmp_key"));
+		String key = paramStack.removeLast();
+		String tmpkey = "_TMPKEY_"+key;
+		String tmpval = "_TMPVAL_"+key;
+		if (GET(tmpval) == null) {
+			DEL(GET(tmpkey));
 		}
 		else {
-			PUT(GET("_tmp_key"), GET("_tmp_val"));
+			PUT(GET(tmpkey), GET(tmpval));
 		}
-		DEL("_tmp_key");
-		DEL("_tmp_val");
+		DEL(tmpkey);
+		DEL(tmpval);
 	}
 
 	public String BLOB (
@@ -284,32 +303,36 @@ public class Message
 		return getParamsBlob();
 	}
 
-	public void setForm (
+	public void setFlag (
 		String name
 	) {
-		String formid = "uri_form_"+name;
-		PUT(formid);
+		String flag = "uri_"+name;
+		PUT(flag);
 	}
 
-	public Boolean getForm (
+	public void delFlag (
 		String name
 	) {
-		String formid = "uri_form_"+name;
-		if (GET(formid) == null) {
-			return false;
-		}
-		DEL(formid);
-		return true;
+		String flag = "uri_"+name;
+		DEL(flag);
 	}
 
-	public Boolean isForm (
+	public Boolean hasFlag (
 		String name
 	) {
-		String formid = "uri_form_"+name;
-		if (GET(formid) == null) {
+		String flag = "uri_"+name;
+		if (GET(flag) == null) {
 			return false;
 		}
 		return true;
+	}
+
+	public Boolean getFlag (
+		String name
+	) {
+		Boolean r = hasFlag(name);
+		delFlag(name);
+		return r;
 	}
 
 	public Boolean isShort (
@@ -345,6 +368,9 @@ public class Message
 
 		initUser();
 		initCalendar();
+		if (!getFlag("eventdel")) {
+			return;
+		}
 		id = GET("uri_eventid");
 		DEL("uri_eventid");
 		if (id == null || curCalendar == null) {
@@ -368,7 +394,7 @@ public class Message
 		initUser();
 		initCalendar();
 		id = GET("uri_eventid");
-		if (!getForm("event")) {
+		if (!getFlag("form_event")) {
 			return;
 		}
 		if (curCalendar == null) {
@@ -400,6 +426,10 @@ public class Message
 			curCalendar.delEvent(Long.parseLong(id));
 		}
 		curOverlaps = curCalendar.getOverlaps(event, fmt);
+		DEL("uri_eventname");
+		DEL("uri_datebeg");
+		DEL("uri_dateend");
+		DEL("uri_eventpub");
 		DEL("uri_eventid");
 		pruneErrors();
 	}
@@ -410,6 +440,9 @@ public class Message
 
 		initUser();
 		initCalendar();
+		if (!getFlag("eventmod")) {
+			return;
+		}
 		id = GET("uri_eventid");
 		if (id == null || curCalendar == null) {
 			return;
@@ -429,7 +462,7 @@ public class Message
 		String name;
 
 		initUser();
-		if (!getForm("calendar")) {
+		if (!getFlag("form_calendar")) {
 			return;
 		}
 		name = GET("uri_newcal");
@@ -457,7 +490,7 @@ public class Message
 		String passwordc;
 
 		pruneErrors();
-		if (!getForm("register")) {
+		if (!getFlag("form_register")) {
 			return false;
 		}
 		username = GET("uri_username");
@@ -487,7 +520,7 @@ public class Message
 		return true;
 	}
 
-	public Boolean modUser (
+	public void modUser (
 	) {
 		ModUser user;
 		DateTime birthday;
@@ -495,14 +528,17 @@ public class Message
 		initUser();
 		user = ModUser.getUser(GET("uri_user"));
 		if (user == null || user != curUser) {
-			return false;
+			return;
 		}
-		if (!getForm("user")) {
+		if (!getFlag("form_user")) {
+			if (!hasFlag("usermod")) {
+				return;
+			}
 			PUT("uri_firstname", user.getFirstname());
 			PUT("uri_lastname", user.getLastname());
 			PUT("uri_birthday",
 				user.getBirthday().toString(fmt_short));
-			return false;
+			return;
 		}
 		try {
 			birthday = fmt_short
@@ -519,15 +555,15 @@ public class Message
 		DEL("uri_firstname");
 		DEL("uri_lastname");
 		DEL("uri_birthday");
+		getFlag("usermod");
 		pruneErrors();
-		return true;
 	}
 
 	public void listUsers (
 	) {
 		String pattern;
 
-		if (!getForm("find")) {
+		if (!getFlag("form_find")) {
 			return;
 		}
 		pattern = GET("uri_finduser");

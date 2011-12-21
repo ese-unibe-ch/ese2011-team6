@@ -7,31 +7,31 @@
 	#{/else}
 </div>
 #{form @CtlCalendar.master(null)}
-	<label for="uri_eventname">Name </label>
+	<label>Name </label>
 	<input type="text" name="uri_eventname"
 		class="${msg.GET("uri_err_eventname") ?'error' :''}"
 		value="${msg.GET("uri_eventname")}" />
 	<br />
 
-	<label for="uri_datebeg">Begin </label>
+	<label>Begin </label>
 	<input type="text" name="uri_datebeg"
 		class="${msg.GET("uri_err_date") ?'error' :''}"
 		value="${msg.GET("uri_datebeg")}" />
 	<br />
 
-	<label for="uri_dateend">End </label>
+	<label>End </label>
 	<input type="text" name="uri_dateend"
 		class="${msg.GET("uri_err_date") ?'error' :''}"
 		value="${msg.GET("uri_dateend")}" />
 	<br />
 
-	<label for="uri_eventpub">Public Event </label>
+	<label>Public Event </label>
 	<input type="checkbox" name="uri_eventpub"
-		value="${msg.GET("uri_eventpub") ?'checked' :''}" />
+		${msg.GET("uri_eventpub")=='true' ?'checked' :''} />
 
-	%{msg.setForm("event")}%
+	%{msg.setFlag("form_event")}%
 	<input type="hidden" name="blob" value="${msg.BLOB()}" />
 	<input type="submit" value="${
 		msg.GET("uri_eventid") ?'edit' :'add'}" />
-	%{msg.getForm("event")}%
+	%{msg.getFlag("form_event")}%
 #{/form}

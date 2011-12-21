@@ -112,6 +112,9 @@ public class ModUser extends Model
 	public void setBirthday (
 		DateTime birthday
 	) {
+		if (birthday == null) {
+			return;
+		}
 		this.birthday = birthday.toDate();
 		save();
 	}

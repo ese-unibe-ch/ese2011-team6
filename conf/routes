@@ -14,5 +14,3 @@ GET	/favicon.ico	404
 * /{uri_user}/?							CtlCalendar.master
 * /{uri_user}/{uri_cal}/?					CtlCalendar.master
 * /{uri_user}/{uri_cal}/{uri_yy}/{uri_mm}/{uri_dd}/?		CtlCalendar.master
-* /{uri_user}/{uri_cal}/{uri_act}/?				CtlCalendar.{uri_act}
-* /{uri_user}/{uri_cal}/{uri_yy}/{uri_mm}/{uri_dd}/{uri_act}/?	CtlCalendar.{uri_act}

@@ -3,8 +3,8 @@
 		class="${msg.GET("uri_err_finduser") ?'error' :''}"
 		name="uri_finduser" />
 
-	%{msg.setForm("find")}%
+	%{msg.setFlag("form_find")}%
 	<input type="hidden" name="blob" value="${msg.BLOB()}" />
 	<input type="submit" value="find" />
-	%{msg.getForm("find")}%
+	%{msg.getFlag("form_find")}%
 #{/form}
